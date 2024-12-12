@@ -1,0 +1,84 @@
+Problem Name : Number of occurrence : link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/searching-gfg-160/problem/number-of-occurrence2259
+
+Problem Statement : Given a sorted array, arr[] and a number target, you need to find the number of occurrences of target in arr[]. 
+
+Examples :
+
+Input: arr[] = [1, 1, 2, 2, 2, 2, 3], target = 2
+Output: 4
+Explanation: target = 2 occurs 4 times in the given array so the output is 4.
+Input: arr[] = [1, 1, 2, 2, 2, 2, 3], target = 4
+Output: 0
+Explanation: target = 4 is not present in the given array so the output is 0.
+Input: arr[] = [8, 9, 10, 12, 12, 12], target = 12
+Output: 3
+Explanation: target = 12 occurs 3 times in the given array so the output is 3.
+
+/++++++++++++++++++++++++++++++++++++++/
+
+Code Brute Force : Use Linear Search and iterate array in O(N) time 
+
+code : 
+     int CountOccurenece(vector<int>& arr ,int target){
+          int first = -1 , last = -1 ;
+          for(int i = 0 ; i < arr.size(); i++){
+                 if(arr[i] == target){
+                    first = i ;
+                    break ;
+                    }
+                }
+           for(int j = size() - 1 ; j > 0 ; j--){
+                   if(arr[j] == target){
+                    last = j ;
+                    break ;
+                }
+           }
+          return last - firs + 1 ;       // take O(N) time in worst case 
+
+ or we can use this in single iteration 
+            for(int i = -0 ; i < n ; i++) if(ar[i] == target) count++ ;   return count  ;
+
+
+/+++++++++++++++++++++++++++++++++++++++/
+Optimal solution : suing binary search Approach , we found the first occurrence and last occurrence then call both of function the return lst - first + 1 .  ( for more optimization in worth case if not found first occ then we return checking this only instead of calling for last  , there is not need to check last if not occur first 
+
+Code : 
+     int firstOccurence(vector<int>& a , int k){
+        int i = 0 ; int j = a.size() - 1 ;
+        int firstOcc = -1;
+        while(i <= j){
+            int mid = i + (j - i)/2;
+            if(a[mid] == k){
+                firstOcc = mid ;
+                j = mid - 1;
+            }else if(a[mid] < k){
+                i = mid + 1 ;
+            }else j = mid - 1 ;
+        }
+        return firstOcc ;
+    }
+    int LastOccurence(vector<int>& a ,int k){
+        int i = 0 , j = a.size() - 1 ;
+        int lastOcc = -1 ;
+        while(i <= j){
+            int mid = i + (j - i)/2 ;
+            if(a[mid] == k){
+                lastOcc = mid ;
+                i = mid + 1 ; // trim left search for next ahead 
+            }else if(a[mid] > k){
+                j = mid - 1 ;  // if found greater value then trim right part 
+            }else i = mid + 1 ;
+        }
+        return lastOcc ;
+    }
+    int countFreq(vector<int>& arr, int target) {
+         int firstOcc = firstOccurence(arr,target);
+         int LastOcc = LastOccurence(arr,target);
+         if(firstOcc == -1 || LastOcc == -1) return 0 ;
+         
+         return (LastOcc - firstOcc)+1 ;
+    }
+
+/// Time complexity : O(llogn) here in binary search 
+
+/**************************************************************/

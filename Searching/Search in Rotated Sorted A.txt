@@ -1,0 +1,48 @@
+Problem : Search in Rotated Sorted Array
+Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/searching-gfg-160/problem/search-in-a-rotated-array4618
+
+Problem Statement : 
+\Given a sorted and rotated array arr[] of distinct elements, the task is to find the index of a target key. Return -1 if the key is not found.
+
+Examples :
+
+Input: arr[] = [5, 6, 7, 8, 9, 10, 1, 2, 3], key = 3
+Output: 8
+Explanation: 3 is found at index 8.
+Input: arr[] = [3, 5, 1, 2], key = 6
+Output: -1
+Explanation: There is no element that has value 6.
+Input: arr[] = [33, 42, 72, 99], key = 42
+Output: 1
+Explanation: 42 is found at index 1.
+
+/***********************************************/
+Solution : 
+int search(vector<int>& arr, int key) {
+        // complete the function here
+         // we can do it linearly using O(N) time 
+         
+        // use binary search and search optimally 
+        int low = 0 , high = arr.size() - 1 ;
+        int ans = -1 ;
+        while(low <= high){
+            int mid = low + (high - low)/2 ;
+            if(arr[mid] == key) ans = mid ;
+            
+            // my task is that to identify the sorted part then trim that to check key present inn range or not
+            if(arr[low] <= arr[mid]){   // sure about the left part is sorted 
+            // lets check the key where including
+               if(arr[low] <= key && key <= arr[mid]){
+                    high = mid - 1 ; // trim the right part 
+               }else  low = mid + 1 ; // trim left bca key exist in righ part 
+            }
+            else{   // if left part is not sorted then right definately will sorted 
+                if(arr[mid] <= key && key <= arr[high]){
+                    low = mid + 1 ; // sure about the key present in right side so trim left part
+                }
+                else high = mid - 1 ; // otherwis we trim the left part 
+                
+            }
+        }
+        return ans  ;
+    }

@@ -1,0 +1,95 @@
+Problem : Rotate by 90 degree
+Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/matrix-gfg-160/problem/rotate-by-90-degree-1587115621
+
+Problem Statement : 
+Given a square matrix mat[][] of size n x n. The task is to rotate it by 90 degrees in an anti-clockwise direction without using any extra space. 
+
+Examples:
+
+Input: mat[][] = [[1, 2, 3],
+                  [4, 5, 6]
+                 [7, 8, 9]]
+Output: Rotated Matrix:
+[3, 6, 9]
+[2, 5, 8]
+[1, 4, 7]
+
+
+Input: mat[][] = [[1, 2],
+                 [3, 4]]
+Output: Rotated Matrix:
+[2, 4]
+[1, 3]
+
+
+Constraints:
+1 ≤ n ≤ 102
+0 <= mat[i][j] <= 103
+
+/************************************************ BRUTE FORCE **************************************************/
+#include<bits/stdc++.h>
+
+using namespace std;
+vector < vector < int >> rotate(vector < vector < int >> & matrix) {
+    int n = matrix.size();
+    vector < vector < int >> rotated(n, vector < int > (n, 0));
+    for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n; j++) {
+        rotated[j][n - i - 1] = matrix[i][j];
+    }
+    }
+    return rotated;
+}
+
+int main() {
+    vector < vector < int >> arr;
+    arr =  {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    vector < vector < int >> rotated = rotate(arr);
+    cout << "Rotated Image" << endl;
+    for (int i = 0; i < rotated.size(); i++) {
+    for (int j = 0; j < rotated[0].size(); j++) {
+        cout << rotated[i][j] << " ";
+    }
+    cout << "n";
+    }
+
+}
+
+/*******************************************************************************************/
+
+Solution :   Optimal Solution 
+
+// Function to rotate matrix anticlockwise by 90 degrees.
+    void rotateby90(vector<vector<int>>& mat) {
+
+        // its brute force solution is taking new array and map it correct place 
+        // we are writing the optimal solution .
+        // in the 1st step we have to reverse the each row of given matrix 
+        int n = mat.size();
+        int m = mat[0].size();
+        for(int i = 0 ; i < n ;i++){
+            reverse(mat[i].begin(),mat[i].end());
+        }
+        
+        // now before return the matrix we have to transpose the matrix 
+     /*   
+        for(int i = 0 ; i < n ;i++){
+            for(int j = 0 ; j < i ;j++){
+               swap(mat[i][j],mat[j][i]);
+            }
+        }
+       */ 
+         for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+            std::swap(mat[i][j], mat[j][i]);
+          }
+        }
+        
+        /*
+        for(int i = 0 ; i < n ;i++){
+            for(int j = 0 ; j < m ; j++){
+                mat[i][j] = mat[j][i] ;
+            }
+        }    // this will work in the temp 2D array taking than do 
+        */
+      // return mat ;

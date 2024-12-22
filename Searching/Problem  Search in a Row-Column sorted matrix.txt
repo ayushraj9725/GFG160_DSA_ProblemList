@@ -1,0 +1,59 @@
+Problem : Search in a Row-Column sorted matrix
+Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/matrix-gfg-160/problem/search-in-a-matrix17201720
+
+Problem Statement : 
+Given a 2D integer matrix mat[][] of size n x m, where every row and column is sorted in increasing order and a number x, the task is to find whether element x is present in the matrix.
+
+Examples:
+
+Input: mat[][] = [[3, 30, 38],[20, 52, 54],[35, 60, 69]], x = 62
+Output: false
+Explanation: 62 is not present in the matrix, so output is false.
+Input: mat[][] = [[18, 21, 27],[38, 55, 67]], x = 55
+Output: true
+Explanation: 55 is present in the matrix.
+Input: mat[][] = [[1, 2, 3],[4, 5, 6],[7, 8, 9]], x = 3
+Output: true
+Explanation: 3 is present in the matrix.
+Constraints:
+1 <= n, m <=1000
+1 <= mat[i][j] <= 109
+1<= x <= 109
+
+/*********************************************************/
+
+Solution : 
+class Solution {
+  public:
+    bool matSearch(vector<vector<int>> &mat, int x) {
+     /*   // your code here
+        int n = mat.size();
+        int m = mat[0].size();
+        
+        for(int i = 0 ; i < n ;i++){
+            for(int j = 0 ; j < m ; j++){
+                if(mat[i][j] == x) return true ;
+            }
+        }
+        return false ;
+        // Expected time complexity : O(N * M)
+     */   
+        // OPTIMAL SOLUTION 
+        // Better solution : using binarty search in each row of matrix : O(n*logm)
+        // Using Binary Search over the merging t=both size and apply it (n + m)
+        
+        int n = mat.size();
+        int m = mat[0].size();
+        int i = 0 , j = m - 1 ;
+        while(i < n && j >= 0){
+            int mid = i + (j - i)/2 ;
+            
+            if(mat[i][j] == x) return true ;
+            
+            else if(mat[i][j] < x) i++ ;
+            
+            else j-- ;   // see the binary search digitzal notes or leetcode clearly understand there this 
+        }
+        return false ;
+    }
+};

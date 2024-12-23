@@ -1,0 +1,82 @@
+problem : Search in a row-wise sorted matrix
+
+link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/matrix-gfg-160/problem/search-in-a-row-wise-sorted-matrix
+
+Problem Statement : Given a row-wise sorted 2D matrix mat[][] of size n x m and an integer x, find whether element x is present in the matrix.
+Note: In a row-wise sorted matrix, each row is sorted in itself, i.e. for any i, j within bounds, mat[i][j] <= mat[i][j+1].
+
+Examples :
+
+Input: mat[][] = [[3, 4, 9],[2, 5, 6],[9, 25, 27]], x = 9
+Output: true
+Explanation: 9 is present in the matrix, so the output is true.
+Input: mat[][] = [[19, 22, 27, 38, 55, 67]], x = 56
+Output: false
+Explanation: 56 is not present in the matrix, so the output is false.
+Input: mat[][] = [[1, 2, 9],[65, 69, 75]], x = 91
+Output: false
+Explanation: 91 is not present in the matrix.
+Constraints:
+1 <= n, m <= 1000
+1 <= mat[i][j] <= 105
+1 <= x <= 105
+
+/
+********************************************************************/
+
+Solution : 
+class Solution {
+  public:
+    bool SearchRow(vector<int>& arr , int x ){
+        	int lo = 0, hi = arr.size();
+    while(lo <= hi) {
+    	int mid = (lo + hi) / 2;
+      
+        // If x = mid, return true
+        if(x == arr[mid]) 
+            return true;
+      
+        // If x < arr[mid], search in left half
+        if(x < arr[mid])
+            hi = mid - 1;
+       
+        // If x > arr[mid], search in right half
+        else
+            lo = mid + 1;
+    }
+    return false;
+        
+    }
+    // Function to search a given number in row-column sorted matrix.
+    bool searchRowMatrix(vector<vector<int>> &mat, int x) {
+        // Otimal solution here in sorted row in matrix 
+        // using binary search we are solving this particular problem 
+        int n = mat.size(), m = mat[0].size();
+  
+    // Iterate over all the rows to find x
+     for(int i = 0; i < n; i++) {
+      
+        // binary search on ith row
+        if(SearchRow(mat[i], x))
+        	return true;
+    }
+  
+    // If x was not found, return false
+    return false;
+        
+       /* // Brute force solution is the Search one by one 
+        int n = mat.size();
+        int m = mat[0].size();
+        for(int i = 0 ; i < n ; i++){
+            for(int j = 0 ;j < m ; j++){
+                
+                if(mat[i][j] == x) return true 
+                 
+            }
+        }
+       return false ;
+       */
+       
+    }
+
+******************************************/

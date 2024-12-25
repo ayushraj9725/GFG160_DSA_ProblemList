@@ -1,0 +1,163 @@
+Problem : Set Matrix Zeros 
+
+link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/matrix-gfg-160/problem/set-matrix-zeroes
+
+problem Statement : 
+You are given a 2D matrix mat[][] of size n×m. The task is to modify the matrix such that if mat[i][j] is 0, all the elements in the i-th row and j-th column are set to 0 and do it in constant space complexity.
+
+Examples:
+
+Input: mat[][] = [[1, -1, 1],
+                [-1, 0, 1],
+                [1, -1, 1]]
+Output: [[1, 0, 1],
+        [0, 0, 0],
+        [1, 0, 1]]
+Explanation: mat[1][1] = 0, so all elements in row 1 and column 1 are updated to zeroes.
+Input: mat[][] = [[0, 1, 2, 0],
+                [3, 4, 5, 2],
+                [1, 3, 1, 5]]
+Output: [[0, 0, 0, 0],
+        [0, 4, 5, 0],
+        [0, 3, 1, 0]]
+Explanation: mat[0][0] and mat[0][3] are 0s, so all elements in row 0, column 0 and column 3 are updated to zeroes.
+Constraints:
+1 ≤ n, m ≤ 500
+- 231 ≤ mat[i][j] ≤ 231 - 1
+
+/**************************************************************/
+
+Solution : OPTIMAL < BETTER < AND BRUTE FORCE GIVEN BELOW 
+
+class Solution {
+  public:
+  
+        void setMatrixZeroes(vector<vector<int>> &mat) {
+        int n = mat.size(), m = mat[0].size();
+
+    int c0 = 1;
+
+    // Traverse the arr and mark first cell of
+    // each row and column
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (mat[i][j] == 0) {
+
+                // mark i-th row
+                mat[i][0] = 0;
+
+                // mark j-th column
+                if (j == 0)
+                    c0 = 0;
+                else
+                    mat[0][j] = 0;
+            }
+        }
+    }
+
+    // Traverse and mark the matrix from (1, 1)
+    // to (n - 1, m - 1)
+    for (int i = 1; i < n; i++) {
+        for (int j = 1; j < m; j++) {
+
+            // Check for col & row
+            if (mat[i][0] == 0 || mat[0][j] == 0) {
+                mat[i][j] = 0;
+            }
+        }
+    }
+
+    // Mark the first row
+    if (mat[0][0] == 0) {
+        for (int j = 0; j < m; j++)
+            mat[0][j] = 0;
+    }
+  
+    // Mark the first column
+    if (c0 == 0) {
+        for (int i = 0; i < n; i++)
+            mat[i][0] = 0;
+    }
+        
+        
+        
+        
+        
+      /*    // Better Approach : using 2 temp array row and colum mark it with some value 
+        // when found the appropriate row and column index at found the 0 and then make 
+        
+         int row[] = {0} ;
+         int colm[] = {0} ; // row and column array 
+         
+         for(int i = 0 ; i < n ; i++){
+             for(int j = 0 ; j < m ; j++){
+                 if(mat[i][j] == 0){
+                     // when found the zero then make the i and j position with 1
+                     row[i] = 1 ;
+                     colm[j] = 1 ;
+                 }
+             }
+         }
+         
+         // after the end of the iterating matrix we have the marks value in row and colm arra
+         // using them we will make it matrix value zero how we do it see below 
+         // reiterating the matrix 
+         
+         for(int i = 0 ; i < n ; i++){
+             for(int j = 0 ; j < m ; j++){
+                 if(row[i] == 1|| colm[j] == 1){
+                     mat[i][j] = 0 ;
+                 }
+             }
+         }
+        // now it made the actual result 
+        
+        // this is taking O(2 N * M) time and space O( N + M)
+        */
+        
+  
+  /*
+    void MakeRow(vector<vector<int>> &mat, int n , int m , int i){
+        for(int j = 0 ; i < m ; j++){
+            if(mat[i][j] != 0){
+                mat[i][j] = -1 ; // make that row -1 using changes in column 
+            }
+        }
+    }
+    void MakeColumn(vector<vector<int>> &mat , int n , int m , int j){
+        for(int i = 0 ; i < n ; i++){
+            if(mat[i][j] != 0){
+                mat[i][j] = -1 ; // kaing column -1 with changes in row , so we runs i for row where column constant 
+            }
+        }
+        // we are making row and colum -1 because if we directly made that zero it can create problem to identify
+        // the actual given zero and make changes accross that so we make -1 so that we can do operation with non voilating 
+    }
+    void setMatrixZeroes(vector<vector<int>> &mat) {
+        // code here
+        int n = mat.size();
+        int m = mat[0].size();
+        
+        for(int i = 0 ; i < n ; i++){
+            for(int j = 0 ; j < m ; j++){
+                if(mat[i][j] == 0){
+                    MakeRow(mat,n,m,i);
+                    MakeColumn(mat,n,m,j);
+                }
+            }
+        }
+        
+        // now we reiterate the matrix and make it zero where we found the -1 
+        for(int i = 0; i < n ; i++){
+            for(int j = 0 ; j < m ;j++){
+                if(mat[i][j] == -1){
+                    mat[i][j] = 0 ;
+                }
+            }
+        }
+        // Time complexity take in brute force : O(N * M)(n + m) + (O*M) ; 
+        // this is taking more time and give the runtime error 
+        */
+        
+    }
+};

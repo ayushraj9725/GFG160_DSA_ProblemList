@@ -1,0 +1,85 @@
+Problem : Two Sum - Pair with Given Sum
+
+Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/hashing-gfg-160/problem/key-pair5616
+
+Problem Statement : Given an array arr[] of positive integers and another integer target. Determine if there exists two distinct indices such that the sum of there elements is equals to target.
+
+Examples:
+Input: arr[] = [1, 4, 45, 6, 10, 8], target = 16
+Output: true
+Explanation: arr[3] + arr[4] = 6 + 10 = 16.
+
+Input: arr[] = [1, 2, 4, 3, 6], target = 11
+Output: false
+Explanation: None of the pair makes a sum of 11.
+
+Input: arr[] = [11], target = 11
+Output: false
+Explanation: No pair is possible as only one element is present in arr[].
+
+Constraints:
+1 ≤ arr.size ≤ 105
+1 ≤ arr[i] ≤ 105
+1 ≤ target ≤ 2*105
+
+/*****************************************************/
+
+Solution : 
+
+class Solution {
+  public:
+    bool twoSum(vector<int>& arr, int target) {
+        
+        // OPTIMAL ANSWER IN O(N) time and O(N) space using Hashing
+        
+        unordered_map<int,int> map ;
+        int n = arr.size();
+        for(int i = 0 ; i < n ; i++){
+            int num = arr[i] ;
+            int needed = target - num ;
+            
+            if(map.find(needed) != map.end()){
+                return true ;
+            }
+            
+            map[num] = i ;
+            
+        }
+        
+        return false ;
+        // Time Complexity : O(N)  and  O(N)     : 
+        
+        /*
+        // better Solution 
+         int n = arr.size(); 
+         // we are going to apply the Greedy and Two Pointer Approach 
+         // in 1st step we have to sort the array .
+          sort(arr.begin(),arr.end()); // arr has sorted 
+         
+          int i = 0 , j = n - 1 ;
+          int sum = 0 ;
+          while(i < j){
+              sum = arr[i] + arr[j] ;
+              
+              if(sum == target) return true ;
+              
+              if(sum < target) i++ ;  // check the sum if less then target than i incr
+              else j-- ;  // other wise j decrement 
+              
+          }
+          return false ; // other wise we return false  
+          // time complexity : O(N) + O(nlogn)  in worth case 
+        
+        /*
+         // Brute Force Solution :
+         int n = arr.size() ;
+         for(int i = 0 ; i < n ; i++){
+             for(int j = i ; j < n ;j++){
+                 if(arr[i] + arr[j] == target) return true ;
+             }
+         }
+         
+         return false ;  // time complexity : O(N ^ 2) time 
+         */
+    }
+};

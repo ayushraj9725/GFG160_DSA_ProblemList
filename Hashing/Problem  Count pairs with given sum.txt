@@ -1,0 +1,85 @@
+Problem : Count pairs with given sum
+
+Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/hashing-gfg-160/problem/count-pairs-with-given-sum--150253
+
+Problem Statement : 
+Given an array arr[] and an integer target. You have to find numbers of pairs in array arr[] which sums up to given target.
+
+Examples:
+Input: arr[] = [1, 5, 7, -1, 5], target = 6 
+Output: 3
+Explanation: Pairs with sum 6 are (1, 5), (7, -1) and (1, 5). 
+
+Input: arr[] = [1, 1, 1, 1], target = 2 
+Output: 6
+Explanation: Pairs with sum 2 are (1, 1), (1, 1), (1, 1), (1, 1), (1, 1), (1, 1).
+
+Input: arr[] = [10, 12, 10, 15, -1], target = 125
+Output: 0
+
+Constraints:
+1 <= arr.size() <= 105
+-104 <= arr[i] <= 104
+1 <= target <= 104
+
+/*************************************************************************/
+
+Problem Solution : 
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std ;
+
+class Ayush {
+public : 
+ int countPairs(vector<int> &arr, int target) {
+        //OPtimal answer using hashing 
+      unordered_map<int,int> map ;
+      int n = arr.size();
+      int count = 0 ;
+      
+      for(int i = 0 ; i < n ; i++){
+          int num = arr[i] ;
+          int req = target - num ;
+          
+          if(map.find(req) != map.end()){
+             count += map[req] ; // if found already in the map any key that frequncy add into count
+          }
+          
+          map[num]++ ; // otherwise that number set that key of map and having frequncy 0+1 
+      }
+      
+      return count ;  // at the end of the loop we have the final answer in the count variabl
+      
+      // for we are achieving this , we have to taken a map of O(N) space and it reduce the timeO(N) time
+      
+      
+      /*  
+        int n = arr.size();
+        int count = 0 ;
+        for(int i = 0 ; i < n ;i++){
+            for(int j = i + 1 ; j < n ; j++){
+                if(arr[i] + arr[j] == target) count++ ;
+            }
+        }
+        
+        return count ;
+        
+        // this program native approach taking more time to find the pair of sum O(N * N)time
+        */
+    }
+}
+
+int main(){
+   // Example input
+    vector<int> arr = {1, 5, 7, 1}; 
+    int target = 6;
+
+    // Call the function
+    int result = countPairs(arr, target);
+
+    // Output the result
+    cout << "Number of pairs with sum " << target << " is: " << result << endl;
+
+    return 0;
+}

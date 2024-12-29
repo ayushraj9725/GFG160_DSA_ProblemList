@@ -1,0 +1,142 @@
+Problem : Intersection of Two arrays with Duplicate Elements
+Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/hashing-gfg-160/problem/intersection-of-two-arrays-with-duplicate-elements
+
+Problem Statement : 
+Given two integer arrays a[] and b[], you have to find the intersection of the two arrays. Intersection of two arrays is said to be elements that are common in both arrays. The intersection should not have duplicate elements and the result should contain items in any order.
+
+Note: The driver code will sort the resulting array in increasing order before printing.
+
+Examples:
+Input: a[] = [1, 2, 1, 3, 1], b[] = [3, 1, 3, 4, 1]
+Output: [1, 3]
+Explanation: 1 and 3 are the only common elements and we need to print only one occurrence of common elements.
+
+Input: a[] = [1, 1, 1], b[] = [1, 1, 1, 1, 1]
+Output: [1]
+Explanation: 1 is the only common element present in both the arrays.
+
+Input: a[] = [1, 2, 3], b[] = [4, 5, 6]
+Output: []
+Explanation: No common element in both the arrays.
+/**************/
+Constraints:
+1 ≤ a.size(), b.size() ≤ 105
+1 ≤ a[i], b[i] ≤ 105
+/**************/
+Solution :
+
+class Ayush {
+public:
+    vector<int> intersectionWithDuplicates(vector<int>& a, vector<int>& b) {
+       
+    // optimal answer is that : stored array a element into the set and take only that element which present in the set so how it get implemented 
+    
+    
+    // for holding the a array element : 1st step 
+    // now add all element into the set
+    unordered_set<int> set(a.begin(),a.end()); // put all element of a in set 
+    // now in second step we have to iterate over the array b and check for the element 
+    // which  is present in set or now , if not present than we will not care about that 
+    // but if contain than we have to take that element in ans and erase / remove from set to maintain duplicacy
+    vector<int> ans ; 
+    for(int num : b){
+        if(set.find(num) != set.end()){
+            ans.push_back(num) ; // that the element in ans 
+            set.erase(num) ;  // remove from the set
+        }
+    }
+    // after the end of the loop we have the answer 
+    
+    return ans ;
+       // Time complexity : O(N + M) and space complexity : O(set_size + ans_size)  
+       // Optimal Answer : above the code 
+       // check the same type question : intercation of two sorted array / union also 
+       
+       
+       
+       
+     /*  // Brute Force answer : taking O(N * N) time and Space O(N + K) 
+        set<int> unique;  // Set will automatically handle unique elements  
+        vector<int> ans;  // Vector to store the result (intersection with duplicates)
+
+    int n = a.size();
+    int m = b.size();
+
+    // Nested loop to find common elements
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (a[i] == b[j]) {
+                unique.insert(a[i]);  // Insert matching elements into the set
+            }
+        }
+    }
+
+    // Convert set to vector
+    ans.assign(unique.begin(), unique.end());
+
+    return ans;  // Return the unique intersection as a vector
+       
+      /* // 2nd Brute force ans 
+        
+        vector<int> ans ; 
+        int n = a.size() ;
+        int m = b.size() ;
+        for(int i = 0 ; i < n ; i++){
+            for(int j = 0 ; j < m ; j++){
+                if(a[i] == b[j]){
+                   ans.push_back(a[i]) ;
+               }
+            }
+        }
+        vector<int> unique(ans.begin(),ans.end());  // anded vector element into unique set to remove the duplicates
+        vector<int> return_ans(unique.begin(),unique.end()) ;
+        return return_ans ; ;
+   /// this is again taking more time and space also 
+       
+       */ // Brute Force Approach :
+       /*
+       
+        set<int> unique ;
+        vector<int> ans ;
+        int n = a.size() ;
+        int m = b.size() ;
+        for(int i = 0 ; i < n ; i++){
+            for(int j = 0 ; j < m ; j++){
+                if(a[i] == b[j]){
+                    ans.push_back(a[i]) ;
+                }
+            }
+        }
+        
+       // remove the duplicae in c++ using erase store ans value in to set 
+        sort(ans.begin(), ans.end()) ; // firstly sort the ans list / vector
+        // in the second step we haave to add intoo the unique
+        ans.erase(unique(ans.begin(),ans.end()),ans.end()) ;
+        
+        return ans  ;  
+        
+        // Other way of writing the code brute force O(N) space and O(N ^ 2) time 
+        */
+    }
+};
+
+int main() {
+    // Example input arrays
+    vector<int> a = {1, 2, 2, 3};
+    vector<int> b = {2, 2, 3, 4};
+
+    // Call the function
+    vector<int> result = intersectionWithDuplicates(a, b);
+
+    // Print the result
+    cout << "Intersection: ";
+    for (int num : result) {
+        cout << num << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
+
+/************************************************************************/
+

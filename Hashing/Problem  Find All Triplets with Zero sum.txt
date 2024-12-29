@@ -1,0 +1,105 @@
+Problem : Find All Triplets with Zero Sum ( 2nd Version of 3 Sum ) 
+Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/hashing-gfg-160/problem/find-all-triplets-with-zero-sum
+
+Problem Statement : 
+Given an array arr[], find all possible triplets i, j, k in the arr[] whose sum of elements is equals to zero. 
+Returned triplet should also be internally sorted i.e. i<j<k.
+
+Examples:
+
+Input: arr[] = [0, -1, 2, -3, 1]
+Output: [[0, 1, 4], [2, 3, 4]]
+Explanation: Triplets with sum 0 are:
+arr[0] + arr[1] + arr[4] = 0 + (-1) + 1 = 0
+arr[2] + arr[3] + arr[4] = 2 + (-3) + 1 = 0
+
+Input: arr[] = [1, -2, 1, 0, 5]
+Output: [[0, 1, 2]]
+Explanation: Only triplet which satisfies the condition is arr[0] + arr[1] + arr[2] = 1 + (-2) + 1 = 0
+
+Input: arr[] = [2, 3, 1, 0, 5]
+Output: [[]]
+Explanation: There is no triplet with sum 0.
+ 
+/**********/
+
+Constraints:
+3 <= arr.size() <= 103
+-104 <= arr[i] <= 104
+
+/******************************************************************************************/
+
+Code Solutions : 
+class Ayush {
+  public:
+    vector<vector<int>> findTriplets(vector<int> &arr) {
+        
+        int n = arr.size();
+        set<vector<int>> uniqueTriplets ;
+        
+        // iterating over the array and find the sum
+        
+        for(int i = 0 ; i < n ; i++){
+            unordered_map<int,int> seen ; // take map for storing the triplet 
+            for(int j = i + 1 ; j < n ; j++){
+                int k = -(arr[i] + arr[j]) ;
+                
+                if(seen.find(k) != seen.end()){
+                    vector<int> triplet = {i,j,seen[k]} ;  // set has value after calculating negative of two sum 
+                    sort(triplet.begin(),triplet.end()) ; // now sort the list triplet 
+                    // after that we stored it into set uniqueTriplet
+                    uniqueTriplets.insert(triplet); // inserted into the triplet into the set 
+                }
+                // and the other hand side if not found that arr[j] into the set 
+                 seen[arr[j]] = j ; // arr[j] with the key  inserted into the seen
+            }
+        }
+        // after the end of the outter loop stored into the 
+        
+        // set uniqueTriplets add into the list 
+        vector<vector<int>> ans(uniqueTriplets.begin(),uniqueTriplets.end()) ;
+        
+        return ans ;
+        // this time the overall complexities ( T.C : O(N*N) and S.C : O(N+K)) 
+        
+        
+        /*
+        // Brute Force Approach of This problem 
+        vector<vector<int>> ans ;
+        int n = arr.size() ;
+        for(int i = 0 ; i < n ; i++){
+            for(int j = i+1; j < n ;j++){
+                for(int k = j+1 ; k < n ;k++){
+                    if(arr[i] + arr[j] + arr[k] == 0){
+                        ans.push_back({i,j,k}) ;  // adding those indices into ans list
+                    }
+                }
+            }
+        }
+        return ans  ;
+        // This Approach is Native (Brute Force ) taking more time in O(N ^ 3) with no space 
+        
+        */
+        
+    }
+};
+
+#include <iostream>
+
+int main() {
+    
+    Solution s ;
+    vector<int> nums = {-1, 0, 1, 2, -1, -4};
+    vector<vector<int>> result = s.findTriplets(nums);
+
+    // Print the result
+    for (const auto& triplet : result) {
+        for (int index : triplet) {
+            cout << index << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
+

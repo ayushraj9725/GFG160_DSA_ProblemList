@@ -1,0 +1,196 @@
+Problem : Union of Arrays with Duplicates 
+
+Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/hashing-gfg-160/problem/union-of-two-arrays3538
+
+Problem Statement :
+Given two arrays a[] and b[], the task is to find the number of elements in the union between these two arrays.
+The Union of the two arrays can be defined as the set containing distinct elements from both arrays. If there are repetitions, then only one element occurrence should be there in the union.
+
+Note: Elements of a[] and b[] are not necessarily distinct.
+
+Examples
+
+Input: a[] = [1, 2, 3, 4, 5], b[] = [1, 2, 3]
+Output: 5
+Explanation: Union set of both the arrays will be 1, 2, 3, 4 and 5. So count is 5.
+
+Input: a[] = [85, 25, 1, 32, 54, 6], b[] = [85, 2] 
+Output: 7
+Explanation: Union set of both the arrays will be 85, 25, 1, 32, 54, 6, and 2. So count is 7.
+
+Input: a[] = [1, 2, 1, 1, 2], b[] = [2, 2, 1, 2, 1] 
+Output: 2
+Explanation: We need to consider only distinct. So count of elements in union set will be 2.
+/***********************/
+Constraints:
+1 ≤ a.size(), b.size() ≤ 106
+0 ≤ a[i], b[i] ≤ 105
+/***********************/
+
+Solution : C++                                      /********************* C++ ************************/
+
+class Solution {
+  public:
+    // Function to return the count of number of elements in union of two arrays.
+    int findUnion(vector<int>& a, vector<int>& b) {
+        // c++ Code 
+        // Optimoized answer : using hashset 
+        
+        // take a set and insert all the element of the Both array 
+        
+        set<int> ans ;
+        
+        for(int num : a){
+            ans.insert(num) ;
+        }
+        // added a element in the set : O(N) time and O(N) space consume 
+        
+        for(int num : b){
+            ans.insert(num) ;
+        }
+        // added b elemetn in the set here : O(N) time and O(N) space consume 
+     
+     
+     // at the end we can return ans as well but this time we required only the how many elemt in the set 
+     // so return we here size of set 
+     
+     return ans.size() ;
+    
+    /*    
+    
+        // Brute Force solution :
+        
+        int n = a.size() ;
+        int m = b.size() ;
+        
+        vector<int> ans ;
+        
+        for(int i = 0 ; i < n ;i++){
+            // checking the current element in ans or not 
+            bool check = false ;
+            for(int x : ans){
+                if(x == a[i]){
+                    check = true ;
+                    break ;
+                }
+            }
+            if(!check) ans.push_back(a[i]); // if current elemt not found in the vector then add in the ans
+        }
+        
+        // same thing for b array 
+        
+        for(int i = 0 ; i < m ;i++){
+            // checking the current element in ans or not 
+            bool check = false ;
+            for(int x : ans){
+                if(x == b[i]){
+                    check = true ;
+                    break ;
+                }
+            }
+            if(!check) ans.push_back(b[i]); // if current elemt not found in the vector then add in the ans
+        }
+        
+        return ans.size() ;  // this is taking More time to find manually duplicate and dont care about that elemet
+        // time taken : O(N ^ 2) over all and space taken O(N + M)
+        */
+    }
+};
+
+// main function : 
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int main() {
+    vector<int> a = {1, 2, 2, 3};
+    vector<int> b = {2, 3, 4};
+    
+    vector<int> result = unionOfArraysBruteForce(a, b);
+    
+    cout << "Union: ";
+    for (int x : result) {
+        cout << x << " ";
+    }
+    cout << endl;
+    
+    return 0;
+}
+
+
+                                   /****************************** JAVA CODE SOLUTION ********************************/
+
+
+Solution : JAVA 
+
+class Solution {
+    public static int findUnion(int a[], int b[]) {
+        // code here
+        // in java we can directly check using brute force 
+        // take a list and add element in list , if current element is not in list 
+      /*  
+        ArrayList<Integer> ans = new ArrayList<>() ; 
+        for(int num : a){
+            if(!ans.contains(num)){   // iterate over the a array and add 
+                ans.add(num) ;
+            }
+        }
+        
+        
+        for(int num : b){
+            if(!ans.contains(num)){   // iterate over the b array and add 
+                ans.add(num) ;
+            }
+        }
+        
+        return ans.size() ; // here the brute force answer with distinct answer 
+        // time complexity : O(N^2 + M^2) for containing check and space (O(N + M)) ...
+        
+        // Optimized Version of the code using : HashSet ;
+        
+        */
+        // OPtimal solution : O(N + M) time and O(N + M) space 
+        HashSet<Integer> set = new HashSet<>() ;
+        
+        for(int num : a){
+            set.add(num) ; // 
+        }
+        
+        for(int num : b){   // adding array b elemet in set automatically removed the duplicate 
+            set.add(num) ;
+        }
+        
+        return set.size() ;
+    }
+}
+
+// main method 
+
+Class Main {
+    public static void main(String args[]){
+       
+       int[]  a = {1,2,2,3,5}
+       int[]  b = {4,5,6}
+
+       // now we have call the function 
+       
+      Solution s = new Solution() ;
+      
+      // we have only know the count ans : We need to know how many element in the ans
+      int ans = s.findUnion(a,b);
+     
+       System.out.println(" The Elements Present in the array after union find : " +ans) ;
+    
+
+      // when we have to print the ans in actual we have to store in array or list
+ 
+      List<Integer> ans  = s.findUnion(a,b) ;
+      
+      System.out.print(ans) ;
+      
+      
+ 
+   }
+}
+
+/   ************************************************************************* /

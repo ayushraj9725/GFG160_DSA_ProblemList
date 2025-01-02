@@ -1,0 +1,118 @@
+Problem : Count total Subarrays with sum K
+link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/hashing-gfg-160/problem/subarrays-with-sum-k
+
+Problem Statement :
+Given an unsorted array of integers, find the number of continuous subarrays having sum exactly equal to a given number k.
+
+Examples:
+
+Input: arr = [10, 2, -2, -20, 10], k = -10
+Output: 3
+Explaination: Subarrays: arr[0...3], arr[1...4], arr[3...4] have sum exactly equal to -10.
+
+Input: arr = [9, 4, 20, 3, 10, 5], k = 33
+Output: 2
+Explaination: Subarrays: arr[0...2], arr[2...4] have sum exactly equal to 33.
+
+Input: arr = [1, 3, 5], k = 0
+Output: 0
+Explaination: No subarray with 0 sum.
+/********************/
+Constraints:
+
+1 ≤ arr.size() ≤ 105
+-103 ≤ arr[i] ≤ 103
+-107 ≤ k ≤ 107
+
+/********************/
+
+Solution :
+                                               /*************************  C++ Code  ****************************/
+
+// c++ code 
+        // brute force : using generating all the subarray and calculate sum and check
+      /* //  int length = 0 ; // here my tast is to count the total no of subarray not tell the length max 
+        int n = arr.size();
+        int count = 0 ;
+        for(int i = 0 ; i < n ; i++){
+            int sum = 0 ;
+            for(int j = i  ; j < n ;j++){
+                sum += arr[j] ;
+                
+                if(sum == k){
+                    count++ ;
+                   // length = max(length,j-i);
+                }
+            }
+        }
+        return count ;
+        // time complexity : O(N ^ N) approx here 
+        // time taken more we have to find optimal answer 
+        */
+        
+        // using hashing we have to find the solution 
+        unordered_map<int,int> map ; // it store the prefix sum and value increment 
+        // we store the prefix sum - current value of array and count if found exact equal to sum suarray 
+        int n = arr.size() ;
+        int current_sum = 0 ;
+        int cnt = 0 ;
+        // precompute the prefix sum 
+        for(int i = 0 ; i < n ; i++){
+            current_sum += arr[i] ;
+            
+            if(current_sum == k) cnt++ ;
+            // if found the current sum - k present in map then we consider and count add their key value in count
+            if(map.find(current_sum - k) != map.end()){
+                cnt = cnt + map[current_sum - k] ;
+            }
+            // now we add in to map 
+            map[current_sum]++ ;
+            
+        }
+        return cnt ; // time take O(N) snd space O(N)
+    }
+int main() {
+    vector<int> arr = {10, 2, -2, -20, 10};
+    int k = -10;
+    cout << countSubarrays(arr, k);
+    return 0;
+}
+
+
+                                /**************************** JAVA CODE ****************************/
+import java.util.*; 
+
+class Ayush {
+    // Function to find number of subarrays with sum as k
+    static int countSubarrays(int[] arr, int k) {
+
+        // HashMap to store prefix sums frequencies
+        Map<Integer, Integer> prefixSums = new HashMap<>();
+        int res = 0;
+        int currSum = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            // Add current element to sum so far.
+            currSum += arr[i];
+
+            // If currSum is equal to desired sum, then a new subarray is found.
+            if (currSum == k)
+                res++;
+
+            // Check if the difference exists in the prefixSums map.
+            if (prefixSums.containsKey(currSum - k))
+                res += prefixSums.get(currSum - k);
+
+            // Add currSum to the set of prefix sums.
+            prefixSums.put(currSum, prefixSums.getOrDefault(currSum, 0) + 1);
+        }
+
+        return res;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 2, -2, -20, 10};
+        int k = -10;
+        System.out.println(countSubarrays(arr, k));
+    }
+}

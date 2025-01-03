@@ -1,0 +1,107 @@
+Problem : Count Subarrays with given XOR
+link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/hashing-gfg-160/problem/count-subarray-with-given-xor
+
+Problem Statement : 
+Given an array of integers arr[] and a number k, count the number of subarrays having XOR of their elements as k.
+
+Examples: 
+
+Input: arr[] = [4, 2, 2, 6, 4], k = 6
+Output: 4
+Explanation: The subarrays having XOR of their elements as 6 are [4, 2], [4, 2, 2, 6, 4], [2, 2, 6], and [6]. Hence, the answer is 4.
+
+Input: arr[] = [5, 6, 7, 8, 9], k = 5
+Output: 2
+Explanation: The subarrays having XOR of their elements as 5 are [5] and [5, 6, 7, 8, 9]. Hence, the answer is 2.
+
+Input: arr[] = [1, 1, 1, 1], k = 0
+Output: 4
+Explanation: The subarrays are [1, 1], [1, 1], [1, 1] and [1, 1, 1, 1].
+/**********************/
+Constraints:
+
+1 ≤ arr.size() ≤ 105
+0 ≤ arr[i] ≤105
+0 ≤ k ≤ 105
+/**********************/
+
+SOLUTION : ::::::::::: :                      /********************* C++ *********************/
+
+class Ayush {
+public:
+    long subarrayXor(vector<int> &arr, int k) {
+        // code here
+        int count = 0 ;
+        int n = arr.size();
+        unordered_map<int,int> map ;
+        int currXor = 0 ;
+        for(int i = 0 ; i < n ; i++){
+            currXor = currXor ^ arr[i] ; // finding current xor
+            // now check if currXor is equal to given no of xor is equal then increment the count 
+            if(currXor == k) count++ ; 
+            // now check if in map (currXor ^ k) xor present then we consider that maps value 
+            if(map.find(currXor ^ k) != map.end()){
+                count += map[currXor ^ k] ; // take keys value of map at currXor ^ k and add
+            }
+            // otherwise add in to the map and if find then increment values 
+            map[currXor]++ ; // currXor is key and if it present in map then we count it and stored as value  
+        }
+        return count ; // time used : O(N) only and space : O(N) 
+        
+       /* // brute force solution 
+        int count = 0 ;
+        int n = arr.size() ;
+        for(int i = 0 ; i < n ;i++){
+            int pxor = 0 ;
+            for(int j = i ; j < n ;j++){
+                pxor = pxor ^ arr[j];
+                if(pxor == k) count++ ; // here when we get any generated subarray xor is k count that subarray
+            }
+        }
+        
+        return count ; // time complexity : O(N * N) approax we have to reduce it using prefix xor and hashing
+        */
+        
+    }
+
+   int main() {
+    vector<int> arr = { 4, 2, 2, 6, 4 };
+    int k = 6;
+
+    cout << subarrayXor(arr, k);
+    return 0;
+}
+ };
+
+                                        /******************** JAVA CODE *********************/
+
+class Solution {
+    public long subarrayXor(int arr[], int k) {
+        // code here
+        int count = 0 ;
+        int n = arr.length ;
+        HashMap<Integer,Integer> hm = new HashMap<>();
+        int currXor = 0 ;
+        hm.put(0,1);
+        for(int i = 0 ; i < n ; i++){
+            currXor = currXor ^ arr[i] ;
+            
+            // now calculate and count the currXor ^ k xor value from map
+            count = count + hm.getOrDefault(currXor ^ k,0);
+          //  if(currXor == k) count++ ; // if currXor is equal to k xor then we count it 
+            
+            hm.put(currXor,hm.getOrDefault(currXor,0)+1) ; // here we made the currXor is key 
+            // we track with prefix xor to know the subarray of xor give equal or not 
+        }
+        
+        return count ;
+    }
+    public static void main(String[] args) {
+        int[] arr = { 4, 2, 2, 6, 4 };
+        int k = 6;
+
+        System.out.println(subarrayXor(arr, k));
+    }
+}
+
+                                                                             /********************************* **************************************/

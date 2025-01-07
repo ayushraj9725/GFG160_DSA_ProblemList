@@ -1,0 +1,86 @@
+Problem : Pair with given sum in a sorted array
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/two-pointer-technique-gfg-160/problem/pair-with-given-sum-in-a-sorted-array4940
+
+Problem Statement : 
+You are given an integer target and an array arr[]. You have to find number of pairs in arr[] which sums up to target. It is given that the elements of the arr[] are in sorted order.
+Note: pairs should have elements of distinct indexes. 
+
+Examples :
+
+Input: arr[] = [-1, 1, 5, 5, 7], target = 6
+Output: 3
+Explanation: There are 3 pairs which sum up to 6 : {1, 5}, {1, 5} and {-1, 7}.
+Input: arr[] = [1, 1, 1, 1], target = 2
+Output: 6
+Explanation: There are 6 pairs which sum up to 2 : {1, 1}, {1, 1}, {1, 1}, {1, 1}, {1, 1} and {1, 1}.
+Input: arr[] = [-1, 10, 10, 12, 15], target = 125
+Output: 0
+Explanation: There is no such pair which sums up to 4.
+/////////////////////////
+Constraints:
+-105 <= target <=105
+ 2 <= arr.size() <= 105
+-105 <= arr[i] <= 105
+/////////////////////////
+
+CODE SOLUTION : ::::::::::::::::::::::::::::::::: :           /**************************** CODE C++ ****************************/
+
+C++ CODE ::
+
+class Solution {
+  public:
+    int countPairs(vector<int> &arr, int target) {
+        // Complete the function
+        // Brute force same as that : 2 sum prblem generated all the pairs in O(N*N) times
+        // Optimal Solution : Using Two Pointers Approach
+        int n = arr.size() ;
+        int i = 0 , j = n - 1 ;
+        int count = 0 ;
+        
+        while(i < j){
+            int sum = arr[i] + arr[j] ;
+            
+            if(sum < target) i++ ; // left pointer move and check 
+            else if(sum > target) j-- ; // else j move to left and check 
+           
+            else if(sum == target){
+                // here we count elemnt where we both pointer pointing 
+                int ele1 = arr[i] , ele2 = arr[j] ;
+                 // count the both element how many time appears
+                int count1 = 0 , count2 = 0 ;
+                while(i <= j && ele1 == arr[i]){
+                    count1++ ;
+                    i++ ;
+                }
+                while(i <= j && ele2 == arr[j]){
+                    count2++ ;
+                    j-- ;
+                }
+                // if ele1 and ele2 both are same 
+                if(ele1 == ele2) {
+                    count += (count1 * (count1 - 1))/2 ; // update with it 
+                }
+                else{
+                    count += count1 * count2 ; // update with it's 
+                }
+                
+                
+            //   count++ ;
+            //   int tmp = j - 1 ;
+            //   while(tmp > 0 && arr[tmp] == arr[tmp+1]){ // check for duplicate to fix one pointer at one place
+            //      count++ ;
+            //      tmp-- ;
+            //      j = tmp ;
+            //   }
+            //   i++ ;
+            // This will not work here 
+            }
+        }
+        
+        return count ;
+    }
+};
+
+ / ********************************************************************************************************************************* /
+

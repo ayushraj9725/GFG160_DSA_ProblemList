@@ -1,0 +1,82 @@
+Problem : Count the number of possible triangles
+Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/two-pointer-technique-gfg-160/problem/count-possible-triangles-1587115620
+
+Problem Statement : 
+Given an integer array arr[]. Find the number of triangles that can be formed with three different array elements as lengths of three sides of the triangle. 
+
+A triangle with three given sides is only possible if sum of any two sides is always greater than the third side.
+
+Examples:
+
+Input: arr[] = [4, 6, 3, 7]
+Output: 3
+Explanation: There are three triangles possible [3, 4, 6], [4, 6, 7] and [3, 6, 7]. Note that [3, 4, 7] is not a possible triangle.  
+Input: arr[] = [10, 21, 22, 100, 101, 200, 300]
+Output: 6
+Explanation: There can be 6 possible triangles: [10, 21, 22], [21, 100, 101], [22, 100, 101], [10, 100, 101], [100, 101, 200] and [101, 200, 300]
+Input: arr[] = [1, 2, 3]
+Output: 0
+Explanation: No triangles are possible.
+//////////////////////////
+Constraints:
+3 <= arr.size() <= 103
+0 <= arr[i] <= 105
+//////////////////////////
+
+CODE SOLUTION : ::::::::::::::::::::::::::::::::::::: / ****************************** C++ CODE ********************************** /
+
+
+
+class Solution {
+  public:
+    // Function to count the number of possible triangles.
+    int countTriangles(vector<int>& arr) {
+        // code here
+        // Optimal Solution : Using Two Pointers Approach : TC : O(n^2) and space : O(1)
+        int n = arr.size() ;
+        int count = 0 ;
+        // step 1st before apply the two pointer : sort the intire array 
+        sort(arr.begin(),arr.end()) ; // O(nlogn) time complexity 
+        for(int i = 2 ; i < n ; i++){
+            int j = 0 , k = i - 1 ;
+            while(j < k){
+                if(arr[j] + arr[k] > arr[i]){
+                    count += k - j ; // update it with their diff of that two summation side of traingle
+                    
+                    k-- ; // move right pointer to the smallest part 
+                }
+                else{
+                    // if found the summation is less than we move low pointer to right
+                    j++ ;
+                }
+            }
+        }
+        // at the end of the day we have the final answer 
+        return count ; // O(N ^ 2) time complexity Taken
+        
+        // Brute Force solution : O(N * N * N) and space O( 1 ) 
+        // Better Solution : Binary Search : TC : O (N *(2nlogn)) and space O(1)
+      /*  int n = arr.size() ;
+        int count = 0 ;
+        for(int i = 0 ; i < n - 2 ;i++){
+            for(int j = i + 1 ; j < n ;j++){
+                for(int k = j + 1 ; k < n ; k++){
+                    if(arr[i] + arr[j] > arr[k] &&
+                       arr[j] + arr[k] > arr[i] &&
+                       arr[k] + arr[i] > arr[j]){
+                           count++ ;
+                       }
+                    // if((arr[i] != arr[j]) && (arr[i] != arr[k]) && (arr[j] != arr[k])){
+                    //     count++ ;
+                    // }
+                    // Do not go for this condition apply the traingle side rule 
+                }
+            }
+        }
+        return count ;
+        */
+        
+    }
+};
+
+/ **************************************************************************************************************************** /

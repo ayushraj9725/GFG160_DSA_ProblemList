@@ -1,0 +1,144 @@
+Problem : Indexes of Subarray Sum
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/two-pointer-technique-gfg-160/problem/subarray-with-given-sum-1587115621
+
+Problem Statement : 
+Given an array arr[] containing only non-negative integers, your task is to find a continuous subarray (a contiguous sequence of elements) whose sum equals a specified value target. You need to return the 1-based indices of the leftmost and rightmost elements of this subarray. You need to find the first subarray whose sum is equal to the target.
+
+Note: If no such array is possible then, return [-1].
+
+Examples:
+
+Input: arr[] = [1, 2, 3, 7, 5], target = 12
+Output: [2, 4]
+Explanation: The sum of elements from 2nd to 4th position is 12.
+Input: arr[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], target = 15
+Output: [1, 5]
+Explanation: The sum of elements from 1st to 5th position is 15.
+Input: arr[] = [5, 3, 4], target = 2
+Output: [-1]
+Explanation: There is no subarray with sum 2.
+//////////////////////////
+Constraints:
+1 <= arr.size()<= 106
+0 <= arr[i] <= 103
+0 <= target <= 109
+///////////////////////////
+
+CODE SOLUTION : APPROACH : ALGORITHM : ::::::::::::::::::::::::::::::::::::::::: /*********************** C++ CODE *********************/
+
+
+class Solution {
+  public:
+    vector<int> subarraySum(vector<int> &arr, int target) {
+        // code here
+        // Optimal Solution for : +ve element use sliding windows 
+        int n = arr.size() ;
+        
+        int sum = arr[0] ;
+        vector<int> ans ;
+        int start = 0  ;  // use two pointers 
+        int end = 0 ;
+        while( end < n){
+            
+            while(start < n && sum > target){
+                sum = sum - arr[start] ; // shrink from left 
+                start++ ; // and move start pointer ahead 
+            }
+            
+            // other wise we add upto n using end pointer 
+            // if we found the sum is equal to target ;
+            if(sum == target){
+                ans.push_back(start + 1) ;
+                ans.push_back(end + 1) ;
+                return ans  ;
+            }
+            // if the sum less then target then we add end pointer to sum
+            if(sum < target && end < n){
+                end++ ;
+                sum = sum + arr[end] ; // and calculate maintain sum 
+                //end++ ;
+            }
+            
+        }
+        return {-1} ; //  return -1 if not found that subarray 
+        
+      /*  // Brute force solution 
+        int n = arr.size() ;
+        vector<int> ans ;
+        for(int i = 0 ; i < n ; i++){
+            int sum = 0 ; 
+            for(int j = i ; j < n ; j++){
+                sum = sum + arr[j] ;
+                
+                if(sum == target){
+                    ans.push_back(i+1) ;
+                    ans.push_back(j+1) ;
+                    return ans ; // where we found 1st time then we return
+                }
+            }
+        }
+        return {-1} ; // if not found array 
+        // time complexity : O(N^2) taken .with Space : O(1)
+        
+        */
+        // Most Optimal Solution For +ve and -ve element both : Hashing then it achieve with O(N) time and O(N) space 
+        // Other wise we use the Sliding windows to maintain the sum using two pointer and shrinking 
+        // Expected time complexity : O(N) time and O(1) space 
+    }
+};
+
+
+/ ************************************************************* JAVA CODE ***********************************************************/
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+class GfG {
+    // Function to find a continuous sub-array which adds up to
+    // a given number.
+    static ArrayList<Integer> subarraySum(int[] arr, int target) {
+        // Initialize window
+        int s = 0, e = 0;  
+        ArrayList<Integer> res = new ArrayList<>();
+
+        int curr = 0;
+        for (int i = 0; i < arr.length; i++) {
+            curr += arr[i];
+
+            // If current sum becomes more or equal,
+            // set end and try adjusting start
+            if (curr >= target) {
+                e = i;
+
+                // While current sum is greater, 
+                // remove starting elements of current window
+                while (curr > target && s < e) {
+                    curr -= arr[s];
+                    ++s;
+                }
+
+                // If we found a subarray
+                if (curr == target) {
+                    res.add(s + 1);
+                    res.add(e + 1);
+                    return res;
+                }
+            }
+        }
+        // If no subarray is found
+        res.add(-1);
+        return res;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {15, 2, 4, 8, 9, 5, 10, 23};
+        int target = 23;
+        ArrayList<Integer> res = subarraySum(arr, target);
+
+        for (int ele : res)
+            System.out.print(ele + " ");
+    }
+}
+/***********************************************************************************************************************************/

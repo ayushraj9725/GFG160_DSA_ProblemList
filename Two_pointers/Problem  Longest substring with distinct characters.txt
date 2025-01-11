@@ -1,0 +1,70 @@
+Problem : Longest substring with distinct characters
+
+problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/two-pointer-technique-gfg-160/problem/longest-distinct-characters-in-string5848
+
+Problem Statement : 
+Given a string s, find the length of the longest substring with all distinct characters. 
+
+Examples:
+
+Input: s = "geeksforgeeks"
+Output: 7
+Explanation: "eksforg" is the longest substring with all distinct characters.
+Input: s = "aaa"
+Output: 1
+Explanation: "a" is the longest substring with all distinct characters.
+Input: s = "abcdefabcbb"
+Output: 6
+Explanation: The longest substring with all distinct characters is "abcdef", which has a length of 6.
+Constraints:
+1<= s.size()<=3*104
+All the characters are in lowercase.
+
+Problem Solution : : :::::::::::::::::::::::::::::::::::::::::::::: : /**************** C++ CODE ******************/
+
+ public:
+    int longestUniqueSubstr(string &s) {
+        // code here
+      // so in brute force we check iterating every element to move in the hashset and check every time is belong from set or no 
+      // if it not belong simple we count that element as distinct other wise break and check for new to move next 
+      //  generating all the substring and check every substring as hashet 
+      int n = s.size() ;
+      int ans = INT_MIN ;
+      for(int i = 0 ; i < n ; i++){
+          unordered_set<int> set ; 
+          int count = 0 ; 
+          for(int j = i ; j < n ; j++){
+              set.insert(s[j]); //  inseeting substring character into set ans count 
+              count++ ;
+              //  check the unique character is belong from the set or not yes then maximize the count with ans 
+              // if its size is not same to count that means these is some duplicate count that not in set so here we simple break 
+          
+              if(set.size() != count) break  ;
+              else{
+                  ans = max(ans,count) ;
+              }
+          }
+      }
+      return ans  ;
+      // OPtimal Solution using Sliding windows techniques when we solve that then we revise this problem using that approach 
+      
+      /*   int n = s.size() ;
+        int ans = -1 ;
+        for(int i = 0 ; i < n ; i++){
+            int count = 0 ;
+            for(int j = 0 ; j < n ; j++){
+                if(s[i] != s[j]){
+                    count++ ;
+                }
+                else break ;
+            }
+            ans = max(ans,count);
+        }
+        return ans ;
+        //  this will not work exaclty check the distinct element between 
+        */
+    }
+};
+
+/**********************************************************************************************************************************/
+JAVA CODE AVAILABLE ON LEETCODE PLATEFORM !!!!!!!!!!11

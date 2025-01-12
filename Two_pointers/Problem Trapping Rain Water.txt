@@ -1,0 +1,121 @@
+Problem : Trapping Rain Water
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/two-pointer-technique-gfg-160/problem/trapping-rain-water-1587115621
+
+Problem statement : Given an array arr[] with non-negative integers representing the height of blocks. If the width of each block is 1, compute how much water can be trapped between the blocks during the rainy season. 
+
+Examples:
+
+Input: arr[] = [3, 0, 1, 0, 4, 0 2]
+Output: 10
+Explanation: Total water trapped = 0 + 3 + 2 + 3 + 0 + 2 + 0 = 10 units.
+
+Input: arr[] = [3, 0, 2, 0, 4]
+Output: 7
+Explanation: Total water trapped = 0 + 3 + 1 + 3 + 0 = 7 units.
+
+Input: arr[] = [1, 2, 3, 4]
+Output: 0
+Explanation: We cannot trap water as there is no height bound on both sides.
+
+Input: arr[] = [2, 1, 5, 3, 1, 0, 4]
+Output: 9
+Explanation: Total water trapped = 0 + 1 + 0 + 1 + 3 + 4 + 0 = 9 units.
+/////////////////////////
+Constraints:
+1 < arr.size() < 105
+0 < arr[i] < 103
+////////////////////////
+
+CODE : ::::::::::::::::::::::::::::::::::::::::::::::::::::::: SOLUTION ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: :
+
+C++ CODE : 
+
+class Solution {
+  public:
+    int maxWater(vector<int> &arr) {
+        // code here
+        // Brute Force by doing Manually Observing the problem and apply logic manually 
+        // for knowing leftmax and right max each time in array !
+        // exteme brute force is that to compute initially PrefixMax and suffixMax and then go forward 
+     /*   // let's take two array preMax and suffMax
+        int n = arr.size() ;
+        vector<int> preMax(n) ; // O(N) space 
+           preMax[0] = arr[0] ;
+        for(int i = 1 ; i < n ; i++){
+            preMax[i] = max(preMax[i-1],arr[i]) ;
+        }
+        // computed the preMax array in O(N) time and O(N) space 
+        // now compute the suffMax 
+        vector<int> suffMax(n) ;  // O(N) space 
+           suffMax[n-1] = arr[n-1] ;
+        for(int i = n-2 ; i >= 0 ; i--){
+            suffMax[i] = max(suffMax[i+1],arr[i]) ;
+        }
+        
+        // now we are applying the logic to calculate total storing water in unit 
+        int total = 0 ;
+        for(int i = 0 ; i < n ; i++){
+            int leftMax = preMax[i] , rightMax = suffMax[i]; // we check the left max in premax current value and righ max in suffmax current value that would help me 
+            // now we find the unit of storing water where it be stored 
+            total += min(leftMax,rightMax) - arr[i] ; // minimum of leftmax and righ max and minus with current element of arr help to track to calculate 
+        }
+        // now we return the ans total 
+        return total ;
+        // total time = O(3N) and space = O(2N) slight we can optimized it using only finding suffix max and go while iterating the loop to calculate total here we sure about to maintain the leftmax 
+        */
+        
+        // better solution 
+        
+       /* 
+        int n = arr.size() ;
+         // now compute the suffMax 
+        vector<int> suffMax(n) ;  // O(N) space 
+           suffMax[n-1] = arr[n-1] ;
+        for(int i = n-2 ; i >= 0 ; i--){
+            suffMax[i] = max(suffMax[i+1],arr[i]) ;
+        }
+        
+        int total = 0 ; 
+        int leftMax = 0 ;
+        for(int i = 0 ; i < n ; i++){
+                leftMax = max(leftMax,arr[i]);
+            int rightMax = suffMax[i];
+            
+            total += min(leftMax,rightMax) - arr[i] ;
+        }
+        return total ; // time complexity : O(2N) and space O(N) only used 
+        */
+        
+        
+        // Optimal Solution : using Two Pointers AND Dynamic programming , stacks 
+        int n = arr.size();
+        int l = 0 ;
+        int r = n - 1 ;
+        int leftMax = 0 ;
+        int rightMax = 0 ;
+        int total = 0 ;
+        while(l < r){
+            if(arr[l] <= arr[r]){   // check the height of left 
+                if(leftMax < arr[l]){  // here we are checking if we see any found greater than leftmax then update leftMax
+                    leftMax = arr[l] ; // update with arr[l] leftMax
+                }else{
+                    // otherwise we sure about that and find unit of water adding 
+                    total += leftMax - arr[l] ; // stored
+                }
+                l++ ; // move forward left pointer
+            }
+            else{ // if arr[r] is greater than we care about this condition 
+                if(rightMax < arr[r]){
+                    rightMax = arr[r] ; //update the rightMax with arr[r]
+                }else{
+                    // otherwise we stored and calculate stored unit of trapped water
+                    total += rightMax - arr[r];
+                }
+                r-- ;
+            }
+        }
+         return total ; // now return the total in O(N) time complexity and O(1) space      
+         
+         
+    }
+};

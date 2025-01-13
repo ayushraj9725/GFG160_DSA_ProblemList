@@ -1,0 +1,80 @@
+Problem : Container With Most Water
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/two-pointer-technique-gfg-160/problem/container-with-most-water0535
+
+Problem Statement : 
+Given an array arr[] of non-negative integers, where each element arr[i] represents the height of the vertical lines, find the maximum amount of water that can be contained between any two lines, together with the x-axis.
+
+Note: In the case of a single vertical line it will not be able to hold water.
+
+Examples:
+
+Input: arr[] = [1, 5, 4, 3]
+Output: 6
+Explanation: 5 and 3 are 2 distance apart. So the size of the base is 2. Height of container = min(5, 3) = 3. So, total area to hold water = 3 * 2 = 6.
+
+Input: arr[] = [3, 1, 2, 4, 5]
+Output: 12
+Explanation: 5 and 3 are 4 distance apart. So the size of the base is 4. Height of container = min(5, 3) = 3. So, total area to hold water = 4 * 3 = 12.
+
+Input: arr[] = [2, 1, 8, 6, 4, 6, 5, 5]
+Output: 25 
+Explanation: 8 and 5 are 5 distance apart. So the size of the base is 5. Height of container = min(8, 5) = 5. So, the total area to hold water = 5 * 5 = 25.
+////////////////////////////////
+Constraints:
+1<= arr.size() <=105
+1<= arr[i] <=104
+///////////////////////////////
+
+PROBLEM SOLUTION : :::::::::::::::::::::::::::::::::::::::::::: : /***************************** C++ CODE *****************************/
+
+class Solution {
+
+  public:
+    int maxWater(vector<int> &arr) {
+      
+       /*
+        // code here : C++ we are doing here 
+        
+        int n = arr.size() ;
+        int ans = 0 ;
+        for(int i = 0 ; i < n ; i++){
+            for(int j = i + 1 ; j < n ; j++){
+                int c = min(arr[i],arr[j]);
+                int base = j - i ;
+                int area = base * c ;
+                ans = max(area,ans);
+            }
+        }
+        return ans ;
+        // Brute force taking more time  : O(N^2) time with constant space ;
+        */
+        
+        // Optimal Solution : Using two pointers approach here we are applied O(N) time and O(1) space 
+        int n = arr.size() ;
+        int l = 0 , r = n - 1 ;
+        int max_area = 0 ;
+        
+        while(l < r){
+            
+            int min_height = min(arr[l],arr[r]) ;
+            int base = r - l ;
+            int area = min_height * base ;
+            max_area = max(max_area,area); 
+        
+           // here we are checking the condition if found r currnt element is greater than l curnt elemnt 
+            if(arr[l] < arr[r]){
+                l++ ;
+            }
+            else{
+                r-- ;
+            }
+           
+        }
+        // at the end of the day we return the answer 
+        return max_area ;
+        
+    }
+};
+
+/*******************************************************************************************************************/

@@ -1,0 +1,106 @@
+Problem : Longest Subarray with Sum K
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/prefix-sum-gfg-160/problem/longest-sub-array-with-sum-k0809
+
+Problem Statement :
+Given an array arr[] containing integers and an integer k, your task is to find the length of the longest subarray where the sum of its elements is equal to the given value k. If there is no subarray with sum equal to k, return 0.
+
+Examples:
+
+Input: arr[] = [10, 5, 2, 7, 1, -10], k = 15
+Output: 6
+Explanation: Subarrays with sum = 15 are [5, 2, 7, 1], [10, 5] and [10, 5, 2, 7, 1, -10]. The length of the longest subarray with a sum of 15 is 6.
+
+Input: arr[] = [-5, 8, -14, 2, 4, 12], k = -5
+Output: 5
+Explanation: Only subarray with sum = 15 is [-5, 8, -14, 2, 4] of length 5.
+
+Input: arr[] = [10, -10, 20, 30], k = 5
+Output: 0
+Explanation: No subarray with sum = 5 is present in arr[].
+///////////////////////////
+Constraints:
+1 ≤ arr.size() ≤ 105
+-104 ≤ arr[i] ≤ 104
+-109 ≤ k ≤ 109
+//////////////////////////
+
+/ ******************************************************************* CODE AND SOLUTION *************************************************/
+
+C++ CODE : 
+class Solution {
+  public:
+    int longestSubarray(vector<int>& arr, int k) {
+        // code here
+        // c++ CODE
+        // Brute Force Solution :
+        
+        // Steps : 1st use the nested loop and generate all the subarray 
+        //         because there is positive and negative both element is present in array 
+        //         Ensure about that while iterate and find sum after generating all the subarray 
+        // Extreme Brute force use 3 loop 1 and 2 is for generating third most inner which find the total sum one time of generated subarray 
+        // HEre Time complexity Used : O(N^3) with constant space But we can reduse it to O(N^2) find each time sum add while generating subarray 
+       
+       /*
+       
+        int n = arr.size() ;
+        int maxSubarr = 0 ;
+        
+        for(int i = 0 ; i < n ; i++){
+            int sum = 0 ;
+            for(int j = i ; j < n ; j++){
+                sum += arr[j] ;
+                
+                if(sum == k){
+                    maxSubarr = max(maxSubarr , j - i+1) ;
+                }
+            }
+        }
+        return maxSubarr ; // O(N^2) with Space O(1) that is more time taking 
+        // Let's Optimized this Code Using Prefix sum and Hashing 
+        
+        */
+        
+        /******************************************************************************************************************/
+        
+        // OPTIIMAL SOLUTION USING : PREFIX SUM AND HASHING 
+        
+        // Steps : Take an Ordered Map 
+        //         Iterate Over the Array Find prefix Sum if found equal to k that sum return that index stored in the map key 
+        //         Check in Map (k - arr[i]) is present in the array if present than take this key value and curr index update with max their diff + 1 
+        
+        int n = arr.size() ;
+        unordered_map<int,int> m ;  // O(N) space taking 
+        int maxSubArr = 0 ;
+        int currSum = 0 ;
+        
+        for(int i = 0 ; i < n ; i++){
+            // calculate prefix sum
+            currSum += arr[i] ;
+            // check if found currSum equal to k than we return the index as length 
+            if(currSum == k) maxSubArr = i + 1 ;
+            
+            // check if currSum - currelemnt present into map then calculate length and maximize it 
+            if(m.find(currSum - k) != m.end()){
+                maxSubArr = max(maxSubArr,i - m[currSum - k]) ;
+            }
+            
+            // othersize we insert that currSum as index and value i here in map 
+            // if(m.find(currSum) == m.end()) or we can use this condition 
+            if(m.find(currSum) == m.end()) m[currSum] = i ;
+        }
+         // at the end of the loop / day we have the max answer 
+         
+        return maxSubArr ;
+    }
+        
+     int main() {
+            vector<int> arr = {10, 5, 2, 7, 1, -10};
+           int k = 15;
+            cout << longestSubarray(arr, k) << endl;
+    }
+       
+   
+};
+
+
+/****************************************************************************************************************************************/

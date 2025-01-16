@@ -1,0 +1,139 @@
+Problem Statement : Largest subarray of 0's and 1's  
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/prefix-sum-gfg-160/problem/largest-subarray-of-0s-and-1s
+
+Problem Statement : 
+Given an array arr of 0s and 1s. Find and return the length of the longest subarray with equal number of 0s and 1s.
+
+Examples:
+
+Input: arr[] = [1, 0, 1, 1, 1, 0, 0]
+Output: 6
+Explanation: arr[1...6] is the longest subarray with three 0s and three 1s.
+
+Input: arr[] = [0, 0, 1, 1, 0]
+Output: 4
+Explnation: arr[0...3] or arr[1...4] is the longest subarray with two 0s and two 1s.
+
+Input: arr[] = [0]
+Output: 0
+Explnation: There is no subarray with an equal number of 0s and 1s.
+
+////////////////////////
+Constraints:
+1 <= arr.size() <= 105
+0 <= arr[i] <= 1
+////////////////////////
+
+//********* CODE SOLUTION HERE BELOW MENTAINED IN JAVA AND C++ BOTH *******************************************************************//
+
+C++ CODE SOLUTION : 
+class Solution {
+  public:
+    int maxLen(vector<int> &arr) {
+        // Your code here
+
+/*********************************************************************************************************************************/
+      // OPTIMIAL APPROACH : HASHING AND PREFIX SUM (MAP)
+      
+      int n = arr.size() ;
+      unordered_map<int,int> m ;
+      
+      int ans  = 0 ;
+      int preSum = 0 ;
+      for(int i = 0 ; i < n ; i++){
+          preSum += (arr[i] == 0) ? -1 : 1 ;
+          
+          if(preSum == 0){
+              ans = i + 1 ;
+          }
+          // if preSum is already have in 
+          if(m.find(preSum) != m.end()){
+              ans = max(ans,i - m[preSum]);
+          }
+          else m[preSum] = i ; // else , othewise we place it intoo the map 
+          
+      }
+      return ans  ; // at the end of the day we return answer : O(N) time and O(N)space 
+
+
+ /***************************************************************************************************************************/  
+
+   
+      // C++ CODE : BRUTE FORCE SOLUTION 
+      /*
+      int n = arr.size() ;
+      int ans = 0 ;
+      for(int i = 0; i < n ; i++){
+          int sum = 0 ;
+          for(int j = i ; j < n ; j++){
+              sum += (arr[j] == 0) ? -1 : 1 ;
+              // if currnt elemnt is 0 then we subtarct sum with -1 when currnt elemtn is 1 then we add upto end 
+              // when find sum is equal to zero then we maximize the subarray length this thing we won't in that approach so that was not perfect work
+              if(sum == 0) {
+                  ans = max(ans,j-i+1) ;
+              }
+          }
+      }
+      return ans ; // at the end of the day wwe returnt the answer : O(N^2) time and Space : O(1)
+      // let's optimized this approach using map . hashing and prefix sum 
+      */
+      
+/***************************************************************************************************************************************/
+      
+      /*  int n = arr.size() ;
+        int count_0 = 0 ;
+        int count_1 = 0 ;
+        for(int i = 0 ;i < n ; i++){
+            if(arr[i] == 0) count_0++ ;
+            if(arr[i] == 1) count_1++ ;
+        }
+        
+        int ans = 0 ;
+        if(count_0 == count_1) ans = count_0 + count_1 ;
+        else if(count_0 > count_1) {
+            int diff = count_0 - count_1 ;
+            ans = count_0 + count_1 - diff ;
+        }
+        else if(count_0 < count_1){
+            int diff = count_1 - count_0 ;
+            ans = count_0 + count_1 - diff ;
+        }
+        
+        return ans ;
+        
+        This approach is not corrct approach : here we are trying to find direct that max size subarray globally 
+        but in actuall we are missing some subarray that being my answer , some issue in this approach that could not handle 
+        the actual problem actually what does state .so we go for diff approach 
+        
+        Brute force Solution : Using nested loop we iterate array and check if surrnt elemtn is zero then find sum with negative of 1 each time when found 0 currnt elemnt 
+                               ans maintain the sum . when we find the sum zero beacuse array made with 0's and 1's only so when we add 1 in sum having 1 , having 0 for we subtracting -1 
+                               whne find the sum equal to zero then we maximized this subaray length 
+                            
+        TIME COMPLEXITY HERE : O(N^2) and sapace O(N) .
+    
+        */
+    }
+};
+/********************************************************************* JAVA CODE *****************************************************/
+
+import java.util.HashMap;
+
+public int findMaxLength(int[] nums) {
+    HashMap<Integer, Integer> map = new HashMap<>();
+    map.put(0, -1);  // Initialize sum 0 at index -1
+    int maxLength = 0, prefixSum = 0;
+
+    for (int i = 0; i < nums.length; i++) {
+        // Convert 0 to -1 to balance the sum
+        prefixSum += (nums[i] == 0) ? -1 : 1;
+
+        // If prefixSum seen before, subarray sum is 0 (equal 0s and 1s)
+        if (map.containsKey(prefixSum)) {
+            maxLength = Math.max(maxLength, i - map.get(prefixSum));
+        } else {
+            map.put(prefixSum, i);  // Store first occurrence
+        }
+    }
+    return maxLength;
+}
+/**************************************************************************************************************************************/

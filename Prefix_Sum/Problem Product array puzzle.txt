@@ -1,0 +1,188 @@
+Problem : Product array puzzle
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/prefix-sum-gfg-160/problem/product-array-puzzle4525
+
+Problem Statement : Given an array, arr[] construct a product array, res[] where each element in res[i] is the product of all elements in arr[] except arr[i]. Return this resultant array, res[].
+Note: Each element is res[] lies inside the 32-bit integer range.
+
+Examples:
+
+Input: arr[] = [10, 3, 5, 6, 2]
+Output: [180, 600, 360, 300, 900]
+Explanation: For i=0, res[i] = 3 * 5 * 6 * 2 is 180.
+For i = 1, res[i] = 10 * 5 * 6 * 2 is 600.
+For i = 2, res[i] = 10 * 3 * 6 * 2 is 360.
+For i = 3, res[i] = 10 * 3 * 5 * 2 is 300.
+For i = 4, res[i] = 10 * 3 * 5 * 6 is 900.
+
+Input: arr[] = [12, 0]
+Output: [0, 12]
+Explanation: For i = 0, res[i] is 0.
+For i = 1, res[i] is 12.
+///////////////////////////
+Constraints:
+2 <= arr.size() <= 105
+-100 <= arr[i] <= 100
+//////////////////////////
+
+Company Tags
+Flipkart , Morgan Stanley ,Accolite , Amazon , Microsoft , D-E-Shaw , Intuit , Opera  
+
+////////////////////////////
+
+SOLUTION : CODE : / ************************************************************* C++ CODE *******************************************/
+
+
+BRUTE FORCE : NATIVE APPROACH : O(N^2) time and  O(N) space  ;
+BETTER APPROACH : O(3N) TIME AND O(3N) SPACE : using PREFIX AND SUFFIX ARRAY USING 
+OPTIMAL APPROACH : O(N) TIME AND O(1) SPACE USING PRODUCT ARRAY !
+
+                                                    // ************* BRUTE FORCE ************* //
+
+class Solution {
+  public:
+    vector<int> productExceptSelf(vector<int>& arr) {
+        // code here
+      /*   // brute force : Solution We ahve to iterate nestedly and find each time product of all elemnt except current index 
+        int n = arr.size() ;
+        vector<int> ans(n) ;
+        
+        for(int i = 0 ; i < n ; i++){
+            long pro = 1 ;
+            for(int j = 0 ; j < n ; j++){
+                if(j != i){
+                     pro = pro * arr[j] ;
+                }
+            }
+            
+            // now we have to insert at ith place this pro
+            ans[i] = pro ;
+        }
+        return ans ; // this approach taking O(N^2) and O(N) space 
+       }
+    } ;
+  
+       */
+/*************************************************************************************************************************************/
+      
+                                                    // ************* BETTER APPROACH ************* //
+
+class Solution {
+    public:
+    vector<int> productExceptSelf(vector<int>& arr) {
+
+        // let's optimized the code : Thinking Behind The Process 
+        // Using Prefix And Suffix : O(N) time and O(N) space : Better Approach 
+        
+        int n = arr.size() ;
+        // find the prefix in this arry
+        vector<int> prefix(n) ;
+        vector<int> suffix(n) , ans(n) ;  // O(3N) taken space 
+        // fidnign the prefix Product 
+        prefix[0] = 1 ;
+        for(int i = 1 ; i < n ;i++){
+            prefix[i] = arr[i-1] * prefix[i-1] ; //  calculated here the prefix pro
+        }
+        // now we need to calculate suffix product
+        suffix[n-1] = 1 ;
+        for(int i = n - 2 ; i >= 0 ;i--){
+            suffix[i] = arr[i+1] * suffix[i+1] ;
+        }
+        // now using both prefix array and suffix array combine and find produxt mutually then find the result 
+        for(int i = 0 ; i < n ; i++){
+            ans[i] = prefix[i] * suffix[i] ; // answer is here 
+        }
+        // now we have to return the answer  after these computing in O(3N) time  and O(2N) Space for prefix and suffix and ans arry aten for returning the result so it will not considered as extra space for computing problem !
+
+        return ans ;
+
+        
+    }
+};
+
+/***************************************************************************************************************************************/
+
+                                             // ************* OPTIMAL APPROACH ************* //
+STEPS : HOW CAN I OPTIMIZED THE THAT O(2N) EXTRA SPACE INTO CONSTANT SPACE COMPLEXITY : USING PREFIX AND SUFFOX VARIAVBLE
+    1 : At first take an answer array for storing the result 
+    2 : Now take a variable prefix with one how it calculate check how many element in left from current i element that's product we have to maintain in answer array in single iteration loop entirely in O(N) time 
+    3 : now we have updated answer array and we have input array also see both and take a suffix variable and iterate the input array from last and stored into answer by doing multiplying with current element and suffix variable 
+    4 : just after updating the answer array with suffix and current element multiplication , we have to also update the suffix variable with the multiplication by current elemnt 
+    5 : After this iteration of loop we have the answer array that is our actual answer what we are expacting for in O(1) space and O(2N) time  
+
+class Solution {
+    public:
+    vector<int> productExceptSelf(vector<int>& arr) {
+    
+      
+        // OPTIMISED APPROACH
+        
+        int n = arr.size() ;
+        vector<int> ans(n) ;
+        ans[0] = 1 ;
+        // in this iteration using prefix we are storeing the result into the ans
+        for(int i = 1 ; i < n ; i++){
+            ans[i] = arr[i-1] * ans[i-1]  ; // prefix calculated 
+        }
+        // now we have to storee the suffix operation using this loop
+        int suffix = 1 ; 
+        for(int i = n-1 ; i >= 0 ;i--){
+            ans[i] = ans[i] * suffix ;
+            suffix = suffix * arr[i] ;
+        }
+        
+        // after this iteration we have the answer that is our actual answer 
+        return ans ;
+        
+
+   }
+};
+
+/**************************************************************************************************************************************/
+
+                                          //************ Another Approach JAVA CODE *************//
+
+import java.util.Arrays;
+
+class GfG {
+  
+    // Function to calculate the product of all elements 
+    // except the current element
+    static int[] productExceptSelf(int[] arr) {
+        int zeros = 0, idx = -1, prod = 1;
+        int n = arr.length;
+
+        // Count zeros and track the index of the zero
+        for (int i = 0; i < n; i++) {
+            if (arr[i] == 0) {
+                zeros++;
+                idx = i;
+            } else {
+                prod *= arr[i];
+            }
+        }
+
+        int[] res = new int[n];
+        Arrays.fill(res, 0);
+
+        // If no zeros, calculate the product for all elements
+        if (zeros == 0) {
+            for (int i = 0; i < n; i++) 
+                res[i] = prod / arr[i];
+        }
+        // If one zero, set product only at the zero's index
+        else if (zeros == 1)
+            res[idx] = prod;
+
+        return res;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = {10, 3, 5, 6, 2};
+        int[] res = productExceptSelf(arr);
+
+        for (int val : res)
+            System.out.print(val + " ");
+    }
+}
+/*****************************************************************************************************************************************/

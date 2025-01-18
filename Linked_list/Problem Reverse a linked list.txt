@@ -1,0 +1,55 @@
+Problem : Reverse a linked list
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/linked-list-gfg-160/problem/reverse-a-linked-list
+
+Problem statement : 
+Given the head of a linked list, the task is to reverse this list and return the reversed head.
+
+Examples:
+
+Input: head: 1 -> 2 -> 3 -> 4 -> NULL
+Output: head: 4 -> 3 -> 2 -> 1 -> NULL
+Explanation:
+
+Input: head: 2 -> 7 -> 10 -> 9 -> 8 -> NULL
+Output: head: 8 -> 9 -> 10 -> 7 -> 2 -> NULL
+Explanation:
+
+Input: head: 2 -> NULL
+Output: 2 -> NULL
+Explanation:
+
+Constraints:
+1 <= number of nodes, data of nodes <= 105
+
+Company Tags
+Paytm VMWare Zoho Accolite Amazon Microsoft Samsung Snapdeal D-E-Shaw MakeMyTrip Teradata Walmart Goldman Sachs Intuit Adobe SAP Labs Tejas Network Cisco Qualcomm Cognizant Mahindra Comviva Ignite World .
+
+/***************************************************************************************************************************************/
+
+/* Linked List Node structure:
+
+struct Node
+{
+    int data;
+    struct Node *next;
+}
+
+*/
+
+class Solution {
+  public:
+    Node* reverseList(struct Node* head) {
+        // code here
+        Node *curr = head , *prev=NULL , *next= curr->next ;
+        while(curr){
+            next = curr -> next ;
+            curr -> next = prev ;
+            prev = curr ;
+            curr = next ;
+        }
+        return prev ;
+    }
+};
+
+/****************************************************************************************************************************************/

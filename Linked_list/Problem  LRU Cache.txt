@@ -1,0 +1,146 @@
+Problem : LRU Cache
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/linked-list-gfg-160/problem/lru-cache
+
+Problem Statement : Design a data structure that works like a LRU Cache. Here cap denotes the capacity of the cache and Q denotes the number of queries. Query can be of two types:
+
+PUT x y: sets the value of the key x with value y
+GET x: gets the key of x if present else returns -1.
+The LRUCache class has two methods get() and put() which are defined as follows.
+
+get(key): returns the value of the key if it already exists in the cache otherwise returns -1.
+put(key, value): if the key is already present, update its value. If not present, add the key-value pair to the cache. If the cache reaches its capacity it should remove the least recently used item before inserting the new item.
+In the constructor of the class the capacity of the cache should be initialized.
+Examples:
+
+Input: cap = 2, Q = 2, Queries = [["PUT", 1, 2], ["GET", 1]]
+Output: [2]
+Explanation: Cache Size = 2
+["PUT", 1, 2] will insert the key-value pair (1, 2) in the cache,
+["GET", 1] will print the value corresponding to Key 1, ie 2.
+Input: cap = 2, Q = 8, Queries = [["PUT", 1, 2], ["PUT", 2, 3], ["PUT", 1, 5], ["PUT", 4, 5], ["PUT", 6, 7], ["GET", 4], ["PUT", 1, 2], ["GET", 3]]
+Output: [5, -1]
+Explanation: Cache Size = 2
+["PUT", 1, 2] will insert the pair (1,2) in the cache.
+["PUT", 2, 3] will insert the pair (2,3) in the cache: 1->2, 2->3(the most recently used one is kept at the rightmost position) 
+["PUT", 1, 5] will replace the value of 1 from 2 to 5 : 2 -> 3, 1 -> 5
+["PUT", 4, 5] : 1 -> 5, 4 -> 5 (Cache size is 2, hence we delete the least recently used key-value pair)
+["PUT", 6, 7] : 4 -> 5, 6 -> 7 
+["GET", 4] : Prints 5 (The cache now looks like 6 -> 7, 4->5)
+["PUT", 1, 2] : 4 -> 5, 1 -> 2  (Cache size is 2, hence we delete the least recently used key-value pair)
+["GET", 3] : No key value pair having key = 3. Hence, -1 is printed.
+Constraints:
+1 <= cap <= 103
+1 <= Q <= 105
+1 <= x, y <= 104
+
+Company Tags
+Paytm Zoho Flipkart Morgan Stanley Amazon Microsoft OYO Rooms Samsung Snapdeal Hike MakeMyTrip Ola Cabs Visa Walmart Goldman Sachs Adobe Google Yahoo
+
+/(+************************************************************** C++ CODE ***********************************************************+)/
+
+
+#include <unordered_map>
+ #include<list>
+  
+class LRUCache {
+  private:
+    // list<pair<int, int>> cacheList ;
+    // unordered_map<int , list<pair<int , int >>:: iterator > cache ;
+    // int capacity ;
+    
+  public:
+    list<pair<int, int>> cacheList ;
+    unordered_map<int , list<pair<int , int >>:: iterator> cache ;
+    int capacity ;
+    
+    LRUCache(int cap) {
+        // code here
+        this -> capacity = cap ;
+    }
+
+    // void makeMostRecentlyUsed(int key){
+    //     dll.erase(cache[key].first);
+    //     dll.push_front(key);
+    //     cache[key].first = dll.begin() ;
+    
+    // Function to return value corresponding to the key.
+    int get(int key) {
+        auto it = cache.find(key) ;
+        if(it == cache.end()) return -1 ;
+        
+        int value = it -> second -> second ;
+        cacheList.erase(it-> second);
+        cacheList.push_front({key,value});
+        
+        cache[key] = cacheList.begin() ;
+        return value ;
+    }
+
+    // Function for storing key-value pair.
+    void put(int key, int value) {
+        // your code here         
+        auto it = cache.find(key) ;
+        if(it != cache.end()){
+            cacheList.erase(it -> second) ;
+            cache.erase(it) ;
+        }
+        cacheList.push_front({key,value}) ;
+        cache[key] = cacheList.begin() ;
+        
+        if(cache.size() > capacity){
+            auto lastNode = cacheList.back().first ;
+            cacheList.pop_back() ;
+            cache.erase(lastNode) ;
+        }
+    }
+    
+};
+
+/****************************************************************** JAVA CODE **********************************************************/
+
+
+class LRUCache {
+    // Constructor for initializing the cache capacity with the given value.
+    private int cap ;
+    private Map<Integer,Integer> cacheMap ;
+    
+    private LinkedList<Integer> lruList ;
+    LRUCache(int cap) {
+        // code here
+        this.cap = cap ;
+        this.cacheMap = new HashMap<>() ;
+        this.lruList = new LinkedList<>() ;
+    }
+
+    // Function to return value corresponding to the key.
+    public int get(int key) {
+        // your code here
+        if(!cacheMap.containsKey(key)) return -1 ;
+        
+        lruList.remove(Integer.valueOf(key)) ;
+        
+        lruList.addFirst(key) ;
+        return cacheMap.get(key) ;
+    }
+
+    // Function for storing key-value pair.
+    public void put(int key, int value) {
+        // your code here
+        
+        if(cacheMap.containsKey(key)){
+            cacheMap.put(key,value) ;
+            lruList.remove(Integer.valueOf(key)) ;
+        }
+        else{
+            if(cacheMap.size() >= cap){
+                int leastUsedKey = lruList.removeLast() ;
+                cacheMap.remove(leastUsedKey);
+            }
+            cacheMap.put(key,value) ;
+        }
+        lruList.addFirst(key) ;
+    }
+}
+
+/***************************************************************************************************************************************/

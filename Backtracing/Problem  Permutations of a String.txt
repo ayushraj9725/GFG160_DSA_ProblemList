@@ -1,0 +1,103 @@
+Problem : Permutations of a String
+
+Problem link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/recursion-and-backtracking-gfg-160/problem/permutations-of-a-given-string2041
+
+Problem Statement : 
+Given a string s, which may contain duplicate characters, your task is to generate and return an array of all unique permutations of the string. You can return your answer in any order.
+
+Examples:
+
+Input: s = "ABC"
+Output: ["ABC", "ACB", "BAC", "BCA", "CAB", "CBA"]
+Explanation: Given string ABC has 6 unique permutations.
+Input: s = "ABSG"
+Output: ["ABGS", "ABSG", "AGBS", "AGSB", "ASBG", "ASGB", "BAGS", "BASG", "BGAS", "BGSA", "BSAG", "BSGA", "GABS", "GASB", "GBAS", "GBSA", "GSAB", "GSBA", "SABG", "SAGB", "SBAG", "SBGA", "SGAB", "SGBA"]
+Explanation: Given string ABSG has 24 unique permutations.
+Input: s = "AAA"
+Output: ["AAA"]
+Explanation: No other unique permutations can be formed as all the characters are same.
+Constraints:
+1 <= s.size() <= 9
+s contains only Uppercase english alphabets
+
+Company Tags
+Zoho Accolite Amazon Microsoft OYO Rooms Samsung Snapdeal Citrix Walmart MAQ Software Cisco 
+
+
+/********************************************************************************** C++ CODE BRUTE FORCE *******************************/
+
+class Solution {
+ 
+   public:
+   
+    void recSolve(string &s , unordered_set<string> &ans ,int index){
+            // base case
+            int n = s.size() ;
+  
+            if(index >= n){
+                ans.insert(s);
+                
+                return ;
+            }
+            for(int j = 0 ; j < n ; j++){
+                swap(s[index],s[j]);  // for swaping
+                
+                recSolve(s,ans,index+1); // here we are reursivly calling 
+                
+                swap(s[index],s[j]); // for backtracking 
+            }
+            
+            
+        }
+    vector<string> findPermutation(string &s) {
+        // Code here there
+        // taking answer to store the all possible string 
+        unordered_set<string> ans ;
+        // taking that index , which helop me to iterate recursivly 
+        
+        int index = 0;
+        // caaling that function which helps to performing the tasks here 
+        recSolve(s,ans,index);
+        
+        return vector<string>(ans.begin(),ans.end()) ;
+    }
+};
+
+/ ************************************************************* OPTIMIZED C++ CODE ******************************************************/
+
+class Solution {
+ 
+   public:
+   
+    void recSolve(int i , int n , string &s , string &premu, unordered_set<string> &ans){
+            // base case
+            
+            if(premu.size() == n){
+                ans.insert(premu);
+                
+                return ;
+            }
+            for(int j = i ; j < n ; j++){
+                swap(s[i],s[j]);  // for swaping
+                premu.push_back(s[i]);
+                recSolve(i+1,n,s,premu,ans); // here we are reursivly calling 
+                premu.pop_back(); 
+                swap(s[i],s[j]); // for backtracking 
+            }
+            
+            
+        }
+    vector<string> findPermutation(string &s) {
+        // Code here there
+        // taking answer to store the all possible string 
+        unordered_set<string> ans ;
+        string premu ; // for holding the permutations of string currunt after made 
+        int n = s.size() ;
+        // caaling that function which helps to performing the tasks here
+        recSolve(0,n,s,premu,ans);
+        
+        return vector<string>(ans.begin(),ans.end()) ;
+    }
+};
+
+/***************************************************************************************************************************************/

@@ -75,4 +75,24 @@ class Solution {
      }
 };
 
-/***************************************************************************************************************************************/ 
+/***************************************************************************************************************************************/
+
+
+
+
+description of this code :
+
+
+Time Complexity: O(log n)
+This is because the function repeatedly divides the problem into half (similar to binary search or divide and conquer), and each recursive call takes constant time for the operations like multiplication and division.
+
+Space Complexity (SC):
+The space complexity is determined by the depth of the recursion stack since we are using recursion.
+
+In the worst case, the recursion depth will be O(log n), as the exponent n is halved in each step.
+Thus, the space complexity is:
+
+Space Complexity: O(log n)
+This is due to the recursion stack, where each recursive call pushes a new frame onto the stack. The maximum depth of the recursion stack is proportional to the logarithm of n.
+
+ 

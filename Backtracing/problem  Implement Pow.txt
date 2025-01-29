@@ -1,0 +1,78 @@
+problem : Implement Pow
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/recursion-and-backtracking-gfg-160/problem/powx-n
+
+problem Statement : 
+mplement the function power(b, e), which calculates b raised to the power of e (i.e. be).
+
+Examples:
+
+Input: b = 3.00000, e = 5
+Output: 243.00000
+
+Input: b = 0.55000, e = 3
+Output: 0.16638
+
+Input: b = -0.67000, e = -7
+Output: -16.49971
+
+Constraints:
+
+-100.0 < b < 100.0
+-109 <= e <= 109
+Either b is not zero or e > 0.
+-104 <= be <= 104
+
+
+/****************************************************** CODE CPP OPTIMAL **************************************************************/
+
+class Solution {
+  public:
+    double power(double b, int e) {
+        // code here
+        // c++ code here write optimized version
+        long long ans = 1.0 ;
+        while(e > 0){
+            if(e % 2 == 1){
+                ans = ans * b ; // answer updated by just multipling  by b
+                e = e - 1 ; // and e is updated by - 1 
+                
+            }
+            else{ // otherwise we update both b and e 
+                e = e / 2 ;
+                b = b * b ; // just do squarre of the base 
+            }
+        }
+        // after the while loop we return that 
+        // check one condition if power e is -ve then do this 
+        if(e < 0) ans = (double)1.0 / (double)(ans) ;
+        
+        return ans ;
+    } 
+};
+
+/*************************************************** RECURSIVE METHOD ********************************************************/
+
+
+class Solution {
+  public:
+    double power(double b, int e) {
+        // code here
+        
+        if(e == 0) return 1 ; // simple ase 
+        if(e < 0) return 1.0/power(b,-e); // simple call recursively for negative power 
+        
+        double temp = power(b,e/2) ; // doing same thing just like that reducing the 
+        
+        if(e % 2 == 0){
+             // if power is even then we calculate square 
+             return temp * temp ;
+        }
+        else{
+            // itherwise we do this 
+            return b * temp * temp ;
+        }
+     }
+};
+
+/***************************************************************************************************************************************/ 

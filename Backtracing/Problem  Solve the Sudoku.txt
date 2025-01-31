@@ -1,0 +1,93 @@
+Problem : Solve the Sudoku
+
+problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/recursion-and-backtracking-gfg-160/problem/solve-the-sudoku-1587115621
+
+problem statement : 
+Given an incomplete Sudoku configuration in terms of a 9x9  2-D interger square matrix, mat[][], the task is to solve the Sudoku. It is guaranteed that the input Sudoku will have exactly one solution.
+
+A sudoku solution must satisfy all of the following rules:
+
+Each of the digits 1-9 must occur exactly once in each row.
+Each of the digits 1-9 must occur exactly once in each column.
+Each of the digits 1-9 must occur exactly once in each of the 9 3x3 sub-boxes of the grid.
+Note: Zeros represent blanks to be filled with numbers 1-9, while non-zero cells are fixed and cannot be changed.
+
+Examples:
+
+Input: mat[][] = 
+
+Output:
+
+Explanation: Each row, column and 3 x 3 box of the output matrix contains unique numbers.
+Input: mat[][] = 
+
+Output:
+
+Explanation: Each row, column and 3 x 3 box of the output matrix contains unique numbers.
+
+Constraints:
+mat.size() = 9
+mat[i].size() = 9
+0 ≤ mat[i][j] ≤ 9
+
+Company Tags
+Zoho Flipkart Amazon Microsoft MakeMyTrip Ola Cabs Oracle MAQ Software Directi PayPal Samsung
+
+Expected Complexities
+Time Complexity: O(9 ^ (n * n))                     Auxiliary Space: O(n)
+
+/******************************************************* SOLUTION **********************************************************************/
+
+
+class Solution {
+  private:
+    bool isValid(vector<vector<int>> &mat , int i , int j, int num){
+        // now we write the validation function
+        //  if any row and column there is placed at any place equal to that number then it is not valid 
+        for(int a = 0 ; a < 9 ; a++){
+            if(mat[i][a] == num || mat[a][j] == num) return false ; // checking the actuall address of matrix
+        }
+        // now we are checking for the 3x3 matrix so we have to find the initial row and colm address so we can validate correctly
+        int sr = i - (i % 3) ; // this is starting row 
+        int sc = j - (j % 3) ; // this is starting column 
+        // now from this we are validating 
+        for(int r = 0 ; r < 3 ; r++){ // row iterating for 3x3 matrix
+            for(int c = 0 ; c < 3 ; c++){ // column iterating for 3x3 matrix
+                if(mat[sr+r][sc+c] == num) return false ; // immidiate return false if at correct place has same number
+            }
+        }
+        /// if there has been not return false yet so it means there shuld correct place for that particular number
+        return true ; // so return true 
+    }
+  private:
+    bool backTrackSolve(vector<vector<int>> &mat){
+        // we are finding the blank space that is zero where we have to put number by satisfing the given three conditions 
+        for(int i = 0 ; i < 9 ; i++){
+            for(int j = 0 ; j < 9 ; j++){
+                if(mat[i][j] == 0){
+                    for(int num = 1 ; num <= 9 ; num++){
+                        // we are checking the number from 1 to 9 to place valid number so check condition
+                        if(isValid(mat,i,j,num)){
+                            mat[i][j] = num ; // put the sutabule number
+                            if(backTrackSolve(mat)) return true ; // and make the recursive call and if true return true 
+                            mat[i][j] = 0 ; // if that number is not soutable in future then we have to remove from there so we backtrack here 
+                            // again make 0 mat[i][j] current place
+                        }
+                    }
+                    return false ; // there is no need to put any it is correct placed 
+                }
+            }
+        }
+        return true ; // at the end if we make the matrix solve correctly at the end 
+    }
+  public:
+    // Function to find a solved Sudoku.
+    void solveSudoku(vector<vector<int>> &mat) {
+        // code here
+        // to solving this we have to use the recursive backtracking approach 
+        // we are callling the function backtracking
+        backTrackSolve(mat); // simply we passed the input 9x9 matrix
+    }
+};
+
+/**************************************************************************************************************************************/

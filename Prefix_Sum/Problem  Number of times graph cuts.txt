@@ -1,0 +1,62 @@
+Problem : Number of times graph cuts X-axis
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/prefix-sum-bonus-problem/problem/number-of-times-graph-cuts-x-axis
+
+Problem Statement : 
+Given an integer array arr[], where each arr[i] denotes the trajectory of the graph over the plane; i.e. arr[i]>0 means graph going above its current position by arr[i] value and arr[i]<0 means graph going down by arr[i] value. If initial position of the graph is at origin, determines the number of times graph crosses or touches the X-axis.
+
+Example:
+
+Input: arr[] = [2, 5, -9, 4]
+Output: 2
+Explanation: Graph touches the X-axis two times through index 1 to 2, and through index 2 to 3.
+
+Input: arr[] = [4, -6, 2, 8, -2, 3, -12]
+Output: 3
+Explanation:
+Graph touches the X-axis three times through index 0 to 1, through index 1 to 2, and through index 5 to 6.
+
+Input: arr[] = [1, 3, 5]
+Output: 0
+Explanation: Graph has not touched the X-axis any time.
+//////////////////////////////
+Constraints:
+1 <= arr.size() <= 105
+-104 <= arr[i] <= 104
+arr[i] does not contains any zero.
+///////////////////////////////
+
+
+/********************************************************* SOLUTION CPP *****************************************************************/
+
+class Solution {
+  public:
+    int touchedXaxis(vector<int>& arr) {
+        // code here
+        int count_cuts = 0 ;
+        int n = arr.size() ;
+        
+        // By observing this problem we got the point we find the prefix sum and just prefix sum we check both of that 
+        // where we get the turning point , if we see any one get after adding negative to positive ot positive to negative we count that point onlt 
+        // and edge case is that if we get prefix sum is equal to 0 then we consider that also 
+        // and along with that we got out answer in O(N) time without using any extra space 
+        
+        int preSum = 0 ;
+        int postSum = 0 ;
+        for(int i = 1 ; i < n ;i++){
+            preSum += arr[i-1] ; 
+            postSum = preSum + arr[i] ;
+            if(preSum < 0 && postSum > 0) count_cuts++ ;
+            
+            if(postSum < 0 && preSum > 0) count_cuts++ ;
+            
+            if(postSum == 0) count_cuts++ ;
+        }
+        
+        return count_cuts ;
+        
+        
+    }
+};
+
+/****************************************************************************************************************************************/

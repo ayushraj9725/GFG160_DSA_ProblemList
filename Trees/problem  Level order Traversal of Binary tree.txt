@@ -1,0 +1,196 @@
+problem : Level order Traversal of Binary Tree
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/tree-gfg-160/problem/level-order-traversal 
+
+Problem Statement : 
+Given a root of a binary tree with n nodes, the task is to find its level order traversal. Level order traversal of a tree is breadth-first traversal for the tree.
+
+Examples:
+
+Input: root[] = [1, 2, 3]
+
+Output: [[1], [2, 3]]
+Input: root[] = [10, 20, 30, 40, 50]
+
+Output: [[10], [20, 30], [40, 50]]
+Input: root[] = [1, 3, 2, N, N, N, 4, 6, 5]
+
+Output: [[1], [3, 2], [4], [6, 5]]
+Constraints:
+
+1 ≤ number of nodes ≤ 105
+0 ≤ node->data ≤ 109
+
+Company Tags
+Flipkart Morgan Stanley Accolite Amazon Microsoft Samsung D-E-Shaw Ola Cabs Payu Adobe Cisco Qualcomm 
+
+
+/************************************************************ CPP CODE SOLUTION **********************************************************************************/
+
+ A binary tree Node
+class Node {
+      public:
+         int data;
+         Node* left;
+         Node* right;
+
+    // Constructor
+     Node(int val) {
+          data = val;
+          left = nullptr;
+          right = nullptr;
+     }
+};
+*/
+
+class Solution {
+  public:
+    vector<vector<int>> levelOrder(Node *root) {
+        // Your code here CPP code 
+
+        // we are taking 2d vector for storing the result that is tree traversal layer wise 
+
+         vector<vector<int>> ans ;
+        // we need to store the temp node data which present at node or left / righ of the node 
+        // so we are taking the queue so we can access the first traversal data first and store it into temp
+
+        Queue<Node*> q ;                  // we are going to put Node data inside the Queue so we specifuy the type
+
+        q.push(root);                        // at first we have to enter / push the root of the tree so we can figure out the next 
+                                                  // we are checkig and doing that this untill the queue is not being empty
+        while(!q.empty()){
+            vector<int> temp ;
+
+            // we need to check what at the current node we we ake it 
+            Node* curr_node = q.front() ;                   // current node data how we know using the q ront data 
+
+            // now we have to pop the front curr_node data and store into the temp
+            q.pop();                            // popping the front node data currnt node 
+
+            temp.push_back(curr_node -> data) ;      // we are insrting the cuuunt node data inside the temp 
+
+            // now we check the curr_node data has any left or right child then insert it also in the q
+            // because we are doing Breadth first traversal so we trivarse first the left node so at first we check for left node and then right
+
+              if(curr_node -> left) q.push(curr_node -> left) ;
+              if(curr_node -> right) q.push(curr_node -> left) ;
+
+              // now we have to add temp into the ans 
+            ans.push_back(temp) ;
+        }
+
+        return ans ; // time taken O(N) and Space : O(N) also
+    }
+};
+
+//Driver Code Starts{
+int main() {
+    // Create binary tree
+    //      1         
+    //     / \       
+    //    3   2      
+    //          \   
+    //           4 
+    //          /  \
+    //         6    5
+    Node *root = new Node(1);
+    root->left = new Node(3);
+    root->right = new Node(2);
+    root->right->right = new Node(4);
+    root->right->right->left = new Node(6);
+    root->right->right->right = new Node(5);
+
+    // Perform level order traversal
+    vector<vector<int>> res = levelOrder(root);
+
+    // Print the result
+    for (vector<int> level : res)
+        for (int data : level)
+            cout << data << " ";
+}
+/*********************************************************************** JAVA CODE SOLUTION *********************************************************************/
+
+
+// Java program for level order traversal of Binary Tree
+// Using Queue
+
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+
+    // Constructor to initialize a new node
+
+    Node(int value) {
+        data = value;
+        left = null;
+        right = null;
+    }
+}
+
+class GfG {
+  
+    // Iterative method to find height of Binary Tree
+    static ArrayList<ArrayList<Integer>> levelOrder(Node root) {
+        if (root == null)
+            return new ArrayList<>();
+
+        // Create an empty queue for level order traversal
+        Queue<Node> q = new LinkedList<>();
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+
+        // Enqueue Root
+        q.add(root);
+        int currLevel = 0;
+
+        while (!q.isEmpty()) {
+            int len = q.size();
+            res.add(new ArrayList<>());
+
+            for (int i = 0; i < len; i++) {
+                // Add front of queue and remove it from queue
+                Node node = q.poll();
+                res.get(currLevel).add(node.data);
+
+                // Enqueue left child
+                if (node.left != null)
+                    q.add(node.left);
+
+                // Enqueue right child
+                if (node.right != null)
+                    q.add(node.right);
+            }
+            currLevel++;
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        // Create binary tree
+        //      1         
+        //     / \       
+        //    3   2      
+        //          \   
+        //           4 
+        //          /  \
+        //         6    5
+        Node root = new Node(1);
+        root.left = new Node(3);
+        root.right = new Node(2);
+        root.right.right = new Node(4);
+        root.right.right.left = new Node(6);
+        root.right.right.right = new Node(5);
+
+        // Perform level order traversal
+        ArrayList<ArrayList<Integer>> res = levelOrder(root);
+
+        // Print the result
+        for (ArrayList<Integer> level : res)
+            for (int data : level)
+                System.out.print(data + " ");
+    }
+}
+
+
+/**************************************************************************************************************************************************************************/

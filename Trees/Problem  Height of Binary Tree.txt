@@ -1,0 +1,147 @@
+Problem : Height of Binary Tree
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/tree-gfg-160/problem/height-of-binary-tree
+
+Problem Statement : 
+Given a binary tree, find its height.
+
+The height of a tree is defined as the number of edges on the longest path from the root to a leaf node. A leaf node is a node that does not have any children.
+
+Examples:
+
+Input: root[] = [12, 8, 18, 5, 11] 
+
+Output: 2
+
+Explanation: One of the longest path from the root (node 12) goes through node 8 to node 5, which has 2 edges.
+
+Input: root[] = [1, 2, 3, 4, N, N, 5, N, N, 6, 7]  
+Output: 3
+Explanation: The longest path from the root (node 1) to a leaf node 6 with 3 edge.
+
+Constraints:
+1 <= number of nodes <= 105
+0 <= node->data <= 105
+
+Company Tags
+VMWare Zoho Amazon Microsoft Snapdeal D-E-Shaw Fact Set MakeMyTrip Teradata Synopsys Coupon Dunia Cadence India Monotype 
+Solutions Free Charge
+
+Expected Complexities
+Time Complexity : O(n)          Auxiliary Space : O(n)
+
+/******************************************************************** CPP CODE SOLUTION ***************************************************************************/
+
+
+class Node {
+public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+
+class Solution {
+  public:
+    // Function to find the height of a binary tree.
+
+    int height(Node* node) {
+        // code here
+        // to solve this we have to use recursion so that we can easly check out the each of the node in the tree 
+
+        // base case 
+        // when the node goes till the left then we return -1
+        if(!node) return -1 ;
+
+        // Recursive Case 
+        // we check the left child of node if it is not null then we make call for left
+        int left_height = height(node -> left) ;
+
+        // similar to this we make call for the right child 
+        int right_height = height(node -> right) ;
+        
+        // now return the max of both +1 in case of edge considering 
+        
+        return max(left_height,right_height) + 1 ;
+        
+    }
+};
+
+//Driver Code Starts{
+int main() {
+  
+    // Representation of the input tree:
+    //     12
+    //    /  \
+    //   8   18
+    //  / \
+    // 5   11
+    Node *root = new Node(12);
+    root->left = new Node(8);
+    root->right = new Node(18);
+    root->left->left = new Node(5);
+    root->left->right = new Node(11);
+    
+    cout << height(root);
+    
+    return 0;
+}
+
+/******************************************************************************* JAVA CODE *************************************************************************/
+
+// Java program to find the height of a binary 
+// tree using depth-first search (DFS) approach.
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int val) {
+        data = val;
+        left = null;
+        right = null;
+    }
+}
+
+class GfG {
+
+    // Returns height which is the number of edges
+    // along the longest path from the root node down 
+    // to the farthest leaf node.
+    static int height(Node root) {
+        if (root == null)
+            return -1;
+
+        // compute the height of left and right subtrees
+        int lHeight = height(root.left);
+        int rHeight = height(root.right);
+
+        return Math.max(lHeight, rHeight) + 1;
+    }
+
+    public static void main(String[] args) {
+
+        // Representation of the input tree:
+        //     12
+        //    /  \
+        //   8   18
+        //  / \
+        // 5   11
+        Node root = new Node(12);
+        root.left = new Node(8);
+        root.right = new Node(18);
+        root.left.left = new Node(5);
+        root.left.right = new Node(11);
+
+        System.out.println(height(root));
+    }
+}
+
+
+/******************************************************************************** ENDS ******************************************************************************/
+
+

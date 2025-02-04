@@ -1,0 +1,90 @@
+Problem : Subarray Sums Divisible by K
+
+Problem Statement : 
+Given an integer array nums and an integer k, return the number of non-empty subarrays that have a sum divisible by k.
+
+A subarray is a contiguous part of an array.
+
+ 
+
+Example 1:
+
+Input: nums = [4,5,0,-2,-3,1], k = 5
+Output: 7
+Explanation: There are 7 subarrays with a sum divisible by k = 5:
+[4, 5, 0, -2, -3, 1], [5], [5, 0], [5, 0, -2, -3], [0], [0, -2, -3], [-2, -3]
+
+Example 2:
+
+Input: nums = [5], k = 9
+Output: 0
+ 
+
+Constraints:
+
+1 <= nums.length <= 3 * 104
+-104 <= nums[i] <= 104
+2 <= k <= 104
+
+/*********************************************************************************** SOLUTION CPP ********************************************************************/
+
+class Solution {
+public:
+    int subarraysDivByK(vector<int>& arr, int k) {
+         // Optimized approach : Using Prefix Sum abd HashMap 
+       
+       int n = arr.size();
+       int sum = 0 ;
+       int ans = 0 ;
+       unordered_map<int,int> map ;
+       // we put 1 at 0th index so when sum come 0 it value set 1
+       map[0] = 1 ;
+       for(int i = 0 ; i < n ;i++){
+           //  calculate the sum use prefix sum
+           sum = sum + arr[i];
+           // calculate the mod 
+           int mod = sum % k ;
+           // mod can be negative so we are hendling the case 
+           if(mod < 0) mod = (mod % k) + k ;
+           
+           //check if it is present in the map then we increase count
+           if(map.find(mod) != map.end()){
+               ans = ans + map[mod]; // what value present at the mod that we will add 
+           }
+           // now we increment the freq in map if not present we put
+           map[mod]++ ;
+       }
+
+       return ans ;
+    }
+};
+
+/*********************************************************************************** JAVA SOLUTION ******************************************************************/
+
+class Solution {
+    public int subarraysDivByK(int[] arr, int k) {
+         int n = arr.length, res = 0;
+        Map<Integer, Integer> prefCnt = new HashMap<>();
+        int sum = 0;
+
+        // Iterate over all ending points
+        for (int i = 0; i < n; i++) {
+
+            // prefix sum mod k (handling negative prefix sum)
+            sum = ((sum + arr[i]) % k + k) % k;
+
+            // If sum == 0, then increment the result by 1
+            // to count subarray arr[0...i]
+            if (sum == 0)
+                res += 1;
+
+            // Add count of all starting points for index i
+            res += prefCnt.getOrDefault(sum, 0);
+
+            prefCnt.put(sum, prefCnt.getOrDefault(sum, 0) + 1);
+        }
+        return res;
+    }
+}
+
+/***************************************************************************************************************************************************************************/

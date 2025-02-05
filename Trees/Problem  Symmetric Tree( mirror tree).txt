@@ -1,0 +1,86 @@
+Problem : Symmetric Tree( mirror tree leetcode 101)
+
+Problem Statement : 
+Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
+
+
+Example 1:
+Input: root = [1,2,2,3,4,4,3]
+Output: true
+
+Example 2:
+Input: root = [1,2,2,null,3,null,3]
+Output: false
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [1, 1000].
+-100 <= Node.val <= 100
+
+/*************************************************************************** CPP CODE *******************************************************************************/
+
+
+Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool mirror(TreeNode* lt , TreeNode* rt){
+        // Base Case :
+        if(!lt && !rt) return true ; // Both are null, so they're symmetric
+        if(!lt || !rt) return false ; // One is null, the other is not
+
+        // return if the value at both left and right subtree node same then return true otherwise false
+        return(lt->val == rt->val) && mirror(lt->left,rt->right) && mirror(lt->right,rt->left);
+
+    }
+    bool isSymmetric(TreeNode* root) {
+        // recurively we will solve this problem 
+        if(!root) return  true ;
+        return mirror(root->left,root->right);
+    }
+};
+
+/**************************************************************************** DIFF CODE ***************************************************************************/
+
+class Node {
+public:
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int x) {
+        data = x;
+        left = right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    // Function to convert a binary tree into its mirror tree.
+    void mirror(Node* node) {
+         // we wany to find out the mirror image 
+         // just what we have to do swap the right child to left same things for all node
+         // Recursively we will solve the question
+         // base case :
+         if(!node) return ;
+         
+         // swap the noth legt and righ childe
+         swap(node -> left , node -> right);
+         
+         // now call recursively all the node left and right both
+         mirror(node->left);
+         mirror(node->right);
+    }
+};
+
+/**********************************************************************************************************************************************************************/

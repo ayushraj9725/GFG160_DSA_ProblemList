@@ -1,0 +1,172 @@
+Problem : Construct Tree from Inorder & Preorder
+
+Problem Statement : Given two arrays representing the inorder and preorder traversals of a binary tree, construct the tree and return the root node of the constructed tree.
+
+Note: The output is written in postorder traversal.
+
+Examples:
+
+Input: inorder[] = [1, 6, 8, 7], preorder[] = [1, 6, 7, 8]
+Output: [8, 7, 6, 1]
+Explanation: The tree will look like
+
+Input: inorder[] = [3, 1, 4, 0, 2, 5], preorder[] = [0, 1, 3, 4, 2, 5]
+Output: [3, 4, 1, 5, 2, 0]
+Explanation: The tree will look like
+
+Input: inorder[] = [2, 5, 4, 1, 3], preorder[] = [1, 4, 5, 2, 3]
+Output: [2, 5, 4, 3, 1]
+Explanation: The tree will look like
+
+Constraints:
+1 ≤ number of nodes ≤ 103
+0 ≤ nodes -> data ≤ 103
+Both the inorder and preorder arrays contain unique values.
+
+Company Tags
+Accolite   Amazon   Microsoft
+
+
+/****************************************************************************** CPP CODE ***************************************************************************/
+
+Definition of the Node class
+class Node {
+public:
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int x) {
+        data = x;
+        left = NULL;
+        right = NULL;
+    }
+};
+*/
+class Solution {
+  public:
+    unordered_map<int,int> map;
+    Node* solve(vector<int> &preorder,int s,int e,int &preInd){
+        // base case :
+        // if start and end cross that mean tree has formed 
+        if(s > e) return NULL ; // return null here 
+        // Recursive case 
+        int val = preorder[preInd];
+        Node* root = new Node(preorder[preInd++]);
+        
+        root->left = solve(preorder,s,map[val]-1,preInd);
+        root->right = solve(preorder,map[val]+1,e,preInd);
+        //after that we return the root
+        
+        return root ;
+    }
+    // Function to build the tree from given inorder and preorder traversals
+    Node *buildTree(vector<int> &inorder, vector<int> &preorder) {
+        
+    // code here :  
+    for(int i = 0 ; i < inorder.size() ; i++){
+        map[inorder[i]] = i;
+    }
+    int preInd = 0 ;
+    
+    return solve(preorder,0,inorder.size()-1,preInd);
+    }
+};
+
+/****************************************************************************** JAVA CODE ***************************************************************************/
+
+// Java program to construct tree using 
+// inorder and preorder traversals
+
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+    Node(int x) {
+        data = x;
+        left = null;
+        right = null;
+    }
+}
+
+class GfG {
+    
+    // Print tree as level order
+    static void printLevelOrder(Node root) {
+        if (root == null) {
+            System.out.print("N ");
+            return;
+        }
+
+        Queue<Node> qq = new LinkedList<>();
+        qq.add(root);
+        int nonNull = 1;
+
+        while (!qq.isEmpty() && nonNull > 0) {
+            Node curr = qq.poll();
+
+            if (curr == null) {
+                System.out.print("N ");
+                continue;
+            }
+            nonNull--;
+
+            System.out.print(curr.data + " ");
+            qq.add(curr.left);
+            qq.add(curr.right);
+            if (curr.left != null)
+                nonNull++;
+            if (curr.right != null)
+                nonNull++;
+        }
+    }
+
+    // Recursive function to build the binary tree.
+    static Node buildTreeRecur(Map<Integer, Integer> mp, int[] preorder, 
+                               int[] preIndex, int left, int right) {
+
+        // For empty inorder array, return null
+        if (left > right)
+            return null;
+
+        int rootVal = preorder[preIndex[0]];
+        preIndex[0]++;
+
+        // create the root Node
+        Node root = new Node(rootVal);
+
+        // find the index of Root element in the in-order array.
+        int index = mp.get(rootVal);
+
+        // Recursively create the left and right subtree.
+        root.left = buildTreeRecur(mp, preorder, preIndex, left, index - 1);
+        root.right = buildTreeRecur(mp, preorder, preIndex, index + 1, right);
+
+        return root;
+    }
+
+    // Function to construct tree from its inorder and preorder traversals
+    static Node buildTree(int[] inorder, int[] preorder) {
+
+        // Hash map that stores index of a root element in inorder array
+        Map<Integer, Integer> mp = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++)
+            mp.put(inorder[i], i);
+
+        int[] preIndex = {0};
+        return buildTreeRecur(mp, preorder, preIndex, 0, inorder.length - 1);
+    }
+
+    public static void main(String[] args) {
+        int[] inorder = {3, 1, 4, 0, 5, 2};
+        int[] preorder = {0, 1, 3, 4, 2, 5};
+        Node root = buildTree(inorder, preorder);
+
+        printLevelOrder(root);
+    }
+}
+
+
+/************************************************************************************************************************************************************************/
+

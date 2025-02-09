@@ -1,0 +1,112 @@
+Problem : Maximum path sum from any node
+
+Problem Statement : 
+Given a binary tree, the task is to find the maximum path sum. The path may start and end at any node in the tree.
+
+Examples:
+
+Input: root[] = [10, 2, 10, 20, 1, N, -25, N, N, N, N, 3, 4]
+Output: 42
+
+Explanation: 
+Max path sum is represented using green colour nodes in the above binary tree.
+
+Input: root[] = [-17, 11, 4, 20, -2, 10]
+Output: 31
+Explanation: 
+Max path sum is represented using green colour nodes in the above binary tree.
+
+Constraints:
+1 ≤ number of nodes ≤ 103
+-104 ≤ node->data ≤ 104
+
+Company Tags
+Flipkart  Google  Facebook
+
+Expected Complexities
+Time Complexity : O(n)     Auxiliary Space : O(h)
+
+/************************************************************************** SOLUTION CPP *****************************************************************************/
+
+Tree Node
+class Node {
+public:
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+class Solution {
+  public:
+    // Function to return maximum path sum from any node in a tree.
+    int solve(Node* root , int &maxi){
+        // base case :
+        if(!root) return 0 ;
+        // recursive calling and checking 
+        int leftSum = solve(root->left,maxi);
+        int rightSum = solve(root->right,maxi);
+        
+        // now check the condition and choose the valid path
+        if(leftSum > 0 && rightSum > 0) maxi = max(maxi,root->data+leftSum+rightSum); // consider all leftSum   , rightSum and root also
+        else if(leftSum < 0 && rightSum < 0) maxi = max(maxi,root->data); // consider only the root data 
+        
+        else maxi = max(maxi,root->data+max(leftSum,rightSum)); // choose that path which is maxi btw left and right including root 
+    
+        return max(0,root -> data + max(leftSum,rightSum)) ; //otherwise return this if greater than zero bcz if root itself has been negative then 0 should be answer 
+    }
+    int findMaxSum(Node *root) {
+        // code here
+        // we are going to solve this using recursion 
+        int maxi = INT_MIN ;
+        solve(root,maxi);
+        
+        return maxi ;
+    }
+];
+
+/******************************************************************************** JAVA SOLUTION *********************************************************************/
+LEETCODE PROBLEM 124 : Binary Tree Maximum Path Sum
+
+
+ Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    int solve(TreeNode root ,int maxi[] ){
+        // base case 
+        if(root == null) return 0 ;
+        //  recurcive case and call
+        int leftSum = Math.max(0,solve(root.left,maxi));
+        int rightSum = Math.max(0,solve(root.right,maxi));
+
+        // updates the maxi
+        maxi[0] = Math.max(maxi[0],root.val + leftSum + rightSum);
+
+        return root.val + Math.max(leftSum,rightSum); // choose whichever is greater btw left and right inculding currnt root 
+    }
+    public int maxPathSum(TreeNode root) {
+        int maxi[] = {Integer.MIN_VALUE} ;
+
+        solve(root,maxi);
+
+        return maxi[0] ;
+    }
+}
+
+/***************************************************************************************************************************************************************************/

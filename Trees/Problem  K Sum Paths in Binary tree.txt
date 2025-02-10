@@ -1,0 +1,216 @@
+Problem : K Sum Paths in Binary tree
+
+Problem Statement : 
+Given a binary tree and an integer k, determine the number of downward-only paths where the sum of the node values in the path equals k. A path can start and end at any node within the tree but must always move downward (from parent to child).
+
+Examples:
+Input: k = 7   
+Output: 3
+Explanation: The following paths sum to k 
+ 
+Input: k = 3
+Output: 2
+Explanation:
+Path 1 : 1 -> 2 (Sum = 3)
+Path 2 : 3 (Sum = 3)
+
+
+Constraints:
+
+1 ≤ number of nodes ≤ 104
+-100 ≤ node value ≤ 100
+-109 ≤ k ≤ 109
+
+Company Tags
+Flipkart  Amazon  Walmart
+
+Topic Tags
+TreeData Structures 
+
+Expected Complexities
+Time Complexity : O(n)    Auxiliary Space : O(h) 
+
+/************************************************************************* CPP CODE ************************************************************************************/
+
+struct Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+class Solution {
+  public:
+    void solve(Node* root, int k , int currSum , int &count,unordered_map<int,int> &mp ){
+        // base case 
+        if(!root) return ;
+        
+        currSum += root->data ; // data of root we will stored in currsum by adding'
+        
+        // now check the currSum is equal to k or not
+        if(currSum == k) count++ ;
+        
+        // now check how many time currSum - k present in map thats freq we will ad in to the count
+        if(mp.find(currSum-k) != mp.end()) count += mp[currSum-k] ;
+        
+        // now we will update the map frequency
+        mp[currSum]++ ;
+        
+        // now make call for left and right , first left path then right 
+        solve(root->left,k,currSum,count,mp);
+        solve(root->right,k,currSum,count,mp);
+        
+        // after return the left  path ending we have to change path to go in right so we have to elimininate the previous value from map 
+        mp[currSum]-- ;
+        
+    }
+    int sumK(Node *root, int k) {
+        // code here cPP 
+        
+        // Recursively We will solve this questiion :
+        int count = 0 ;
+        unordered_map<int,int> mp ;
+        solve(root,k,0,count,mp);
+        
+        return count ;
+    }
+};
+
+/************************************************************************ JAVA CODE *********************************************************************************/
+
+                                                                              //  BRUTE FORCE SOLUTION \\
+
+// Java Program to Count all K Sum Paths in Binary Tree
+// By Exploring All Possible Paths
+
+import java.util.*;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int k) {
+        data = k;
+        left = null;
+        right = null;
+    }
+}
+
+class GfG {
+
+    // Function to count paths with sum k starting from the given node
+    static int countPathsFromNode(Node node, int k, int currentSum) {
+        if (node == null)
+            return 0;
+
+        int pathCount = 0;
+
+        // Update the current sum
+        currentSum += node.data;
+
+        // If current sum equals k, increment path count
+        if (currentSum == k)
+            pathCount++;
+
+        // Recur for the left and right subtree
+        pathCount += countPathsFromNode(node.left, k, currentSum);
+        pathCount += countPathsFromNode(node.right, k, currentSum);
+
+        return pathCount;
+    }
+
+    // Function to count all paths that sum to k in the binary tree
+    static int countAllPaths(Node root, int k) {
+        if (root == null)
+            return 0;
+
+        // Count all paths starting from the current node
+        int res = countPathsFromNode(root, k, 0);
+
+        // Recur for the left and right subtree
+        res += countAllPaths(root.left, k);
+        res += countAllPaths(root.right, k);
+
+        return res;
+    }
+
+    public static void main(String[] args) {
+        // Create a sample tree:
+        //        8
+        //      /  \
+        //     4    5
+        //    / \    \
+        //   3   2    2
+        //  / \   \
+        // 3  -2   1
+
+        Node root = new Node(8);
+        root.left = new Node(4);
+        root.right = new Node(5);
+        root.left.left = new Node(3);
+        root.left.right = new Node(2);
+        root.right.right = new Node(2);
+        root.left.left.left = new Node(3);
+        root.left.left.right = new Node(-2);
+        root.left.right.right = new Node(1);
+
+        int k = 7;
+
+        System.out.println(countAllPaths(root, k));
+    }
+}
+
+                                                                                /// OPtimal SOlution \\\
+
+public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    int solve(TreeNode root, int k , int currSum , HashMap<Integer,Integer> map){
+        // base case  
+        if(root == null) return 0 ;
+
+        int count = 0 ;
+        currSum += root.val ;
+
+        if(currSum == k) count++ ;
+
+        if(map.containsKey(currSum - k)){
+            count += map.getOrDefault((currSum - k),0);
+        }
+
+        map.put(currSum,map.getOrDefault(currSum,0)+1);
+
+        // recursive calls
+        count += solve(root.left,k,currSum,map);
+        count += solve(root.right,k,currSum,map);
+
+        // now backtrack so we have to change the path excepting the left node by taking right
+        map.put(currSum,map.get(currSum)-1);
+       
+       return count ;
+    }
+    public int pathSum(TreeNode root, int targetSum) {
+        HashMap<Integer,Integer> map = new HashMap<>();
+        //int count = solve(root,targetSum,0,map);
+        // return count ;
+        
+        return solve(root,targetSum,0,map); 
+    }
+}
+
+/*************************************************************************************************************************************************************************/

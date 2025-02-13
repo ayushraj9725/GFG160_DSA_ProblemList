@@ -1,0 +1,122 @@
+Problem : Pair Sum in BST 
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/tree-gfg-160/problem/find-a-pair-with-given-target-in-bst
+
+Problem Statement : 
+Given a Binary Search Tree(BST) and a target. Check whether there's a pair of Nodes in the BST with value summing up to the target. 
+Examples:
+
+Input: root = [7, 3, 8, 2, 4, N, 9], target = 12
+Output: True
+Explanation: In the binary tree above, there are two nodes (8 and 4) that add up to 12.
+
+Input: root = [9, 5, 10, 2, 6, N, 12], target = 23          
+Output: False
+Explanation: In the binary tree above, there are no such two nodes exists that add up to 23.
+
+Constraints:
+
+1 ≤ Number of Nodes ≤ 105
+1 ≤ target ≤ 106
+
+Company Tags
+VMWare   Flipkart   Amazon   Microsoft  OYO Rooms  Snapdeal  
+
+Expected Complexities
+Time Complexity  : O(n)Auxiliary Space  : O(h)  
+
+/ **************************************************************************** CPP CODE ****************************************************************************/
+
+class Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+
+class Solution {
+  public:
+    void solve(Node *root,vector<int> &tmp){
+        // base case 
+        if(!root) return ;
+        solve(root->left,tmp);
+        tmp.push_back(root->data);
+        solve(root->right , tmp);
+    }
+    bool findTarget(Node *root, int target) {
+        // we can solve it using inorder traversal , put all the elemtn into the sorted array and using two pointers we can check the sum easly
+        // time taken : O(N) + (N) and space  : O(N) 
+        vector<int> tmp ;
+        solve(root,tmp);
+        
+        // now we travers the tmp using two pointers 
+        int i = 0 , j = tmp.size() - 1 ;
+        
+        while(i < j){
+            int sum = tmp[i] + tmp[j] ;
+            
+            if(sum == target) return true ;
+            
+            // if sum is greater that means target is small we should move the right pointer j towards left
+            if(sum > target) j-- ;
+            else i++ ; // otherwise sum is small and target big than i move to right 
+        }
+        
+        return false ; // at the end of the day if we not found the sum then we return false 
+    }
+};
+
+
+/**************************************************************************** JAVA CODE *****************************************************************************/
+
+public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    void solve(TreeNode root, List<Integer> tmp){
+        // base case 
+        if(root == null) return ;
+        solve(root.left , tmp);
+        tmp.add(root.val);
+        solve(root.right, tmp);
+    }
+    public boolean findTarget(TreeNode root, int k) {
+        List<Integer> tmp = new ArrayList<>();
+        solve(root,tmp);
+        
+        // now we travers the tmp using two pointers 
+        int i = 0 , j = tmp.size() - 1 ;
+        
+        while(i < j){
+            int sum = tmp.get(i) + tmp.get(j) ;
+            
+            if(sum == k) return true ;
+            
+            // if sum is greater that means target is small we should move the right pointer j towards left
+            if(sum > k) j-- ;
+            else i++ ; // otherwise sum is small and target big than i move to right 
+        }
+        
+        return false ;
+
+    }
+}
+
+
+/**************************************************************************************************************************************************************************/
+

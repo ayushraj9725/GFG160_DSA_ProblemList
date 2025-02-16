@@ -1,0 +1,158 @@
+Problem : Serialize and deserialize a binary tree
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/tree-gfg-160/problem/serialize-and-deserialize-a-binary-tree
+
+Problem Statement : 
+Serialization is to store a tree in an array so that it can be later restored and deserialization is reading tree back from the array. Complete the functions
+
+serialize() : stores the tree into an array a and returns the array.
+deSerialize() : deserializes the array to the tree and returns the root of the tree.
+
+Note: Multiple nodes can have the same data and the node values are always positive integers. Your code will be correct if the tree returned by deSerialize(serialize(input_tree)) is same as the input tree. Driver code will print the in-order traversal of the tree returned by deSerialize(serialize(input_tree)).
+
+Examples :
+Input: root = [1, 2, 3] 
+Output: [2, 1, 3]
+
+Input: root = [10, 20, 30, 40, 60, N, N]    
+Output: [40, 20, 60, 10, 30]
+
+Constraints:
+1 <= Number of nodes <= 104
+1 <= Data of a node <= 109
+
+Company Tags
+Paytm  Flipkart  Accolite  Amazon  Microsoft  MAQ Software  Adobe  LinkedIn  Quikr  YahooIn  Mobi 
+
+Expected Complexities
+Time Complexity  : O(n)Auxiliary Space  : O(n)
+
+
+/**************************************************************************** CPP SOLUTION ************************************************************************/
+
+
+struct Node
+{
+    int data;
+    Node* left;
+    Node* right;
+}; 
+
+class Solution {
+  public:
+  void preorder(Node *root,vector<int> &ans){
+      if(!root){
+          ans.push_back(-1);
+          return;
+      }
+      // insert and calls 
+      ans.push_back(root->data);
+      preorder(root->left,ans);
+      preorder(root->right,ans);
+      
+  }
+    // Function to serialize a tree and return a list containing nodes of tree.
+    vector<int> serialize(Node *root) {
+        // Your code here
+        vector<int> ans ;
+        preorder(root,ans);
+        
+        return ans ;
+    }
+    int i = 0 ;
+    
+    // Function to deserialize a list and construct the tree.
+    Node *deSerialize(vector<int> &arr) {
+        // Your code here
+        int val = arr[i];
+        i++ ;
+        if(val == -1) return NULL ;
+        Node* nn = new Node(val);
+        // now call for the 
+        nn->left = deSerialize(arr);
+        nn->right = deSerialize(arr);
+        
+        return nn ;
+    }
+};
+
+
+
+/******************************************************************************* JAVA SOLUTION **********************************************************************/
+
+import java.util.*;
+
+// Definition for a binary tree node.
+class TreeNode {
+    int val;
+    TreeNode left;
+    TreeNode right;
+    TreeNode(int x) { val = x; }
+}
+
+public class Codec {
+
+    // Serializes a tree to a single string.
+    public String serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        preorder(root, sb);
+        return sb.toString();
+    }
+
+    // Deserializes the string back into a tree.
+    public TreeNode deserialize(String data) {
+        Queue<String> nodes = new LinkedList<>(Arrays.asList(data.split(",")));
+        return deserializeHelper(nodes);
+    }
+
+    // Helper method for preorder serialization
+    private void preorder(TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            sb.append("null,");  // Use "null" for null nodes
+            return;
+        }
+        sb.append(root.val).append(",");  // Append the node value followed by a comma
+        preorder(root.left, sb);          // Recursively serialize the left subtree
+        preorder(root.right, sb);         // Recursively serialize the right subtree
+    }
+
+    // Helper method for deserialization
+    private TreeNode deserializeHelper(Queue<String> nodes) {
+        String val = nodes.poll();  // Get the next value in the queue
+
+        if (val.equals("null")) return null;  // If the value is "null", return a null node
+
+        TreeNode node = new TreeNode(Integer.parseInt(val));  // Create a new node with the integer value
+        node.left = deserializeHelper(nodes);        // Recursively deserialize the left subtree
+        node.right = deserializeHelper(nodes);       // Recursively deserialize the right subtree
+
+        return node;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Codec codec = new Codec();
+
+        // Create a sample tree:
+        //       1
+        //      / \
+        //     2   3
+        //      \
+        //       4
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.right = new TreeNode(4);
+
+        // Serialize the tree
+        String serialized = codec.serialize(root);
+        System.out.println("Serialized Tree: " + serialized);
+
+        // Deserialize the string back into the tree
+        TreeNode deserializedRoot = codec.deserialize(serialized);
+        System.out.println("Deserialized Tree (Root Value): " + deserializedRoot.val);
+    }
+}
+
+

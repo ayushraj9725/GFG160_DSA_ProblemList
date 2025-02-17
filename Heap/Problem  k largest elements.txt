@@ -1,0 +1,138 @@
+Problem : k largest elements
+
+Problem Statement : 
+
+Given an array arr[] of positive integers and an integer k, Your task is to return k largest elements in decreasing order. 
+
+Examples:
+
+Input: arr[] = [12, 5, 787, 1, 23], k = 2
+Output: [787, 23]
+Explanation: 1st largest element in the array is 787 and second largest is 23.
+
+Input: arr[] = [1, 23, 12, 9, 30, 2, 50], k = 3 
+Output: [50, 30, 23]
+Explanation: Three Largest elements in the array are 50, 30 and 23.
+
+Input: arr[] = [12, 23], k = 1
+Output: [23]
+Explanation: 1st Largest element in the array is 23.
+
+Constraints:
+1 ≤ k ≤ arr.size() ≤ 106
+1 ≤ arr[i] ≤ 106
+ 
+
+Company Tags
+Amazon  Microsoft   Samsung   Walmart   Google
+
+Topic Tags
+Arrays   Sorting   Heap   Data Structures   Algorithms
+
+Expected Complexities (Optimal)
+Time Complexity  : k+(n-k)*logk       Auxiliary Space  : k+(n-k)*logk 
+
+
+/********************************************************************************** CPP CODE **************************************************************************/
+
+class Solution {
+  public:
+    vector<int> kLargest(vector<int>& arr, int k) {
+        // Your code here
+        // Optimal Solution : Using HEAP Data Structure : O(k + (n-k)logk) time and Space : OO(k + (n-k)logk) 
+        
+        priority_queue<int,vector<int>,greater<int>> pq ;
+        // insertin data arr untill pq size not goes up to k
+        for(int i = 0; i < arr.size() ;i++){
+            pq.push(arr[i]);
+            if(pq.size() > k) pq.pop(); // if goes up then the top of pq pop 
+        }
+        // now we need to insert there rest of the elemnt in the vector answer
+        vector<int> ans ;
+        while(!pq.empty()){
+            ans.push_back(pq.top()); // top of the pq inserting 
+            pq.pop(); // and simple remove from the 
+        }
+        
+        // we have to return answr in the descending order so reverse it and return 
+        reverse(ans.begin(),ans.end());
+        
+        return ans ;
+      
+
+/*************************************************************************************************/
+      // brute force : Sorting O(nlogn + k) and space O(K) ;
+        
+        sort(arr.begin(),arr.end()); // sort he arr given in ascendin gorder
+        // now take a list and push the largest elemnt from last 
+        
+        vector<int> ans ;
+        int n = arr.size();
+        for(int i = n - 1 ; i >= 0 ; i--){
+            if(k > 0){
+                ans.push_back(arr[i]);
+                k-- ;
+            }
+            else if(k == 0) break ;
+        }
+        
+        return ans ;
+        
+        
+   }
+};
+
+/************************************************************************************* JAVA CODE **********************************************************************/
+Leetcode : 215 
+
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        
+      PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+      for(int i = 0 ; i < nums.length ; i++){
+          pq.offer(nums[i]);
+          if(pq.size() > k) pq.poll(); // remove the top of the queue because we have not reach yet till the answer saving actual in the pq
+      }
+
+       return pq.peek() ;
+       
+    }
+}
+
+
+/***************************************************************************************************************************************************************************/
+
+
+K Smallest Elemnt : 
+
+
+class Solution {
+  public:
+    // arr : given array
+    // k : find kth smallest element and return using this function
+    int kthSmallest(vector<int> &arr, int k) {
+        // code here
+        priority_queue<int> pq ; // take a max heap here by deafult it is max heap
+        
+        for(int i = 0 ; i < arr.size() ; i++){
+            pq.push(arr[i]);
+            if(pq.size() > k) pq.pop();
+            
+        }
+        
+        return pq.top() ;
+        
+        /*
+        // Brute force solution 
+        
+        sort(arr.begin(),arr.end());
+        
+        return arr[k-1] ;
+        
+        */
+        
+    }
+
+/************************************************************************************************************************************************************************/

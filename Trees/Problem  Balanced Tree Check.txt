@@ -1,0 +1,121 @@
+Problem : Balanced Tree Check
+
+Problem Link : https://www.geeksforgeeks.org/problems/check-for-balanced-tree/1?page=2&difficulty=Easy&sortBy=submissions
+
+Problem Statement : 
+Given a binary tree, determine if it is height-balanced. A binary tree is considered height-balanced if the absolute difference in heights of the left and right subtrees is at most 1 for every node in the tree.
+
+Examples:
+Input: root[] = [10, 20, 30, 40, 60]  
+Output: true
+Explanation: The height difference between the left and right subtrees at all nodes is at most 1. Hence, the tree is balanced.
+
+Input: root[] = [1, 2, 3, 4, N, N, N, 5]  
+Output: false
+Explanation: The height difference between the left and right subtrees at node 2 is 2, which exceeds 1. Hence, the tree is not balanced.
+
+Input: root[] = [1, 2, N, N, 3]
+Output: false
+Explanation: The height difference between the left and right subtrees at node 1 is 2, which exceeds 1. Hence, the tree is not balanced.
+
+Constraints:
+0 <= number of nodes <= 5000
+- 104 <= node->data <= 104
+
+Company Tags
+Amazon  Microsoft   Walmart
+
+Topic Tags
+TreeData  Structures
+
+Expected Complexities
+Time Complexity : O(n)   Auxiliary Space  : O(h)  
+
+
+/******************************************************************************* CPP SOLUTION **********************************************************************/
+
+class Node {
+  public:
+    int data;
+    Node* left;
+    Node* right;
+
+    // Constructor to initialize a new node
+    Node(int val) {
+        data = val;
+        left = NULL;
+        right = NULL;
+    }
+};
+ 
+
+class Solution {
+  public:
+    int height(Node* root){
+        // base case 
+        if(!root) return 0 ;
+        // now check the left child high what 
+        int lh = height(root->left);  // Recursively get the height of left subtree             
+        if(lh == -1) return -1 ;
+        
+        // now check for the right child 
+        int rh = height(root->right);  // Recursively get the height of right subtree
+        if (rh == -1) return -1;  // If right subtree is unbalanced, return -1
+        
+        // now check the absolute diff 
+        if(abs(lh - rh) > 1) return -1 ;
+        
+        return max(lh,rh) + 1 ;
+    }
+    bool isBalanced(Node* root) {
+        // Code here
+       // chcecking the height of left and right tree each time and check recursivly
+       
+       return height(root) != -1 ;
+        
+    }
+};
+
+/******************************************************************************* JAVA SOLUTION *********************************************************************/
+
+public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public int height(TreeNode root){
+        // base case 
+        if(root == null) return 0 ;
+        // left subtrees height 
+        int lh = height(root.left);
+        if(lh == -1) return -1 ;
+
+        // right subtree 
+        int rh = height(root.right);
+        if(rh == -1) return -1 ;
+
+        // now check the absolute diff 
+        if(Math.abs(lh - rh) > 1) return -1 ;
+
+        // now return max of lh rh + 1
+
+        return Math.max(lh,rh) + 1 ;
+    }
+    public boolean isBalanced(TreeNode root) {
+        // check height and tell answer true or false 
+
+        return height(root) != -1 ;
+
+    }
+}
+
+/**************************************************************************************************************************************************************************/

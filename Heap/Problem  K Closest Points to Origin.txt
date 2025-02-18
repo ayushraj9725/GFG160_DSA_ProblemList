@@ -1,0 +1,159 @@
+Problem : K Closest Points to Origin
+
+Problem Statement : 
+Given an array of points where each point is represented as points[i] = [xi, yi] on the X-Y plane and an integer k, return the k closest points to the origin (0, 0).
+The distance between two points on the X-Y plane is the Euclidean distance, defined as: 
+
+sqrt( (x2 - x1)2 + (y2 - y1)2 )
+
+Note: You can return the k closest points in any order, driver code will sort them before printing.
+
+Examples:
+
+Input: k = 2, points[] = [[1, 3], [-2, 2], [5, 8], [0, 1]]
+Output: [[-2, 2], [0, 1]]
+Explanation: The Euclidean distances from the origin are:
+Point (1, 3) = sqrt(10)
+Point (-2, 2) = sqrt(8)
+Point (5, 8) = sqrt(89)
+Point (0, 1) = sqrt(1)
+The two closest points to the origin are [-2, 2] and [0, 1].
+
+
+Input: k = 1, points = [[2, 4], [-1, -1], [0, 0]]
+Output: [[0, 0]]
+Explanation: The Euclidean distances from the origin are:
+Point (2, 4) = sqrt(20)
+Point (-1, -1) = sqrt(2)
+Point (0, 0) = sqrt(0)
+The closest point to origin is (0, 0).
+
+
+Constraints:
+
+1 <= k <= points.size() <= 105
+-104 <= xi, yi <= 104
+
+
+/ ************************************************************************************* CPP SOLUTION ***************************************************************/
+ 
+//////////////// BRUTE FORCE USING : SORTING (NLOGN) \\\\\\\\\\\\\\\\\\\\\\\
+
+// Function to calculate squared distance from the origin
+static int squaredDis(vector<int>& point) {
+    return point[0] * point[0] + point[1] * point[1];
+}
+
+static bool cmp (vector<int> &p1, vector<int> &p2) {
+    return squaredDis(p1) < squaredDis(p2);
+}
+
+// Function to find k closest points
+vector<vector<int>> kClosest(vector<vector<int>>& points, 
+                                                int k) {
+    
+    sort(points.begin(), points.end(), cmp);
+    return vector<vector<int>> (points.begin(), points.begin() + k);
+}
+
+int main() {
+    vector<vector<int>> points = {{1, 3}, {-2, 2}, 
+                            {5, -1}, {3, 2}, {1, 1}};
+    int k = 3;
+    
+    vector<vector<int>> res = kClosest(points, k);
+    
+    for (vector<int> point: res) {
+        cout << "[" << point[0] << ", " << point[1] << "] ";
+    }
+
+    return 0;
+}
+
+
+///////////////////////////////////////////////////// OPTIMAL USING PRIORITY QUEUE (HEAP) \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+
+class Solution {
+  public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        // Your code here
+        // take a PriorityQueue MaxHeap 
+
+        priority_queue<pair<int,vector<int>>> maxHeap ;
+        
+        // iterate through the give points 
+
+        for(auto & point : points){
+            int x = point[0];
+            int y = point[1];
+            int dis = x*x + y*y ;
+            
+            // insert push dis into the maxHeap 
+            maxHeap.push({dis,point}); // dist and point both
+
+            // when get this maxHeap exceeded from the k then we pop the top of the heap
+
+            if(maxHeap.size() > k) maxHeap.pop();
+        }
+        
+        // at the end of the day now we fill all the saved point in to the ans 
+        vector<vector<int>> ans ;
+
+        while(!maxHeap.empty()){
+
+            ans.push_back(maxHeap.top().second); // fillin the points and add into the ans 
+        
+            maxHeap.pop();
+
+        }
+        // now we return the answer
+        
+        return ans ;
+    }
+};
+
+
+
+
+/************************************************************************************* JAVA SOLUTION **************************************************************/
+
+import java.util.*;
+
+class Solution {
+    public int[][] kClosest(int[][] points, int k) {
+
+        // Max Heap to store points based on distance from origin
+
+        PriorityQueue<int[]> maxHeap = new PriorityQueue<>((a, b) -> 
+            Integer.compare(b[0] * b[0] + b[1] * b[1], a[0] * a[0] + a[1] * a[1])
+        );
+
+        // Iterate through each point
+
+        for (int[] point : points) {
+            maxHeap.offer(point);
+            
+            // If the heap exceeds size k, remove the farthest point
+
+            if (maxHeap.size() > k) {
+                maxHeap.poll();
+            }
+
+        }
+
+        // Store the k closest points in result array
+
+        int[][] result = new int[k][2];
+
+        for (int i = 0; i < k; i++) {
+            result[i] = maxHeap.poll();
+        }
+
+        return result;
+
+    }
+}
+
+
+/************************************************************************************************************************************************************************/

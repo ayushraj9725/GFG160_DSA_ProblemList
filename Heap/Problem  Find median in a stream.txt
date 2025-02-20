@@ -1,0 +1,76 @@
+Problem : Find median in a stream
+
+
+Problem Link : https://www.geeksforgeeks.org/batch/gfg-160-problems/track/heap-gfg-160/problem/find-median-in-a-stream-1587115620
+
+Leetcode :295 
+
+SOULUTION : /***************************CPP **************************************************************************************************************************/
+
+
+
+class Solution {
+  public:
+    vector<double> getMedian(vector<int> &arr) {
+        // code here  
+        
+        // C++ CODE ;
+        priority_queue<int> lMxh ;
+        priority_queue<int,vector<int>,greater<int>> rMnh ;
+        vector<double> ans ;
+        for(int i =0 ;i < arr.size(); i++){
+            lMxh.push(arr[i]);
+            
+            int ele = lMxh.top();
+            rMnh.push(ele);
+            lMxh.pop();
+            
+            if(rMnh.size() > lMxh.size()){
+                int ele = rMnh.top();
+                lMxh.push(ele);
+                rMnh.pop();
+            }
+            double median ;
+            if(lMxh.size() != rMnh.size()){
+                median = lMxh.top();
+            }
+                else{
+                median=(double)(lMxh.top()+rMnh.top())/2 ;
+                }
+                ans.push_back(median);
+            }
+        return ans ;
+    }
+};
+
+
+
+
+/************************************************************************* JAVA SOLUTION *****************************************************************************/
+
+
+
+//JAVA CODE
+class Solution {
+    static ArrayList<Double> getMedian(int[] arr) {
+        PriorityQueue<Integer> leftMaxHeap = new PriorityQueue<>((a, b) -> b - a);
+        PriorityQueue<Integer> rightMinHeap = new PriorityQueue<>();
+        ArrayList<Double> res = new ArrayList<>();
+        for (int i = 0; i < arr.length; i++) {
+            leftMaxHeap.add(arr[i]);
+            int temp = leftMaxHeap.poll();
+            rightMinHeap.add(temp);
+            if (rightMinHeap.size() > leftMaxHeap.size()) {
+                temp = rightMinHeap.poll();
+                leftMaxHeap.add(temp);
+            }
+            double median;
+            if (leftMaxHeap.size() != rightMinHeap.size())
+                median = leftMaxHeap.peek();
+            else
+                median = (leftMaxHeap.peek() + rightMinHeap.peek()) / 2.0;
+            res.add(median);
+        }
+        return res;
+    }
+}

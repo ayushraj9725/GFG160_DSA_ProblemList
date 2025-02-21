@@ -1,0 +1,137 @@
+Problem : Longest subarray with sum divisible by K
+
+Problem Statement :
+Given an array arr[] and a positive integer k, find the length of the longest subarray with the sum of the elements divisible by k.
+Note: If there is no subarray with sum divisible by k, then return 0.
+
+Examples :
+
+Input: arr[] = [2, 7, 6, 1, 4, 5], k = 3
+Output: 4
+Explanation: The subarray [7, 6, 1, 4] has sum = 18, which is divisible by 3.
+
+Input: arr[] = [-2, 2, -5, 12, -11, -1, 7], k = 3
+Output: 5
+Explanation: The subarray [2, -5, 12, -11, -1] has sum = -3, which is divisible by 3.
+
+Input: arr[] = [1, 2, -2], k = 2
+Output: 2
+Explanation: The subarray is [2, -2] has sum = 0, which is divisible by 2.
+
+Constraints:
+
+1 <= arr.size() <= 106
+1 <= k <= 106
+-106 <= arr[i] <= 106 
+
+Company Tags
+Microsoft   Snapdeal
+
+Expected Complexities
+Time Complexity  : O(n)     Auxiliary Space  : O(min(n, k))
+
+/*************************************************************************** C++ CODE *********************************************************************************/
+
+
+//////////////////////////// BRUTE FORCE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int longestSubarrayDivK(vector<int> &arr, int k) {
+    int res = 0;
+    for (int i = 0; i < arr.size(); i++) {
+
+        // Initialize sum for the current subarray
+        int sum = 0;
+        for (int j = i; j < arr.size(); j++) {
+          
+            // Add the current element to the subarray sum
+            sum = (sum + arr[j]) % k;
+
+            // Update max length if sum is divisible by k
+            if (sum == 0)
+                res = max(res, j - i + 1);
+        }
+    }
+    return res;
+}
+
+int main() {
+    vector<int> arr = {2, 7, 6, 1, 4, 5};
+    int k = 3;
+
+    cout << longestSubarrayDivK(arr, k);
+    return 0;
+}
+
+/////////////////////////// OPTIMAL BUT NOT PASS ALL THE REST CASE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+class Solution {
+  public:
+    int longestSubarrayDivK(vector<int>& arr, int k) {
+        // Complete the function
+        // Optimal Answer using the hashing : Map find the minimest and maxi containing the reminder of prefix sum is zero then we maximize
+        unordered_map<int,int> map ;
+        map[0] = -1 ; // to handle the zeroth index length
+        int maxLen = 0 , preSum = 0 ;
+        
+        for(int i = 0 ; i < arr.size() ;i++){
+            preSum += arr[i];
+            
+            int rem = ((preSum % k) + k ) % k ;
+            // if get preSum zero then return that index i because 0 is always divisible by k
+            if(preSum == 0) maxLen = i+1 ; // not return instead of this storeed in the maxLen
+            
+            if(map.find(rem) != map.end()){
+                maxLen = max(maxLen,i - map[rem]);
+            }
+            else{
+                map[rem] = i ; // rem store with the curr ind 
+            } // always do not store only if the preSum is not in the map then we put it 
+        }
+        
+        // now return the answer 
+        return maxLen ;
+    }
+
+//////////////////////////// MOST OPTIMAL \\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+int longestSubarrayDivK(vector<int> &arr, int k) {
+    int n = arr.size(), res = 0;
+    unordered_map<int, int> prefIdx;
+    int sum = 0;
+
+    // Iterate over all ending points
+    for (int i = 0; i < n; i++) {
+
+        // prefix sum mod k (handling negative prefix sum)
+        sum = ((sum + arr[i]) % k + k) % k;
+
+        // If sum == 0, then update result with the
+        // length of subarray arr[0...i]
+        if (sum == 0)
+            res = i + 1;
+
+        // Update max length for repeating sum
+        else if (prefIdx.find(sum) != prefIdx.end()) {
+            res = max(res, i - prefIdx[sum]);
+        }
+
+        // Store the first occurrence of sum
+        else {
+            prefIdx[sum] = i;
+        }
+    }
+    return res;
+}
+
+int main() {
+    vector<int> arr = {2, 7, 6, 1, 4, 5};
+    int k = 3;
+
+    cout << longestSubarrayDivK(arr, k);
+}
+
+/*************************************************************************** JAVA CODE *******************************************************************************//

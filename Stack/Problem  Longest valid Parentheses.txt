@@ -1,0 +1,95 @@
+Problem : Longest valid Parentheses
+
+Problem Statement : 
+Given a string s consisting of opening and closing parenthesis '(' and ')'. Find the length of the longest valid parenthesis substring.
+
+A parenthesis string is valid if:
+
+For every opening parenthesis, there is a closing parenthesis.
+The closing parenthesis must be after its opening parenthesis.
+Examples :
+
+Input: s = "((()"
+Output: 2
+Explanation: The longest valid parenthesis substring is "()".
+
+Input: s = ")()())"
+Output: 4
+Explanation: The longest valid parenthesis substring is "()()".
+
+Input: s = "())()"
+Output: 2
+Explanation: The longest valid parenthesis substring is "()".
+
+Constraints:
+1 ≤ s.size() ≤ 106  
+s consists of '(' and ')' only
+
+Company Tags
+Microsoft  Google
+
+
+Expected Complexities
+Time Complexity  : O(n)    Auxiliary Space  : O(n) 
+
+/********************************************************************************* C++ SOLUTION ******************************************************************/
+
+class Solution {
+  public:
+    int maxLength(string& s) {
+        // code here
+        // Optimal approach using stack and Dp
+        stack<int> st ;
+        st.push(-1); // it is doing for the edge case handling 
+        int maxi = 0 ; 
+        for(int i = 0 ; i < s.size() ;i++){
+            if(s[i] == '(') st.push(i);
+            
+            else{
+                st.pop(); // if any thing found ")" then we pop instant 
+           
+            if(!st.empty()){ // if stk is empty then we pop the top then apply formula
+                maxi = max(maxi,i-st.top());
+            }
+            else{
+                // otherwise we push the index curr
+                st.push(i);
+            }
+          }
+        }
+        return maxi ;
+        
+    }
+
+
+/********************************************************************************** JAVA SOLUTION *****************************************************************/
+
+
+class Solution {
+    public int longestValidParentheses(String s) {
+        // using stack we are solving this problem 
+        Stack<Integer> stk = new Stack<>();
+        int maxi = 0 ;
+        stk.push(-1); // intially we add this to handle the edges case this string  "()"
+        // now iterate the string 
+        for(int i = 0 ; i < s.length() ;i++){
+            if(s.charAt(i) == '(') stk.push(i);
+            else{
+                // otherwise pop instant the top of the stk
+                stk.pop();
+                // now check the stk is empty or not 
+                if(!stk.isEmpty()){
+                    // then maximize the maxi ans
+                    maxi = Math.max(maxi,i - stk.peek());
+                }
+                else{
+                    stk.push(i); // otherwise we add this curr i into the stk
+                }
+            }
+        }
+        return maxi ;
+    }
+}
+
+
+/************************************************************************************************************************************************************************/

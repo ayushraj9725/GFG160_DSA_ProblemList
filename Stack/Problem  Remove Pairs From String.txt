@@ -1,0 +1,136 @@
+Problem : Remove Pairs From String 
+
+Problem Statement : 
+Our geek loves to play with strings, Currently, he is trying to reduce the size of a string by recursively removing all the consecutive duplicate pairs. In other words, He can apply the below operations any number of times.
+
+Remove all the consecutive duplicate pairs and concatenate the remaining string to replace the original string.
+Your task is to find the string with minimum length after applying the above operations.
+
+Note: If the string length become zero after applying operations, return "-1" as a string.
+
+
+Example 1:
+
+Input:
+aaabbaaccd
+Output: 
+ad
+Explanation: 
+Remove (aa)abbaaccd =>abbaaccd
+Remove a(bb)aaccd => aaaccd
+Remove (aa)accd => accd
+Remove a(cc)d => ad
+Example 2:
+
+Input: 
+aaaa
+Output: 
+Empty String
+Explanation: 
+Remove (aa)aa => aa
+Again removing pair of duplicates then (aa) 
+will be removed and we will get 'Empty String'.
+
+Your Task:
+This is a function problem. You only need to complete the function removePair() that takes a string as a parameter and returns the modified string. Return "-1" if the whole string is deleted.
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N)
+
+Constraints:
+1 <= |str| <= 104
+
+
+/****************************************************************************** CPP CODE *****************************************************************************/
+
+class Solution {
+  public:
+    string removePair(string s) {
+        // code here
+      
+      stack<char> stk ; // use it to store the character 
+      // if match the top of stack with the curr then we pop the top otherwise pushh that curr character 
+      
+      for(char c : s){
+          if(!stk.empty() && stk.top() == c) {
+              stk.pop();
+          }
+          else{
+              stk.push(c);
+          }
+      }
+      
+      // now we pop all the element and stored it into the result
+      
+      string ans ;
+      
+      while(!stk.empty()){
+          ans += stk.top();
+          stk.pop();
+      }
+      
+      reverse(ans.begin(),ans.end());
+      
+      return (ans.size() == 0) ? "-1" : ans ;
+      
+      
+      
+      /*
+      
+       // it will not work in correct order maintain we we have to use stack to maintain the order 
+      
+      vector<char> frq(26) ;
+        
+        for(int i = 0 ; i < s.size() ;i++){
+            frq[s[i] - 'a']++ ;
+        }
+        
+        string str ;
+        
+        for(int i = 0 ; i < 26 ;i++){
+            if(frq[i] % 2 != 0) str.push_back(i+'a') ;
+        }
+        
+        
+        return str ;
+        
+        */
+        
+        
+    }
+};
+
+/***************************************************************************** JAVA CODE *****************************************************************************/
+
+import java.util.Stack;
+
+public class RemoveAdjacentPairs {
+    public static String removePair(String s) {
+        Stack<Character> stack = new Stack<>();
+        
+        for (char ch : s.toCharArray()) {
+            // If the stack is not empty and the top element is equal to current character
+            if (!stack.isEmpty() && stack.peek() == ch) {
+                stack.pop();  // Remove the duplicate pair
+            } else {
+                stack.push(ch);  // Otherwise, push the character
+            }
+        }
+        
+        // Build the final string from the stack
+        StringBuilder result = new StringBuilder();
+        while (!stack.isEmpty()) {
+            result.append(stack.pop());
+        }
+        
+        return result.reverse().toString(); // Reverse to maintain order
+    }
+
+    public static void main(String[] args) {
+        String s = "aabbccdde";  // Example input
+        System.out.println(removePair(s));  // Output: "e"
+        
+        System.out.println(removePair("abbaca"));  // Output: "ca"
+        System.out.println(removePair("azxxzy"));  // Output: "ay"
+    }
+}

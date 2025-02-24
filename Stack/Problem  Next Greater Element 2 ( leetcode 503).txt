@@ -1,0 +1,152 @@
+Problem : Next Greater Element 
+
+Problem Statement : 
+Given an array arr[ ] of integers, the task is to find the next greater element for each element of the array in order of their appearance in the array. Next greater element of an element in the array is the nearest element on the right which is greater than the current element.
+If there does not exist next greater of current element, then next greater element for current element is -1. For example, next greater of the last element is always -1.
+
+Examples
+
+Input: arr[] = [1, 3, 2, 4]
+Output: [3, 4, 4, -1]
+Explanation: The next larger element to 1 is 3, 3 is 4, 2 is 4 and for 4, since it doesn't exist, it is -1.
+
+Input: arr[] = [6, 8, 0, 1, 3]
+Output: [8, -1, 1, 3, -1]
+Explanation: The next larger element to 6 is 8, for 8 there is no larger elements hence it is -1, for 0 it is 1 , for 1 it is 3 and then for 3 there is no larger 
+element on right and hence -1.
+
+Input: arr[] = [10, 20, 30, 50]
+Output: [20, 30, 50, -1]
+Explanation: For a sorted array, the next element is next greater element also exxept for the last element.
+
+Input: arr[] = [50, 40, 30, 10]
+Output: [-1, -1, -1, -1]
+Explanation: There is no greater element for any of the elements in the array, so all are -1.
+
+
+Constraints:
+1 ≤ arr.size() ≤ 106
+0 ≤ arr[i] ≤ 109
+
+Company Tags
+Flipkart  Amazon  Microsoft  MakeMyTrip  Adobe
+
+
+Expected Complexities
+Time Complexity : O(n)      Auxiliary Space: O(n)
+
+/**************************************************************************** C++ SOLUTION ************************************************************************/
+
+
+class Solution {
+  public:
+    // Function to find the next greater element for each element of the array.
+    vector<int> nextLargerElement(vector<int>& arr) {
+        // Optimal USing Stack :
+        int n = arr.size();
+        vector<int> ans(n,-1);
+        stack<int> stk ;
+        // stk.push(arr[n-1]);
+        
+        // take stack and iterate arr from the right 
+        for(int i = n - 1 ; i >= 0 ;i--){
+            // check if arr[i] is greater than 
+            while(!stk.empty() && arr[i] >= stk.top()) stk.pop(); // if this happen then simple we remove the top of the stack
+            // bacause only we consider top of stake is greater than curr arr[i]
+            if(!stk.empty() && arr[i] < stk.top()) ans[i] = stk.top(); // update this 
+            
+            stk.push(arr[i]);  //and push that curr in stk
+        }
+        
+        
+        return ans ;
+        
+        
+        // code here
+        // Brute Force Solution : O(N^2) 
+        
+    }
+};
+
+
+
+
+/****************************************************************************** JAVA SOLUTION ************************************************************************/
+
+
+Leetcode :  503. Next Greater Element II 
+
+Example 1:
+
+Input: nums = [1,2,1]
+Output: [2,-1,2]
+Explanation: The first 1's next greater number is 2; 
+The number 2 can't find next greater number. 
+The second 1's next greater number needs to search circularly, which is also 2.
+
+Example 2:
+Input: nums = [1,2,3,4,3]
+Output: [2,3,4,-1,4]
+
+
+Solution : -> Time : O(4N) and Space : O(2N)  and O(N) for returning 
+
+
+class Solution {
+    public int[] nextGreaterElements(int[] nums) {
+        int n = nums.length ;
+        int ans[] = new int[n];
+        Stack<Integer> stk = new Stack<>();
+       // Arrays.fill(ans,-1);
+
+        for(int i = 2*n-1 ; i >= 0 ; i--){
+            while(!stk.isEmpty() && nums[i%n] >= stk.peek()) stk.pop();
+
+           if(i < n){
+              if(stk.isEmpty()) ans[i] = -1 ; // not take simple put there -1 
+              else {
+                 ans[i] = stk.peek();
+              }
+           }
+           
+
+            stk.push(nums[i%n]);
+        }
+
+        return ans ;
+    }
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////// C ++ SOLUTION \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+class Solution {
+  public:
+    vector<long long> nextLargerElement(vector<long long> &arr, int n){
+        // Your code here
+        vector<long long> ans(n) ;
+        stack<long long> stk ;
+        
+        for(int i = 2*n -1 ; i>=0 ; i--){
+            while(!stk.empty() && arr[i%n] >= stk.top()) stk.pop();
+             
+            if(i < n) {   // this time we will take the num form stk if stk is not empty
+              if(!stk.empty()){
+                  ans[i] = stk.top();
+                  
+                 // ans.push_back(stk.top());
+              }
+              else{
+                  ans[i] = -1 ;
+                  
+                  //ans.push_back(-1);
+              }
+                
+            }
+            // now curr ele push into the stk
+            stk.push(arr[i%n]);
+        }
+        
+        return ans ;
+    }
+};

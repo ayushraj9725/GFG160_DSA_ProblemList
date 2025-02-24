@@ -1,0 +1,120 @@
+Problem : Online Stock Span Problem 
+
+Leetcode : 901 
+
+Problem Statement : given there 
+
+
+
+/************************************************************************ SOLUTION JAVA BRUTE FORCE *********************************************************/
+
+TIME : O( number of days ) individually but over all O(N^2)   , SPACE : O(total no of fun next calls )    -> in aspect of given data in array than we solve below see 
+
+class StockSpanner {
+    // brute force solution 
+
+    List<Integer> arr ;
+    public StockSpanner() {
+        arr = new ArrayList<>();
+    }
+    
+    public int next(int price) {
+        arr.add(price);
+        int count = 1 ;
+        for(int i = arr.size() - 2 ; i >= 0 ;i--){
+            if(arr.get(i) <= price) count++ ;
+            else break;
+        }
+
+        return count ;
+    }
+}
+
+/************************************************************************** OPTIMAL JAVA SOLUTION ****************************************************************/
+
+TIME COMP : O(2N)    individually : O(1)                    SPACE COMP :  O(N)
+
+
+import java.util.Stack;
+
+class StockSpanner {
+    private Stack<int[]> stack; // Stack to store {price, span}
+
+    public StockSpanner() {
+        stack = new Stack<>();
+    }
+    
+    public int next(int price) {
+        int span = 1; 
+
+        // While the stack is not empty and the top price is less than or equal to the current price
+        while (!stack.isEmpty() && stack.peek()[0] <= price) {
+            span += stack.pop()[1]; // Add the span of the popped element           //   here we are dealing with the index subtracting over here 
+
+        }
+
+        // Push current price and span onto the stack
+        stack.push(new int[]{price, span});
+
+        return span;
+    }
+}
+
+/************************************************************************************ OTHER WAY TO FORMAT *******************************************************/
+
+C++ SOLUTION :
+
+class Solution {
+  public:
+    vector<int> calculateSpan(vector<int>& arr) {
+        // write code here
+        // brute force solution 
+        int n = arr.size();
+        vector<int> ans(n);
+        
+        for(int i = 0 ; i < n ; i++){
+            int count = 1 ;
+            for(int j = i-1 ; j >= 0 ;j--){
+                if(arr[j] <= arr[i]) count++;
+                else break;
+            }
+            ans[i] = count ;
+        }
+        
+        
+        return ans ;
+        /// it will take more time   : O(N^2) approax time and space : O(1)
+    }
+};
+
+
+/******************************************************************************** OPTIMIZED SOLUTION **************************************************************/
+
+// here we are dealing with the index subtracting over here 
+
+
+class Solution {
+  public:
+    vector<int> calculateSpan(vector<int>& arr) {
+        // write code here
+       // Optimal Solution using stack data structure 
+       
+       stack<pair<int,int>> stk ;
+       int n = arr.size();
+       vector<int> ans(n);
+       
+       for(int i = 0 ; i < n ; i++){
+           
+           while(!stk.empty() && arr[i] >= stk.top().first) stk.pop();
+           
+           int ind = ((stk.empty()) ? -1 : stk.top().second) ;
+           
+           ans[i] = i - ind ;
+           
+           stk.push({arr[i],i});
+           
+       }
+       
+       return ans ;
+       
+       

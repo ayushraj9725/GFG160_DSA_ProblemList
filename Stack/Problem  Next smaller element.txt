@@ -1,0 +1,44 @@
+Problem : Next smaller element 
+
+Problem : leecode 1475 Final Prices With a Special Discount in a Shop
+
+
+solution : 
+
+class Solution {
+    public int[] finalPrices(int[] prices) {
+        // Optimal Solution : using Stack and monotonic stack 
+        int n = prices.length;
+    Stack<Integer> stack = new Stack<>();
+
+    for (int i = 0; i < n; i++) {
+        // Apply discount to items in the stack
+        while (!stack.isEmpty() && prices[stack.peek()] >= prices[i]) {
+            int index = stack.pop();
+            prices[index] -= prices[i];
+        }
+        // Push the current item's index onto the stack
+        stack.push(i);
+    }
+
+    return prices;
+
+    /*
+        // Brute Force Solution 
+        int n = prices.length ;
+       // int[] result = new int[] ;
+        for(int i = 0 ; i < n ; i++){
+            for(int j = i + 1 ; j < n ;j++){
+                if(j > i && prices[j] <= prices[i]){
+                    prices[i] = prices[i] - prices[j] ;
+                    break ; // discount applied now moved to the next item ;
+                }
+            }
+        }
+
+        return prices ; // now we will have to return the prices 
+
+        */
+        
+    }
+}

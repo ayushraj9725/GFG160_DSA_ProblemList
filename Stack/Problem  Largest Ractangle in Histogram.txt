@@ -1,0 +1,154 @@
+Problem : Largest Ractangle in Histogram
+
+Leedcode : 84
+
+Problem Statement : 
+
+
+
+
+Solution : BRUTE FORCE :  O(N^2) with const space :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::    CPP CODE BELOW :::::::::::::::::::::::::::::::::::::::::
+
+
+int getMaxArea(vector<int> &arr){
+    int res = 0, n = arr.size();
+  
+    // Consider every bar one by one
+    for(int i = 0; i < n; i++){
+        int curr = arr[i];
+      
+        // Traverse left while we have a greater height bar
+        for(int j = i-1; j>=0 && arr[j] >= arr[i]; j--)
+             curr += arr[i];
+      
+        // Traverse right while we have a greater height bar      
+        for(int j = i+1; j<n && arr[j] >= arr[i]; j++)
+            curr += arr[i];
+      
+        res = max(res, curr);
+    }
+    return res;
+}
+
+int main() { 
+    vector<int> arr =  {60, 20, 50, 40, 10, 50, 60};
+    cout << getMaxArea(arr);
+    return 0; 
+}
+
+/********************************************** BETTER APPROACH USING 2 STACK (NSE AND NGE ) FINDING : O(5N) time and O(2N) space 
+
+code :
+
+vector<int> nextSmaller(vector<int>& arr) {
+    int n = arr.size();
+  
+    // Initialize with n for the cases when next smaller
+    // does not exist
+    vector<int> nextS(n, n);
+  
+    stack<int> st;
+ 
+    // Traverse all array elements from left to right
+    for (int i = 0; i < n; ++i) {
+        while (!st.empty() && arr[i] < arr[st.top()]) {
+
+            // Setting the index of the next smaller element
+            // for the top of the stack
+            nextS[st.top()] = i;
+            st.pop();
+        }
+        st.push(i);
+    }
+    return nextS;
+}
+
+// Function to find previous smaller for every element
+vector<int> prevSmaller(vector<int>& arr) {
+    int n = arr.size();
+  
+    // Initialize with -1 for the cases when prev smaller
+    // does not exist
+    vector<int> prevS(n, -1);
+  
+    stack<int> st;
+ 
+    // Traverse all array elements from left to right
+    for (int i = 0; i < n; ++i) {
+        while (!st.empty() && arr[i] < arr[st.top()]) {
+
+            // Setting the index of the previous smaller element
+            //  for the top of the stack
+            st.pop();
+        }
+        if (!st.empty()) {
+            prevS[i] = st.top();
+        }
+        st.push(i);
+    }
+    return prevS;
+}
+
+// Function to calculate the maximum rectangular
+// area in the Histogram
+int getMaxArea(vector<int>& arr) {
+    vector<int> prevS = prevSmaller(arr);
+    vector<int> nextS = nextSmaller(arr);
+    
+    int maxArea = 0;
+
+    // Calculate the area for each Histogram bar
+    for (int i = 0; i < arr.size(); ++i) {
+        int width = nextS[i] - prevS[i] - 1; 
+        int area = arr[i] * width;          
+        maxArea = max(maxArea, area);        
+    }
+    
+    return maxArea;
+}
+
+
+/****************************************************************** OPTIMAL IN O(2N) TIME AND SPACE : O(N) ***************************************************/
+
+
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+         
+        int n = heights.size();
+        stack<int> stk ;
+        int res = 0 ;
+        int tp , curr ;
+        
+        for(int i = 0 ; i < n ; i++){
+            
+            while(!stk.empty() && heights[stk.top()] >= heights[i]){
+                // pop the top of the stack as the smallest ele of the histogram
+                tp = stk.top();
+                stk.pop();
+                // nw find the width to calculate the area  so fix the width
+                int width = (stk.empty()) ? i : i - stk.top() - 1 ;
+                
+                res = max(res,width * heights[tp]); // using the smallest elemt we take and calculate them and maximized
+            }
+            
+            stk.push(i);
+        }
+        /// for the remaining item of the stack , next smaller elemnt does not exist
+        
+        while(!stk.empty()){
+            tp = stk.top();
+            stk.pop();
+            curr = heights[tp] * (stk.empty() ? n : n - stk.top() - 1) ;
+            
+            res = max(res,curr);
+        }
+        
+        
+        return res ;
+        
+    }
+};
+
+

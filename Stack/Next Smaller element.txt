@@ -1,0 +1,35 @@
+Problem : Next Smaller Element 
+
+Problem link : https://www.naukri.com/code360/problems/next-smaller-element_1112581?leftPanelTabValue=SUBMISSION
+
+
+Problem Solution : 
+
+import java.util.*;
+import java.io.*;
+
+public class Solution{
+    static ArrayList<Integer> nextSmallerElement(ArrayList<Integer> arr, int n){
+        // Write your code here.
+
+        Stack<Integer> stk = new Stack<>();
+        ArrayList<Integer> ans = new ArrayList<>(Collections.nCopies(n, -1));
+
+       // Arrays.fill(ans,-1);
+
+        for(int i = n - 1 ; i >= 0 ; i--){
+ 
+            while(!stk.isEmpty() && stk.peek() >= arr.get(i)){
+                stk.pop();
+            }
+
+            ans.set(i, (!stk.isEmpty()) ? stk.peek() : -1);
+
+            stk.push(arr.get(i));
+
+        }
+
+        return ans ;
+
+    }
+}

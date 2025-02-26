@@ -1,0 +1,52 @@
+Problem : Maximum of minimum for every window size
+
+Problem check on the gfg or leetodeplease:
+
+
+Solution :  //////////////////////////////////////////////////////////////////////////////////// OPTIMAL SOLUTION \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+TIME COMP : O(N)       and           SPACE COMP : O(N)
+
+
+class Solution {
+  public:
+    vector<int> maxOfMins(vector<int>& arr) {
+        // Your code here
+        
+        int n = arr.size();
+        vector<int> res(n,0);
+        
+        stack<int> s ;
+        
+        vector<int> len(n,0);
+        
+        for(int i = 0 ; i < n ; i++){
+            while(!s.empty() && arr[s.top()] > arr[i]){
+                int top = s.top();
+                s.pop();
+                int windowsSize = s.empty() ? i : i - s.top() - 1 ;
+                len[top] = windowsSize;
+            }
+            s.push(i);
+        }
+        
+        while(!s.empty()){
+            int top = s.top();
+            s.pop();
+            int windowsSize = s.empty() ? n : n - s.top() - 1 ;
+            len[top] = windowsSize;
+        }
+        
+        for(int i = 0 ; i < n ;i++){
+            int windowsSize = len[i] - 1;
+            res[windowsSize] = max(res[windowsSize],arr[i]);
+        }
+        
+        for(int i = n - 2 ; i>= 0 ;i--){
+            res[i] = max(res[i],res[i+1]);
+        }
+        
+        return res ;
+        
+    }
+};

@@ -1,0 +1,63 @@
+Problem : Get Min from Stack
+
+Problem Link : https://www.geeksforgeeks.org/problems/get-minimum-element-from-stack/1
+
+Problem Solution : 
+
+
+                        ::::::::::::::::::::::                                     :::::::::::::::::::::  C++ CODE  :::::::::::::::::::                                    ::::::::::::::::::::::::
+
+
+class Solution {
+  public:
+    int mini ;
+    stack<int> st;
+    
+    Solution() {
+        // code here
+    }
+
+    // Add an element to the top of Stack
+    void push(int x) {
+        // code here
+        if(st.empty()) mini = x ;
+        else if(x <= mini){
+            st.push(mini);
+            mini = x ;
+        }
+        st.push(x);
+    }
+
+    // Remove the top element from the Stack
+    void pop() {
+        // code here
+        if(st.empty()) return ;
+        int tmp = st.top();
+        st.pop();
+        if(tmp == mini && !st.empty()){
+            mini = st.top();
+            st.pop();
+        }
+    }
+
+    // Returns top element of the Stack
+    int peek() {
+        // code here
+        if(st.empty()) return -1 ;
+        return st.top();
+    }
+
+    // Finds minimum element of Stack
+    int getMin() {
+        // code here
+        if(st.empty()) return -1 ;
+        return mini ;
+    }
+    
+};
+
+
+/**************************************************************************** JAVA SOLUTION **************************************************************************/
+
+
+Leetcode : 115 

@@ -1,0 +1,94 @@
+Problem : Capitalize the first and last character of each word in a string
+
+
+Given the string, the task is to capitalise the first and last character of each word in a string.
+Examples: 
+ 
+
+Input: Geeks for geeks
+Output: GeekS FoR GeekS
+
+Input: Geeksforgeeks is best
+Output: GeeksforgeekS IS BesT
+
+
+Solution :
+
+ // ********************************************************************* C++ Implementation ***********************************************************************\\
+
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
+#include <cctype>
+
+using namespace std;
+
+string capitalizeFirstLast(string str) {
+    stringstream ss(str);
+    string word;
+    string result;
+
+    while (ss >> word) { // Split the string into words
+        if (word.length() == 1) {
+            // If the word has only one character, capitalize it
+            word[0] = toupper(word[0]);
+        } else {
+            // Capitalize the first and last character
+            word[0] = toupper(word[0]);
+            word[word.length() - 1] = toupper(word[word.length() - 1]);
+        }
+        result += word + " ";
+    }
+
+    // Remove the trailing space and return the result
+    if (!result.empty()) {
+        result.pop_back();
+    }
+    return result;
+}
+
+int main() {
+    string input = "hello world";
+    string output = capitalizeFirstLast(input);
+    cout << output << endl;  // Output: HellO WorlD
+
+    return 0;
+}
+
+/***************************************************************************** Java Implementation ***************************************************************\\
+
+
+public class Main {
+    public static String capitalizeFirstLast(String str) {
+        String[] words = str.split(" "); // Split the string into words
+        StringBuilder result = new StringBuilder();
+
+        for (String word : words) {
+            if (word.length() == 1) {
+                // If the word has only one character, capitalize it
+                result.append(word.toUpperCase()).append(" ");
+            } else {
+                // Capitalize the first and last character
+                String capitalizedWord = word.substring(0, 1).toUpperCase() +
+                                         word.substring(1, word.length() - 1) +
+                                         word.substring(word.length() - 1).toUpperCase();
+                result.append(capitalizedWord).append(" ");
+            }
+        }
+
+        // Remove the trailing space and return the result
+        return result.toString().trim();
+    }
+
+    public static void main(String[] args) {
+        String input = "hello world";
+        String output = capitalizeFirstLast(input);
+        System.out.println(output);  // Output: HellO WorlD
+    }
+}
+
+
+/??????? / TIME : O(N) AND  SPACE : O(N) 
+

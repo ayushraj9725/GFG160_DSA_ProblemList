@@ -1,0 +1,152 @@
+problem : Decode the string
+
+Problem Statement : 
+Given an encoded string s, the task is to decode it. The encoding rule is :
+
+k[encodedString], where the encodedString inside the square brackets is being repeated exactly k times. Note that k is guaranteed to be a positive integer.
+Note: The test cases are generated so that the length of the output string will never exceed 105 .
+
+Examples:
+
+Input: s = "1[b]"
+Output: "b"
+Explanation: "b" is present only one time.
+
+Input: s = "3[b2[ca]]"
+Output: "bcacabcacabcaca"
+Explanation:
+
+1. Inner substring “2[ca]” breakdown into “caca”.
+2. Now, new string becomes “3[bcaca]”
+3. Similarly “3[bcaca]” becomes “bcacabcacabcaca ” which is final result.
+
+
+Constraints:
+1 ≤ |s| ≤ 105 
+
+Company Tags
+Microsoft  Facebook
+
+Expected Complexities
+Time Complexity : O(n)Auxiliary Space : O(n)
+
+/********************************************************************** CPP SOLUTION USING STACK DATASTRUCTURE ******************************************/
+
+class Solution {
+  public:
+    string decodedString(string &s) {
+        
+        // code here
+        
+        // using stack we are solving this problem now
+        
+        stack<char> stk ;
+        for(int i = 0 ; i < s.size() ;i++){
+            if(s[i] != ']') stk.push(s[i]);  // any char else ] we push all thing in to the stack
+            else{
+                // just we get ] since we start popping out the charcter and make a string tmp take that
+                string word ;
+                while(!stk.empty() && stk.top() != '['){ // we insert char untill we not get [ char
+                    word.push_back(stk.top()); stk.pop();
+                }
+                stk.pop(); // pop [ this char
+                reverse(word.begin(),word.end()); // we need to reverse that word to get actual word
+                // now make check digit take it as number do this'
+                string tmp ;
+                while(!stk.empty() && isdigit(stk.top())){
+                    tmp.push_back(stk.top()); stk.pop();
+                }
+                reverse(tmp.begin(),tmp.end()); // reverse this and convert in to integer 
+                int k = stoi(tmp);
+                
+                // now we need to make the repeated string kth time 
+                string repeated ;
+                while(k > 0){
+                    repeated.append(word); // repeated has the encoding string
+                    k-- ;
+                }
+                
+                // now encoding string we need to again push all char in to the stack for the rest of operation
+                
+                for(char c : repeated) stk.push(c); 
+            }
+        }
+        
+        // now the end of the for loop after traversing the input given string we have the encoded string in stk 
+        // so extract the char from the stack and make string ans
+        string ans ;
+        
+        while(!stk.empty()){
+            ans.push_back(stk.top());
+            stk.pop();
+        }
+        // reverse the string to get actual string 
+        
+        reverse(ans.begin(),ans.end());
+        
+        return ans ;
+        
+    }
+};
+
+/************************************************************************ JAVA SOLUTION USING STACK **********************************************************/
+
+class Solution {
+    public String decodeString(String s) {
+         
+        Stack<Character> stk = new Stack<>();
+
+        for(int i = 0 ; i < s.length() ;i++){
+            if(s.charAt(i) != ']') stk.push(s.charAt(i));  // any char else ] we push all thing in to the stack
+            else{
+                // just we get ] since we start popping out the charcter and make a string tmp take that
+                StringBuilder word = new StringBuilder();
+                while(!stk.isEmpty() && stk.peek() != '['){ // we insert char untill we not get [ char
+                    word.insert(0,stk.peek());  // making string
+                    stk.pop();
+                }
+                stk.pop(); // pop [ this char here 
+                // we need to reverse that word to get actual word
+                // now make check digit take it as number do this'
+                StringBuilder tmp = new StringBuilder();
+                while(!stk.isEmpty() && Character.isDigit(stk.peek())){
+                    tmp.insert(0,stk.peek());  // making string
+                    stk.pop();
+                }
+                // reverse this and convert in to integer 
+                int k = Integer.parseInt(tmp.toString());
+                
+                // now we need to make the repeated string kth time 
+                StringBuilder repeated = new StringBuilder();
+                while(k > 0){
+                    repeated.append(word.toString()); // repeated has the encoding string
+                    k-- ;
+                }
+                
+                // now encoding string we need to again push all char in to the stack for the rest of operation
+                
+                for(char c : repeated.toString().toCharArray()) stk.push(c); 
+            }
+        }
+        
+        // now the end of the for loop after traversing the input given string we have the encoded string in stk 
+        // so extract the char from the stack and make string ans
+        StringBuilder ans = new StringBuilder();
+        
+        while(!stk.isEmpty()){
+            ans.insert(0,stk.peek());  // making string
+            stk.pop();
+        }
+        // reverse the string to get actual string 
+        
+        
+        return ans.toString() ;
+    }
+}
+
+/***************************************************   ANOTHER   JAVA   SOLUTION   USING   RECURSION    ***************************************************/
+
+
+********* >   Go in Recursion Folder  Of DSA Notes Directory < *********
+
+

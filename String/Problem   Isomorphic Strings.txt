@@ -1,0 +1,130 @@
+Problem  : Isomorphic Strings
+
+Problem statement : 
+Given two strings s1 and s2, check if these two strings are isomorphic to each other.
+
+If the characters in s1 can be changed to get s2, then two strings, s1 and s2, are isomorphic. A character must be completely swapped out for another character while maintaining the order of the characters. A character may map to itself, but no two characters may map to the same character.
+
+Examples:
+
+Input: s1 = "aab", s2 = "xxy"
+Output: true
+Explanation: There are two different characters in aab and xxy, i.e a and b with frequency 2 and 1 respectively.
+Input: s1 = "aab", s2 = "xyz"
+Output: false
+Explanation:  There are two different characters in aab but there are three different charactersin xyz. So there won't be one to one mapping between s1and s2.
+
+Input: s1 = "aac", s2 = "xyz"
+Output: false
+Explanation: There are two different characters in aab but there are three different charactersin xyz. So there won't be one to one mapping between s1and s2.
+
+Constraints:
+1 <= |s1|, |s2| <= 105
+
+Company Tags
+Google
+
+Expected Complexities
+Time Complexity : O(n)Auxiliary Space : O(n)
+
+
+/**************************************************************************** CPP SOLUTION ************************************************************************/
+
+
+using two map 
+
+class Solution {
+  public:
+    // Function to check if two strings are isomorphic.
+    bool areIsomorphic(string &s1, string &s2) {
+
+        // Your code here
+        if(s1.size() != s2.size()) return false ;
+        
+        unordered_map<char,char> map1 , map2 ;
+        
+        for(int i = 0 ; i < s1.size() ; i++){
+           char c1 = s1[i] ,c2 = s2[i] ;
+           
+           if(map1.find(c1) != map1.end() && map1[c1] != c2){
+               return false ;
+               
+           }
+           if(map2.find(c2) != map2.end() && map2[c2] != c1){
+               return false ;
+           }
+           
+           // other wise we will map both
+           map1[c1] = c2 ;
+           map2[c2] = c1 ;
+        }
+        
+        return true ;  // otherwise false no return yet then we should return true 
+        
+}
+};
+
+
+/************************************************************************* ANOTHER SOLUTION ******************************************************************/
+
+#include <iostream>
+#include <unordered_map>
+using namespace std;
+
+bool areIsomorphic(string s, string t) {
+    if (s.size() != t.size()) return false;
+
+    unordered_map<char, char> h;  // Stores mapping s[i] -> t[i]
+    unordered_map<char, bool> used;  // Tracks already mapped characters in 't'
+
+    for (int i = 0; i < s.size(); i++) {
+        char c1 = s[i], c2 = t[i];
+
+        if (h.find(c1) != h.end()) {  // If 'c1' is already mapped
+            if (h[c1] != c2) return false;  // Check if the stored mapping is correct
+        } 
+        else {  // If 'c1' is not mapped yet
+            if (used[c2]) return false;  // If 'c2' is already mapped to another character
+            h[c1] = c2;  // Map c1 -> c2
+            used[c2] = true;  // Mark c2 as used
+        }
+    }
+
+    return true;
+}
+
+int main() {
+    cout << areIsomorphic("egg", "add") << endl;  // Output: 1 (true)
+    cout << areIsomorphic("foo", "bar") << endl;  // Output: 0 (false)
+    cout << areIsomorphic("paper", "title") << endl; // Output: 1 (true)
+    return 0;
+}
+
+
+/************************************************************************** JAVA SOLUTION ***********************************************************************/
+
+
+import java.util.HashMap ;
+class Solution {
+    public boolean isIsomorphic(String s, String t) {
+        HashMap<Character,Character> h = new HashMap<>();
+   // set at hashmap , s char as key and value t's charcater 
+        for(int i = 0 ; i < s.length() ; i++){
+            if(h.containsKey(s.charAt(i))){  // checing if key present 
+                if(!h.get(s.charAt(i)).equals(t.charAt(i))){ // if key present then check key's value equal to mapped or not
+                   return false ;   // please check leetcode 2nd case ans dry run then you easly revised concept condition 
+                }
+            }
+            else{
+                if(h.containsValue(t.charAt(i))){ // if key is not present then check value of hashmap taking from t string ,if present return false
+                    return false ;           // if not hm has not value then put / add the key and value 
+                }
+                h.put(s.charAt(i),t.charAt(i)); // from here 
+            }
+        }
+        return true ;
+    }
+}
+
+/*********************************************************************************************************************************************************************/
+

@@ -1,0 +1,94 @@
+Problem : Longest String Chain
+
+Problem Solution : 
+You are given an array of words where each word consists of lowercase English letters.
+wordA is a predecessor of wordB if and only if we can insert exactly one letter anywhere in wordA without changing the order of the other characters to make it equal to wordB. For example, "abc" is a predecessor of "abac", while "cba" is not a predecessor of "bcad".
+
+A word chain is a sequence of words [word1, word2, ..., wordk] with k >= 1, where word1 is a predecessor of word2, word2 is a predecessor of word3, and so on. A single word is trivially a word chain with k = 1.
+
+Return the length of the longest possible word chain with words chosen from the given list of words in any order.
+
+Examples:
+
+Input: words[] = ["ba", "b", "a", "bca", "bda", "bdca"]
+Output: 4
+Explanation: One of the longest word chains is ["a", "ba", "bda", "bdca"].
+
+Input: words[] = ["abc", "a", "ab"]
+Output: 3
+Explanation: The longest chain is {"a", "ab" "abc"}
+
+Input: words[] = ["abcd", "dbqca"]
+Output: 1
+Explanation: The trivial word chain ["abcd"] is one of the longest word chains.
+
+Constraint:
+1 <= words.length <= 104
+1 <= words[i].length <= 10
+ words[i] only consists of lowercase English letters.
+
+   /************************************************************************** SOLUTION CPP USING DPP **********************************************************/
+
+
+//C++ CODE
+class Solution {
+  public:
+    int longestStringChain(vector<string>& words) {
+        // CodeGenius
+        sort(words.begin(),words.end(),[](const string &a,const string &b){
+            return a.size()<b.size();
+        });
+        unordered_map<string,int>mp;
+        int maxlength=1;
+        for(const string &word : words){
+            int length=1;
+            for(int i=0;i<word.size();i++){
+                string pred=word.substr(0,i) + word.substr(i+1);
+                if(mp.find(pred)!=mp.end())
+                length=max(length,mp[pred]+1);
+            }
+            mp[word]=length;
+            maxlength=max(maxlength,length);
+        }
+        return maxlength;
+        
+    }
+};
+
+
+/////////////////////***********************************************************    JAVA CODE    ******************************************************//////////////////////////
+
+
+class Solution {
+    public int longestStringChain(String words[]) {
+        // code here
+        Arrays.sort(words, (a, b) -> a.length() - b.length());
+        
+        // Step 2: Create a map to store the longest chain length for each word
+        Map<String, Integer> dp = new HashMap<>();
+        int maxLength = 1; // At least one word in the chain
+        
+        // Step 3: Process each word
+        for (String word : words) {
+            int currentLength = 1; // Start with a chain of length 1 (the word itself)
+            
+            // Generate all possible predecessors by removing one character
+            for (int i = 0; i < word.length(); i++) {
+                String predecessor = word.substring(0, i) + word.substring(i + 1);
+                
+                // Check if the predecessor exists in the map
+                if (dp.containsKey(predecessor)) {
+                    currentLength = Math.max(currentLength, dp.get(predecessor) + 1);
+                }
+            }
+            
+            // Update the DP map with the current word's chain length
+            dp.put(word, currentLength);
+            
+            // Update the maximum chain length
+            maxLength = Math.max(maxLength, currentLength);
+        }
+        
+        return maxLength;
+    }
+}

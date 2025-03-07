@@ -26,6 +26,8 @@ Both strings s1 and s2 contain only uppercase English letters.
 Company Tags
 Paytm  VM Ware  Amazon  Microsoft  Citrix   MakeMyTrip
 
+Expected Complexities
+Time Complexity : O(n * m)    Auxiliary Space  : O(n)
 
 /******************************************************************************** SOLUTION CPP CODE **************************************************************/
 

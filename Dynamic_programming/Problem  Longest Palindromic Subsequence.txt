@@ -1,0 +1,72 @@
+Problem  :  Longest Palindromic Subsequence
+
+Problem Statement : 
+Given a string s, return the length of the longest palindromic subsequence.
+
+A subsequence is a sequence that can be derived from the given sequence by deleting some or no elements without changing the order of the remaining elements.
+
+A palindromic sequence is a sequence that reads the same forward and backward.
+
+Examples:
+
+Input: s = "bbabcbcab"
+Output: 7
+Explanation: Subsequence "babcbab" is the longest subsequence which is also a palindrome.
+
+Input: s = "abcd"
+Output: 1
+Explanation: "a", "b", "c" and "d" are palindromic and all have a length 1.
+
+Input: s = "agbdba"
+Output: 5
+Explanation: The longest palindromic subsequence is "abdba", which has a length of 5. The characters in this subsequence are taken from the original string "agbdba", and they maintain the order of the string while forming a palindrome.
+
+Constraints:
+1 ≤ s.size() ≤ 1000
+The string contains only lowercase letters.
+
+Company Tags
+Amazon   Google  
+
+
+Expected Complexities
+Time Complexity  : O(n^2)   Auxiliary Space: O(n^2)
+
+/************************************************************************* CPP CODING SOLUTION *****************************************************************/
+
+class Solution {
+  public:
+    int dp[1001][1001] ;
+    int LCS(int i, int j , string &a ,string &b){
+        
+        // base case
+        if(i >= a.size() || j >= b.size()) return 0 ;
+        
+        // checking the dp i , j unnecessary check
+        if(dp[i][j] != -1) return dp[i][j];
+        
+        // check the recursively 
+        if(a[i] == b[j]) return dp[i][j] = 1 + LCS(i+1,j+1,a,b);
+        else{
+            return dp[i][j] = max(LCS(i,j+1,a,b),LCS(i+1,j,a,b));
+        }
+        
+    }
+    int longestPalinSubseq(string &s) {
+        // code here
+        // we are finding this using the longest common subcequence of actual string and its  reverse 
+        string rev = s ;
+        reverse(rev.begin(),rev.end());
+        
+        // set the memorization
+        
+        memset(dp,-1,sizeof(dp));
+        
+        return LCS(0,0,s,rev);
+        
+    }
+};
+
+
+/********************************************************************** JAVA CODE SOLUTION **********************************************************************/
+

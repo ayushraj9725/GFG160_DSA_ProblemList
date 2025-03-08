@@ -1,0 +1,112 @@
+Problem : Longest Palindrome in a String
+
+Problem Statement : 
+Given a string s, your task is to find the longest palindromic substring within s.
+
+A substring is a contiguous sequence of characters within a string, defined as s[i...j] where 0 ≤ i ≤ j < len(s).
+
+A palindrome is a string that reads the same forward and backward. More formally, s is a palindrome if reverse(s) == s.
+
+Note: If there are multiple palindromic substrings with the same length, return the first occurrence of the longest palindromic substring from left to right.
+
+Examples :
+
+Input: s = “forgeeksskeegfor” 
+Output: “geeksskeeg”
+Explanation: There are several possible palindromic substrings like “kssk”, “ss”, “eeksskee” etc. But the substring “geeksskeeg” is the longest among all.
+
+Input: s = “Geeks” 
+Output: “ee”
+Explanation: "ee" is the longest palindromic substring of "Geeks". 
+
+Input: s = “abc” 
+Output: “a”
+Explanation: "a", "b" and "c" are longest palindromic substrings of same length. So, the first occurrence is returned.
+
+Constraints:
+1 ≤ s.size() ≤ 103
+s consist of only lowercase English letters.
+
+Company Tags
+Zoho Accolite  Amazon  Microsoft  Samsung  MakeMyTrip  Visa Walmart  Google  Qualcomm  Groupon
+
+Expected Complexities
+Time Complexity : O(n^2)    Auxiliary Space : O(1)
+
+
+/********************************************************************** SOLUTION CPP CODE ***********************************************************************/
+
+class Solution {
+  public:
+    int length(int left,int right,string &s){
+        int len=0;
+        while(left>=0 && right<s.size()){
+            if(s[left]==s[right]){
+                len+=2;
+                left--;
+                right++;
+            }
+            else break;
+        }
+        return len;
+    }
+    string longestPalindrome(string &s) {
+        // CodeGenius
+        int n=s.size();
+        int maxlen=1;
+        int start=0;
+        
+        //odd
+        for(int i=0;i<n;i++){
+            int len=1+length(i-1,i+1,s);
+            if(len>maxlen){
+            maxlen=len;
+            start=i-len/2;
+            }
+        }
+        //even
+        for(int i=1;i<n;i++){
+            int len=length(i-1,i,s);
+            if(len>maxlen){
+            maxlen=len;
+            start=i-len/2;
+            }
+        }
+        return s.substr(start,maxlen);
+    }
+};
+
+/********************************************************************** JAVA SOLUTION *****************************************************************************/
+
+class Solution {
+    static String expandAroundCenter(String s, int left, int right) {
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            left--;
+            right++;
+        }
+        return s.substring(left + 1, right);
+    }
+
+    static String longestPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+
+        String longestPalin = "";
+        for (int i = 0; i < s.length(); i++) {
+            // Odd length palindromes (single character center)
+            String pal1 = expandAroundCenter(s, i, i);
+            if (pal1.length() > longestPalin.length()) {
+                longestPalin = pal1;
+            }
+
+            // Even length palindromes (two character center)
+            String pal2 = expandAroundCenter(s, i, i + 1);
+            if (pal2.length() > longestPalin.length()) {
+                longestPalin = pal2;
+            }
+        }
+
+        return longestPalin;
+    }
+}

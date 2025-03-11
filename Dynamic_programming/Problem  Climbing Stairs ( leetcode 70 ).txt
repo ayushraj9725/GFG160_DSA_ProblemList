@@ -1,0 +1,118 @@
+Problem : Climbing Stairs ( leetcode 70 )
+
+Problem  : Ways to Reach the n'th Stair
+
+Problem Statement : 
+There are n stairs, a person standing at the bottom wants to reach the top. The person can climb either 1 stair or 2 stairs at a time. Your task is to count the number of ways, the person can reach the top (order does matter).
+
+Examples:
+
+Input: n = 1
+Output: 1
+Explanation: There is only one way to climb 1 stair. 
+
+Input: n = 2
+Output: 2
+Explanation: There are 2 ways to reach 2th stair: {1, 1} and {2}.  
+
+Input: n = 4
+Output: 5
+Explanation: There are five ways to reach 4th stair: {1, 1, 1, 1}, {1, 1, 2}, {2, 1, 1}, {1, 2, 1} and {2, 2}.
+
+Constraints:
+1 ≤ n ≤ 44
+
+Company Tags
+Flipkart   Amazon  Microsoft  OYO Rooms Adobe
+
+
+/**************************************************************************** SOLUTION CPP CODE ******************************************************************/
+
+//////////// BRUTE FORCE (  NATIVE APPROACH )   : TIME COMP : O(2^n) and Space : O(K) USing Stack RECURSION 
+
+
+#include <iostream>
+using namespace std;
+
+int countWays(int n) {
+
+    // Base cases: If there are 0 or 1 stairs,
+    // there is only one way to reach the top.
+    if (n == 0 || n == 1)
+        return 1;
+
+    return countWays(n - 1) + countWays(n - 2);
+}
+
+int main() {
+    int n = 4;
+    cout << countWays(n);
+    return 0;
+}
+
+///////////// BETTER APPROACH : USING Dynamic Programming Memorization => Time : O(N) and Space : O(N)  for TOP DOWN AND BOTTOM UP \\\\\\\\\
+
+
+                                                                                     //////  " TOP DOWN MEMORIZATION " \\\\\\
+
+class Solution {
+  public:
+    int solve(int n, vector<int>& memo){
+        // base case 
+        if(n == 0 || n == 1) return 1 ;
+        
+        // check for unnecessary recurive call avoiding 
+        if(memo[n] != -1) return memo[n] ;
+        
+        // other wise we return this fabonacci made for mula
+        
+        return memo[n] = solve(n-1,memo) + solve(n-2,memo) ;
+    }
+    int countWays(int n) {
+        // your code here
+        // Brute Force SOlution : Using Fabonacci formula : O(2^n) time 
+        // Expected Better Solution : using Dynamic Programming : O(N) time and O(N) space Recursivly 
+        // Top Down or Bottom Up memorization 
+        
+        // Top Down memorization 
+        
+        vector<int> memo(n+1,-1);
+        
+        return solve(n,memo);
+        
+    }
+};
+
+                                                                                  //////  " BOTTOM UP MEMORIZATION " \\\\\\
+
+
+/*******************************************  USING JAVA WE ARE GONNA SOLVE THIS BOTTOM UP MEMORIZATION  **********************************/
+
+class Solution {
+    public int climbStairs(int n) {
+        
+        // base case
+        if(n==0 || n==1) return 1 ;
+
+        // take n+1 size array for set value of previous 
+        int memo[] = new int[n+1]  ;    // or named dp[]
+
+        memo[1] = 1 ;
+        memo[2] = 2 ;
+
+        for(int i = 3 ; i <= n ;i++){
+            memo[i] = memo[i-1] + memo[i-2] ; // set the value at every index of 3 to n
+        }
+
+        // now at the end of the day we have the memorized array now we can return our answer directly returing the memo[n]
+
+        return memo[n] ;
+
+        // Time nd Space Comp : O(N) Both 
+    }
+}
+
+/**************************************************************** MOST OPTIMAL SOLUTION USING MATRIX FILLING ********************************************/
+
+EXPLORE IN FUTURE :::: ......
+ 

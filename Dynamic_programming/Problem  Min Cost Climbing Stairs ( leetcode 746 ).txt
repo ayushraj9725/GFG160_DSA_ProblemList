@@ -1,0 +1,150 @@
+Problem : Min Cost Climbing Stairs ( leetcode 746 )
+
+Problem Statement : 
+Given an array of integers cost[] where cost[i] is the cost of the ith step on a staircase. Once the cost is paid, you can either climb one or two steps. Return the minimum cost to reach the top of the floor.
+Assume 0-based Indexing. You can either start from the step with index 0, or the step with index 1.
+
+Examples:
+
+Input: cost[] = [10, 15, 20]
+Output: 15
+Explanation: Cheapest option is to start at cost[1], pay that cost, and go to the top.
+
+
+
+Input: cost[] = [1, 100, 1, 1, 1, 100, 1, 1, 100, 1]
+Output: 6
+Explanation: Cheapest option is to start on cost[0], and only step on 1s, skipping cost[3].
+
+
+Constraints:
+2 ≤ cost.size() ≤ 105
+0 ≤ cost[i] ≤ 999
+
+
+/******************************************************************* CPP SOLUTION AND APPROACHES ************************************************************/
+
+////////////   BRUTE FORCE ( NAIVE ) APPROACH : USING RECURSIVE NATURE   :: TIME COMP : O(2^n) and SPACE : O(N) for Recursion Stack \\\\\\\\\\
+
+
+// C++ program to count number of
+// ways to reach nth stair.
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+  public:
+    int minCost(vector<int>& cost, int i){
+        // base case 
+        if(i == 0 || i == 1) return cost[i] ;
+        
+        // recursive case calls 
+        
+        return cost[i] + min(minCost(cost,i-1), minCost(cost,i-2)) ;
+        
+    }
+    int minCostClimbingStairs(vector<int>& cost) {
+        // Write your code here
+        // Brute Force using Recursion : 
+        // Better Appraoch using DP Top Down Approach 
+        
+        int n = cost.size() ;
+        vector<int> memo(n+1,-1);
+        
+        if(n == 1)  return cost[0] ;
+        
+        return min(minCost(cost,n-1), minCost(cost,n-2));
+        
+    }
+
+    int main() {
+    vector<int> cost = { 16, 19, 10, 12, 18 };
+    cout << minCostClimbingStairs(cost) << endl;
+    return 0;
+ }
+
+};
+
+
+////////////   BETTER APPROACH : USING DYNAMIC PROGRAMMING  Memorization dp array :: TIME O(N)  ans SPACE : O(N) TOP DOWN APPch \\\\\\\\\\
+
+// C++ program to count number of
+// ways to reach nth stair.
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+  public:
+    int minCost(vector<int>& cost, int i , vector<int>& memo){
+        // base case 
+        if(i == 0 || i == 1) return cost[i] ;
+        
+        // check for the unnecessarly calls , if memorize or found the value then return from here
+        
+        if(memo[i] != -1) return memo[i] ;
+        
+        // recursive case calls and set in memo array from top 
+        
+        return memo[i] = cost[i] + min(minCost(cost,i-1,memo), minCost(cost,i-2,memo)) ;
+        
+    }
+    int minCostClimbingStairs(vector<int>& cost) {
+        // Write your code here
+        // Brute Force using Recursion : 
+        // Better Appraoch using DP Top Down Approach 
+        
+        int n = cost.size() ;
+        vector<int> memo(n,-1);
+        
+        if(n == 1)  return cost[0] ;
+        
+        return min(minCost(cost,n-1,memo), minCost(cost,n-2,memo));
+        
+    }
+      
+    int main() {
+    vector<int> cost = { 16, 19, 10, 12, 18 };
+    cout << minCostClimbingStairs(cost) << endl;
+    return 0;
+}
+    
+};
+
+
+////////////  BETTER APPRAOCH USING DP BOTTOM UP APPROACH : TIME COMP : O(N) AND SPACE : O(N)    USING JAVA ****************  \\\\\\\\\\\\
+
+
+class Solution {
+    public int minCostClimbingStairs(int[] cost) {
+        // Using Bottom up approach we are building the Memorization Solution 
+        // and Dynamically we are approaching the efficient Solution 
+
+        int n = cost.length;
+        if(n == 1) return cost[0] ; // this is exp initial case
+
+        int minCost[] = new int[n+1] ; // we can tell it dp[] memo array
+
+        // we are setting the base case
+        minCost[0] = 0 ;
+        minCost[1] = 0 ; // because we can jump initially 1 or 2 step so its value initially considerd as zero 
+
+        // now we are gonna build the memorization and set value in this minCost array form bottom 
+
+        for(int i = 2 ; i <= n ; i++){
+            minCost[i] = Math.min(cost[i-1] + minCost[i-1], cost[i-2] + minCost[i-2]);
+        }
+
+        // now at the end of the day we are at the top of the stairs now we can return easly form here the mincost[n] at nth value we have answer
+
+        return minCost[n] ;
+        
+    }
+}
+
+
+/******************************************************  EXPECTED OPTIMAL APPROACH USING SPACE OPTIMIZED  *****************************************/
+
+
+EXPLORE FOR FUTURE : :::: : 
+
+ 

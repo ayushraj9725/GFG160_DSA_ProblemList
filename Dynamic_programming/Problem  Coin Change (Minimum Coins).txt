@@ -1,0 +1,121 @@
+Problem : Coin Change (Minimum Coins)
+
+Problem Statement : 
+You are given an array coins[], where each element represents a coin of a different denomination, and a target value sum. You have an unlimited supply of each coin type {coins1, coins2, ..., coinsm}.
+
+Your task is to determine the minimum number of coins needed to obtain the target sum. If it is not possible to form the sum using the given coins, return -1.
+
+Examples:
+
+Input: coins[] = [25, 10, 5], sum = 30
+Output: 2
+Explanation: Minimum 2 coins needed, 25 and 5  
+
+Input: coins[] = [9, 6, 5, 1], sum = 19
+Output: 3
+Explanation: 19 = 9 + 9 + 1
+
+Input: coins[] = [5, 1], sum = 0
+Output: 0
+Explanation: For 0 sum, we do not need a coin
+
+Input: coins[] = [4, 6, 2], sum = 5
+Output: -1
+Explanation: Not possible to make the given sum.
+ 
+Constraints:
+1 ≤ sum * coins.size() ≤ 106
+0 <= sum <= 104
+1 <= coins[i] <= 104
+1 <= coins.size() <= 103
+
+Company Tags
+Paytm  Morgan Stanley  Accolite  Amazon  Microsoft  Samsung  Snapdeal  Oracle  Visa  Google  Synopsys 
+
+
+/******************************************************************** CPP SOLUTION ******************************************************************************/
+ 
+///// RECURSION USING  : TIME O(N^SUM)  and SPACE : O(N*SUM)     ///  BRUTE FORCE (NAIVE ) 
+
+
+
+///// USING MEMMORIZATIONS TOP DOWN { TIME TAKEN : O(N*SUM)  WITH SAPCE : O(N*SUM)  ;;;;; BETTER APPROACH 
+
+
+
+///// USING TABULATION  BOTTOM UP { TIME TAKEN : O(N*SUM)  WITH SAPCE : O(N*SUM)  ;;;;; BETTER APPROACH 
+
+
+
+////// EXPECTED (OPTIMAL) APPROACH USING DYNAMIC PROGRAMMING  BUILDING THE SOLUTION OPTIMIZING SPACE IN O(N) and TIME O(N*s)
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int minCoins(vector<int> &coins, int sum) {
+    if (sum < 1) return 0;
+    
+    vector<int> minCostDp(sum + 1, INT_MAX); // DP table of size `sum+1`
+    minCostDp[0] = 0; // Base case: 0 coins needed to make sum 0
+
+    for (int i = 1; i <= sum; i++) {
+        for (int coin : coins) {
+            if (coin <= i && minCostDp[i - coin] != INT_MAX) {
+                minCostDp[i] = min(minCostDp[i], 1 + minCostDp[i - coin]);
+            }
+        }
+    }
+
+    return (minCostDp[sum] == INT_MAX) ? -1 : minCostDp[sum];
+}
+
+int main() {
+    vector<int> coins = {1, 2, 5};
+    int sum = 11;
+    cout << minCoins(coins, sum) << endl; // Output: 3 (5+5+1)
+    return 0;
+}
+
+/********************************************************************* JAVA SOLUTION ****************************************************************************/
+
+
+/////// EXPECTED APPROACH : TIME : O( N *SUM) AND SPACE : O(N) USING DP 
+
+
+
+import java.util.*;
+
+class Solution {
+    public int minCoins(int[] coins, int sum) {
+        if (sum < 1) return 0;
+
+        int[] minCostDp = new int[sum + 1]; 
+        Arrays.fill(minCostDp, Integer.MAX_VALUE); // Initialize DP array
+        minCostDp[0] = 0; // Base case: 0 coins needed to make sum 0
+
+        for (int i = 1; i <= sum; i++) {
+            for (int coin : coins) {
+                if (coin <= i && minCostDp[i - coin] != Integer.MAX_VALUE) {
+                    minCostDp[i] = Math.min(minCostDp[i], 1 + minCostDp[i - coin]);
+                }
+            }
+        }
+
+        return (minCostDp[sum] == Integer.MAX_VALUE) ? -1 : minCostDp[sum];
+    }
+
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        int[] coins = {1, 2, 5};
+        int sum = 11;
+        System.out.println(sol.minCoins(coins, sum)); // Output: 3 (5+5+1)
+    }
+}
+
+
+
+/***********************************************************************************************************************************************************************/
+
+
+
+//// B

@@ -1,0 +1,226 @@
+Problem : Partition Equal Subset Sum
+
+Problem Statement : 
+Given an array arr[], determine if it can be partitioned into two subsets such that the sum of elements in both parts is the same.
+
+Note: Each element must be in exactly one subset.
+
+Examples:
+
+Input: arr = [1, 5, 11, 5]
+Output: true
+Explanation: The two parts are [1, 5, 5] and [11].
+
+Input: arr = [1, 3, 5]
+Output: false
+Explanation: This array can never be partitioned into two such parts.
+
+Constraints:
+1 ≤ arr.size ≤ 100
+1 ≤ arr[i] ≤ 200
+
+Company Tags
+Accolite  Amazon  Microsoft  OYO Rooms  Adobe  Drishti-Soft  
+
+/**************************************************************************** SOLUTION CPP **************************************************************************/
+
+THERE ARE TWO TYPE OF SOLUTION EXIST OF THIS PARTICULAR PROBLEM 
+
+=> USING RECURSION AND  BACKTRACKING   ( WE WILL DO IT IN BACKTRACING DIRECTORY )  (TIME : O(2^n) and space : O(n) Naive Approach
+
+///////// CPP RECURSIVE CODE HERE below \\\\\\\
+
+class Solution {
+  public:
+    bool solve(vector<int>& arr, int sum, int i  ){
+        // base case
+        // if at the end of the when we founnd the sum zero that mean wwe have get the subset s we should return now true
+        if(sum == 0) return true ;
+        if(i >= arr.size()) return false ;// if we get i cross the n and untill not return true that means we have not found our subset so simplly return false 
+        // recursive case 
+        bool pick = false , nopick = false ;
+        if(arr[i] <= sum){ // when we pick the ele from arr when found less than equal to given sum so we get success to find subset 
+            pick = solve(arr,sum - arr[i],i+1);
+        }
+        // other wise if fount the greater value then we will not picl simple call for next ele 
+        nopick = solve(arr,sum,i+1);
+        
+        return (pick || nopick) ;// any of then we will return 
+    }
+    bool isSubsetSum(vector<int>& arr, int sum) {
+        
+        int n = arr.size(); //
+        bool res = solve(arr,sum,0,dp); // passing parameter reqired to apply operation 
+        
+        return res ; // what ever in this res simple wew are returning 
+        
+    }
+    
+     bool equalPartition(vector<int>& arr) {
+        
+       int n = arr.size() ;
+       int totalSum = 0 ; 
+       for(int i = 0 ; i < n ; i++) totalSum += arr[i] ;
+       if(totalSum % 2 != 0) return false ; // that mean the partition does not possible not exist any two subset of two equal sum 
+       /// other wise we call this 
+     
+      isSubsetSum(arr,totalSum/2) ; // then we check for that half of totalSum 
+        
+    }
+};
+
+///////// OPTIMIZED VERSION OF SOLUTION USING DP MEMORIZATION   TOP DOWN ( BETTER SOLUTION O(n*sum) time and O(N*sum) Space \\\\\\\
+
+class Solution {
+  public:
+    bool solve(vector<int>& arr, int sum, int i , vector<vector<int>> &dp ){
+        // base case
+        // if at the end of the when we founnd the sum zero that mean wwe have get the subset s we should return now true
+        if(sum == 0) return true ;
+        if(i >= arr.size()) return false ;// if we get i cross the n and untill not return true that means we have not found our subset so simplly return false 
+        
+        // check the dp array to save the time if get already chec simple return from there not move on
+        if(dp[i][sum] != -1) return dp[i][sum] ;
+        
+        // recursive case 
+        bool pick = false , nopick = false ;
+        if(arr[i] <= sum){ // when we pick the ele from arr when found less than equal to given sum so we get success to find subset 
+            pick = solve(arr,sum - arr[i],i+1,dp);
+        }
+        // other wise if fount the greater value then we will not picl simple call for next ele 
+        nopick = solve(arr,sum,i+1,dp);
+        
+        return dp[i][sum] = (pick || nopick) ;// any of then we will return 
+    }
+    bool isSubsetSum(vector<int>& arr, int sum) {
+        // code here
+        int n = arr.size(); //
+        vector<vector<int>> dp(n,vector<int>(sum+1,-1)); // here the N*SUM space taken for saving the ununnecessary recursive calls
+        
+        bool res = solve(arr,sum,0,dp); // passing parameter reqired to apply operation 
+        
+        return res ; // what ever in this res simple wew are returning 
+        
+    }
+
+    bool equalPartition(vector<int>& arr) {
+        
+       int n = arr.size() ;
+       int totalSum = 0 ; 
+       for(int i = 0 ; i < n ; i++) totalSum += arr[i] ;
+       if(totalSum % 2 != 0) return false ; // that mean the partition does not possible not exist any two subset of two equal sum 
+       /// other wise we call this 
+     
+      isSubsetSum(arr,totalSum/2) ; // then we check for that half of totalSum 
+        
+    }
+
+};
+
+///////// SIMILAR TO THOSE DP BOTTOM UP APPROACH   " TIME : O(N*SUM) AND SPACE : O(N*SUM)  \\\\\\\
+
+class solution {
+public : 
+
+bool isSubsetSum(vector<int>& arr, int sum) {
+    int n = arr.size();
+    vector<vector<bool>> dp(n + 1, vector<bool>(sum + 1, false));
+
+    // Base Case: We can always form sum 0 (by choosing nothing)
+    for (int i = 0; i <= n; i++) dp[i][0] = true;
+
+    // Fill DP Table
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= sum; j++) {
+            if (arr[i - 1] <= j) {
+                // Either pick or don't pick
+                dp[i][j] = dp[i - 1][j] || dp[i - 1][j - arr[i - 1]];
+            } else {
+                dp[i][j] = dp[i - 1][j]; // Can't pick, only rely on previous subset
+            }
+        }
+    }
+
+    return dp[n][sum];
+}
+bool equalPartition(vector<int>& arr) {
+        
+       int n = arr.size() ;
+       int totalSum = 0 ; 
+       for(int i = 0 ; i < n ; i++) totalSum += arr[i] ;
+       if(totalSum % 2 != 0) return false ; // that mean the partition does not possible not exist any two subset of two equal sum 
+       /// other wise we call this 
+     
+      isSubsetSum(arr,totalSum/2) ; // then we check for that half of totalSum 
+        
+    }
+};
+
+
+////////////////////////  MOST OPTIMAL SOLUTION USING DP OPTIMIZING HERE SPACE IN O(N) WITH TIME O(N*SUM) \\\\\\\\\\\\\\\\\ \
+
+bool isSubsetSum(vector<int>& arr, int sum) {
+    int n = arr.size();
+    vector<bool> dp(sum + 1, false);
+
+    // Base Case: sum 0 is always possible
+    dp[0] = true;
+
+    for (int i = 0; i < n; i++) {
+        // Traverse from right to left (to avoid overwriting previous row values)
+        for (int j = sum; j >= arr[i]; j--) {
+            dp[j] = dp[j] || dp[j - arr[i]];
+        }
+    }
+
+    return dp[sum];
+}
+bool equalPartition(vector<int>& arr) {
+        
+       int n = arr.size() ;
+       int totalSum = 0 ; 
+       for(int i = 0 ; i < n ; i++) totalSum += arr[i] ;
+       if(totalSum % 2 != 0) return false ; // that mean the partition does not possible not exist any two subset of two equal sum 
+       /// other wise we call this 
+     
+      isSubsetSum(arr,totalSum/2) ; // then we check for that half of totalSum 
+        
+    }
+
+
+/*************************************************************************** JAVA SOLUTION **************************************************************************/
+
+Leetcode : 416 : PARTITION EQUAL SUBSET SUM 
+
+OPTIMIZED CODE : O(sum[arr]*n) and SPACE : O(sum(arr)) 
+
+class Solution {
+    public boolean isSubsetExist(int nums[] , int sum){
+        int n = nums.length ;
+        // take dp array here 
+        boolean dp[] = new boolean[sum+1];
+        Arrays.fill(dp,false);
+        // base case , sum 0 always exist
+        dp[0] = true ;
+
+        for(int i = 0 ;i < n ; i++){
+            for(int j = sum ; j >= nums[i] ;j--){
+                dp[j] = dp[j] || dp[j - nums[i]];
+            }
+        }
+        return dp[sum] ;
+    }
+    public boolean canPartition(int[] nums) {
+        int n = nums.length ;
+        int totalSum = 0 ; 
+        for(int i = 0 ; i < n ; i++){
+            totalSum += nums[i]; 
+        }
+        if(totalSum % 2 != 0) return false ;
+
+        return isSubsetExist(nums,totalSum/2);
+
+    }
+}
+
+/*************************************************************************************************************************************************************************/

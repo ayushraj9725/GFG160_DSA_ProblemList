@@ -1,0 +1,60 @@
+Problem : Matrix Chain Multiplication
+
+Problem Statement : 
+Given an array arr[] which represents the dimensions of a sequence of matrices where the ith matrix has the dimensions (arr[i-1] x arr[i]) for i>=1, find the most efficient way to multiply these matrices together. The efficient way is the one that involves the least number of multiplications
+
+Input: arr[] = [1, 2, 3, 4, 3]
+Output: 30
+Explanation: There are 4 matrices of dimensions 1 × 2, 2 × 3, 3 × 4, 4 × 3. Let this 4 input matrices be M1, M2, M3 and M4. The minimum number of multiplications are obtained by ((M1 x M2) x M3) x M4). The minimum number is (1 x 2 x 3) + (1 x 3 x 4) + (1 x 4 x 3) = 30.
+
+
+Input: arr[] = [3, 4]
+Output: 0
+Explanation: As there is only one matrix so, there is no cost of multiplication.
+
+
+Constraints: 
+2 ≤ arr.size() ≤ 100
+1 ≤ arr[i] ≤ 200
+
+Company Tags
+Flipkart   Microsoft  FactSet 
+
+
+/******************************************************************************** CPP SOLUTION ********************************************************************/
+
+// NAIVE SOLUTION :  Using Recursion – O(2^n) and O(n) Space
+
+
+/// BETTER SOLUTION  :  MEMORIZATION AND TABULATION ::  Using Top-Down DP (Memoization) – O(n*n*n) and O(n*n) Space   
+                                                                                                ;;  Using Bottom up ( tabulation ) – O(n*n*n) and O(n*n) Space 
+
+
+
+///OPTIMAL SOLUTION USING SPACE OPTIMIZATION  :: Time Complexity: O(n2)  due to the two nested for loops used in “matrixMultiplication” function.
+Auxiliary Space: O(n2) for the dp vector.
+
+
+class Solution {
+  public:
+    int matrixMultiplication(vector<int> &arr) {
+        // code here
+        int n = arr.size() ;
+        vector<vector<int>> dp(n,vector<int>(n,0)) ;
+        
+        for(int l = 2 ; l < n ; l++){
+          for(int i = 1 ; i < n - l + 1 ; i++){
+            int j = i + l - 1 ;
+            dp[i][j] = INT_MAX ;
+            
+            for(int k = i ; k < j ; k++){
+               int cost = dp[i][k] + dp[k+1][j] + (arr[i-1] * arr[k] * arr[j]) ;
+               dp[i][j] = min(dp[i][j],cost);
+            }
+            
+          }
+        } 
+        return dp[1][n-1];
+    }
+};
+

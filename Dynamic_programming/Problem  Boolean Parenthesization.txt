@@ -1,0 +1,87 @@
+Problem : Boolean Parenthesization
+
+Problem Statement  : 
+You are given a boolean expression s containing
+    'T' ---> true
+    'F' ---> false 
+and following operators between symbols
+   &   ---> boolean AND
+    |   ---> boolean OR
+   ^   ---> boolean XOR
+Count the number of ways we can parenthesize the expression so that the value of expression evaluates to true.
+
+Note: The answer is guaranteed to fit within a 32-bit integer.
+
+Examples:
+
+Input: s = "T|T&F^T"
+Output: 4
+Explaination: The expression evaluates to true in 4 ways: ((T|T)&(F^T)), (T|(T&(F^T))), (((T|T)&F)^T) and (T|((T&F)^T)).
+Input: s = "T^F|F"
+Output: 2
+Explaination: The expression evaluates to true in 2 ways: ((T^F)|F) and (T^(F|F)).
+Constraints:
+1 ≤ |s| ≤ 100 
+
+Company Tags
+Amazon  Microsoft  Intuit  Linkedin
+
+
+/ ********************************************************************************* CPP SOLUTION ********************************************************************/
+
+
+  ///////////////     [Naive Approach] – Using Recursion – O(2^n) Time and O(n^2) Space  
+
+
+/////////////// /   [Expected Approach 1]- Using Top-Down DP – O(n^3) Time and O(n^2) Space
+
+
+/////////////////   [Expected Approach 2]- Using Bottom-Up DP – O(n^3) Time and O(n^2) Space
+
+
+class Solution {
+  public:
+    bool evaluate(int b1 , int b2 , char op){
+        if(op == '&') return b1 & b2 ;
+        if(op == '|') return b1| b2 ;
+        
+        return b1 ^ b2 ;
+    }
+    int countWays(string &s) {
+        // code here
+        int n = s.length();
+        vector<vector<vector<int>>> dp(n,vector<vector<int>>(n,vector<int>(2,0)));
+        
+        // base case
+        for(int i = 0 ; i < n ; i+= 2){
+            dp[i][i][1] = (s[i] == 'T');
+            dp[i][i][0] = (s[i] == 'F');
+        }
+        for(int len = 2 ; len < n ; len+=2){
+            for(int i = 0 ; i < n - len ; i+=2){
+                int j = i +len ;
+                dp[i][j][0] = dp[i][j][1] = 0 ;
+                
+                for(int k = i+1 ; k < j ;k += 2){
+                    char op = s[k];
+                    int leftTrue = dp[i][k-1][1] , leftFalse = dp[i][k-1][0];
+                    int rightTrue = dp[k+1][j][1] , rightFalse = dp[k+1][j][0];
+                    
+                    if(evaluate(1,1,op)) dp[i][j][1] += leftTrue * rightTrue ;
+                    if(evaluate(1,0,op)) dp[i][j][1] += leftTrue * rightFalse ;
+                    if(evaluate(0,1,op)) dp[i][j][1] += leftFalse * rightTrue ;
+                    if(evaluate(0,0,op)) dp[i][j][1] += leftFalse * rightFalse ;
+                    
+                    if(!evaluate(1,1,op)) dp[i][j][0] += leftTrue * rightTrue ;
+                    if(!evaluate(1,0,op)) dp[i][j][0] += leftTrue * rightFalse ;
+                    if(!evaluate(0,1,op)) dp[i][j][0] += leftFalse * rightTrue ;
+                    if(!evaluate(0,0,op)) dp[i][j][0] += leftFalse * rightFalse ;
+                    
+                }
+            }
+        }
+        
+        return dp[0][n-1][1] ;
+    }
+};
+

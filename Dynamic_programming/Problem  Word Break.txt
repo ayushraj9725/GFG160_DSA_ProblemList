@@ -1,0 +1,223 @@
+Problem : Word Break
+
+Problem Statement :
+You are given a string s and a list dictionary[] of words. Your task is to determine whether the string s can be formed by concatenating one or more words from the dictionary[].
+
+Note: From dictionary[], any word can be taken any number of times and in any order.
+
+Examples :
+
+Input: s = "ilike", dictionary[] = ["i", "like", "gfg"]
+Output: true
+Explanation: s can be breakdown as "i like".
+
+Input: s = "ilikegfg", dictionary[] = ["i", "like", "man", "india", "gfg"]
+Output: true
+Explanation: s can be breakdown as "i like gfg".
+
+Input: s = "ilikemangoes", dictionary[] = ["i", "like", "man", "india", "gfg"]
+Output: false
+Explanation: s cannot be formed using dictionary[] words.
+
+
+Constraints:
+1 ≤ s.size() ≤ 3000
+1 ≤ dictionary.size() ≤ 1000
+1 ≤ dictionary[i].size() ≤ 100
+
+Company Tags
+Zoho  Flipkart  Amazon  Microsoft  Hike  Walmart  MAQ Software  Google  IBM
+
+
+/*************************************************************************** Approach & Algoritm Solution CPP *******************************************************/
+
+
+////////////////   [Naive Approach] Using Recursion – O(2^n) Time and O(n) Space
+
+// C++ program to implement word break.
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to check if the given string can be broken
+// down into words from the word list
+bool wordBreakRec(int i, string &s, vector<string> &dictionary)
+{
+
+    // If end of string is reached,
+    // return true.
+    if (i == s.length())
+        return true;
+
+    int n = s.length();
+    string prefix = "";
+
+    // Try every prefix
+    for (int j = i; j < n; j++)
+    {
+        prefix += s[j];
+
+        // if the prefix s[i..j] is a dictionary word
+        // and rest of the string can also be broken into
+        // valid words, return true
+        if (find(dictionary.begin(), dictionary.end(), prefix) != dictionary.end() &&
+            wordBreakRec(j + 1, s, dictionary))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool wordBreak(string &s, vector<string> &dictionary)
+{
+    return wordBreakRec(0, s, dictionary);
+}
+
+int main()
+{
+    string s = "ilike";
+
+    vector<string> dictionary = {"i", "like", "gfg"};
+
+    cout << (wordBreak(s, dictionary) ? "true" : "false") << endl;
+
+    return 0;
+}
+
+///////////////   [Expected Approach – 1] Using Top-Down DP – O(n^2) Time and O(n+m) Spacce
+
+#include <bits/stdc++.h>
+using namespace std;
+
+bool wordBreakRec(int ind, string &s, vector<string> &dictionary, vector<int> &dp)
+{
+    if (ind >= s.size())
+    {
+        return true;
+    }
+    if (dp[ind] != -1)
+        return dp[ind];
+    bool possible = false;
+    for (int i = 0; i < dictionary.size(); i++)
+    {
+        string temp = dictionary[i];
+        if (temp.size() > s.size() - ind)
+            continue;
+        bool ok = true;
+        int k = ind;
+        for (int j = 0; j < temp.size(); j++)
+        {
+            if (temp[j] != s[k])
+            {
+                ok = false;
+                break;
+            }
+            else
+                k++;
+        }
+        if (ok)
+        {
+            possible |= wordBreakRec(ind + temp.size(), s, dictionary, dp);
+        }
+    }
+    return dp[ind] = possible;
+}
+
+bool wordBreak(string s, vector<string> &dictionary)
+{
+    int n = s.size();
+    vector<int> dp(n + 1, -1);
+    string temp = "";
+    return wordBreakRec(0, s, dictionary, dp);
+}
+int main()
+{
+    string s = "ilike";
+    vector<string> dictionary = {"i", "like", "gfg"};
+
+    cout << (wordBreak(s, dictionary) ? "true" : "false") << endl;
+    return 0;
+}     
+
+//////////////   [Expected Approach – 2] Using Bottom Up DP – O(n*m*k) time and O(n) space
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+bool wordBreak(string &s, vector<string> &dictionary)
+{
+    int n = s.size();
+    vector<bool> dp(n + 1, 0);
+    dp[0] = 1;
+
+    // Traverse through the given string
+    for (int i = 1; i <= n; i++)
+    {
+
+        // Traverse through the dictionary words
+        for (string &w : dictionary)
+        {
+
+            // Check if current word is present
+            // the prefix before the word is also
+            // breakable
+            int start = i - w.size();
+            if (start >= 0 && dp[start] && s.substr(start, w.size()) == w)
+            {
+                dp[i] = 1;
+                break;
+            }
+        }
+    }
+    return dp[n];
+}
+
+int main()
+{
+    string s = "ilike";
+
+    vector<string> dictionary = {"i", "like", "gfg"};
+
+    cout << (wordBreak(s, dictionary) ? "true" : "false") << endl;
+
+    return 0;
+}
+
+
+////////////////////////// Other Approach  
+
+
+class Solution {
+  public:
+    bool solve(string &s, set<string> set ,int i,vector<int> &dp){
+        // base case
+        if(i == s.size()) return 1 ;
+        // recurcive case
+        if(dp[i] != -1) return dp[i] ;
+        string tmp = "" ;
+        
+        for(int j = i ; j < s.size() ; j++){
+            tmp += s[j];
+            if(set.find(tmp) != set.end()){
+                // call for the next word from that ind after return true
+                if(solve(s,set,j+1,dp)) return dp[i] = 1 ;
+            }
+        }
+        return dp[i] = 0 ; /// otherwise return false for that curr j so consider new adding char into existing word then again check  
+        
+    }
+    bool wordBreak(string &s, vector<string> &dictionary) {
+        // code here
+        int n = s.size();
+        vector<int> dp(n+1,-1);
+        
+        set<string> set ;
+        for(auto word : dictionary){
+            set.insert(word);
+        }
+        return solve(s,set,0,dp);
+        
+    }
+};

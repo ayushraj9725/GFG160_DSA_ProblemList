@@ -42,9 +42,82 @@ Zoho  Flipkart  Morgan Stanley  Amazon  Microsoft  FactSet  Google
 
 /*********************************************************************************** CPP SOLUTION *******************************************************************/
 
+[Naive Approach] Considering Every Index as Starting Point – O(n^2) Time and O(1) Space
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int startStation(vector<int> &gas, vector<int> &cost) {
+    int n = gas.size();
+    int startIdx = -1;
+    for(int i = 0; i < n; i++) {
+        
+        // Initially car tank is empty
+        int currGas = 0;
+        bool flag = true;
+        for (int j = 0; j < n; j++){
+            
+            // Circular Index
+            int idx = (i + j) % n;
+            currGas = currGas + gas[idx] - cost[idx];
+            
+            // If currGas is less than zero, then it isn't
+            // possible to proceed further with this starting point
+            if(currGas < 0) {
+                flag = false;
+                break;  
+            }
+        }
+        
+      	// If flag is true, then we have found
+      	// the valid starting point
+        if(flag) {
+            startIdx = i;
+            break;
+        }
+    }
+    return startIdx;
+}
+
+int main() {
+    vector<int> gas = {1, 2, 3, 4, 5};
+    vector<int> cost = {3, 4, 5, 1, 2};
+    cout << startStation(gas, cost) << endl;
+    return 0;
+}
+
 
 // OPTIMAL SOLUTION :  USING GREEDY : :   Time Complexity  : O(n)   Auxiliary Space  : O(1)
+[Expected Approach 1] Greedy Approach – O(n) Time and O(1) Space
 
-
+class Solution {
+  public:
+    int startStation(vector<int> &gas, vector<int> &cost) {
+        // Your code here
+        int n = gas.size() ;
+        int totalGas = 0 ;
+        int reqGas = 0 ;
+        for(int i = 0 ;i < n ; i++){
+            totalGas += gas[i];
+            reqGas += cost[i];
+        }
+        // if there is no solution find then we return -1 because of totalgas is less than req
+        if(totalGas < reqGas) return -1 ;
+        
+        int ans = 0;
+        int currGas = 0 ;
+        
+        for(int i = 0 ; i < n ;i++){
+            currGas += gas[i] - cost[i] ;
+            if(currGas < 0){
+                ans = i + 1 ;
+                currGas = 0 ; // if get negative then we do index next when we go
+            }
+        }
+        
+        return ans ;
+    }
+};
 
 /********************************************************************************** JAVA SOLUTION ******************************************************************/

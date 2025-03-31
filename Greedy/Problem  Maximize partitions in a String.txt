@@ -1,0 +1,131 @@
+Problem : Maximize partitions in a String
+
+// Another version of Problem Leetcode : 763. Partition Labels
+
+Problem Statement : 
+Given a string s of lowercase English alphabets, your task is to return the maximum number of substrings formed, after possible partitions (probably zero) of s such that no two substrings have a common character.
+
+Examples:
+
+Input: s = "acbbcc"
+Output: 2
+Explanation: "a" and "cbbcc" are two substrings that do not share any characters between them.
+
+Input: s = "ababcbacadefegdehijhklij"
+Output: 3
+Explanation: Partitioning at the index 8 and at 15 produces three substrings: “ababcbaca”, “defegde”, and “hijhklij” such that none of them have a common 
+character. So, the maximum number of substrings formed is 3.
+
+Input: s = "aaa"
+Output: 1
+Explanation: Since the string consists of same characters, no further partition can be performed. Hence, the number of substring (here the whole string is considered as the substring) is 1.
+
+Constraints:
+1 ≤ s.size() ≤ 105
+'a' ≤ s[i] ≤ 'z' 
+
+Expected Complexities
+Time Complexity  : O(n)Auxiliary Space  : O(n)
+
+/****************************************************************************** SOLUTION CPP **************************************************************************/
+
+class Solution {
+  public:
+    int maxPartitions(string &s) {
+        // code here
+        // using hashmap we are solving this problem by addressing the last occurence of each character of string
+        int n = s.size();
+        unordered_map<int,int> mp ;
+        
+        for(int i = 0 ; i < n ; i++){
+            mp[s[i]] = i ; // we have stored the last occurrence of char in map their index 
+        }
+        
+        int count = 0 ; // it stored the ans how many substring contains like that mentioned in the problem statement
+        int maxi = 0;  // it point the maximum index where that curr index of any current char (last occureence of char)
+        int prev = -1 ; // it point the prev substring where ends 
+        
+        // now we again iterate over the string
+        for(int i = 0 ; i < n ; i++){
+            maxi = max(maxi,mp[s[i]]); // maximize the occurrence with the last occurrence 
+            if(maxi == i){  // and where it 'i' meet with the maxi we increment the count 
+                count++ ;
+                prev = maxi ;  // and update the prev with maxi 
+            }
+        }
+        
+        return count ;
+    }
+};
+
+
+/***************************************************************************** ANOTHER SOLUTION **************************************************************/
+
+/// OPTIMAL 2nd Problem Statement : 
+
+class Solution {
+public:
+    vector<int> partitionLabels(string s) {
+        
+        // using hashmap and greedy we are tring to find the solution and inolementation
+        unordered_map<char,int> mp ; // it stored all the index of last occurrence of each char 
+        int n = s.size();
+
+        for(int i = 0; i < n ; i++){
+            mp[s[i]] = i ; // stored all the last occurrence of char present in the string 
+        }
+
+        // now we apply grredy method to pic the index of partition by checking the condition
+        vector<int> ans ; // it stored all the partition length in ans for return
+        int maxi = 0 ;
+        int prev = -1 ; 
+        for(int i = 0 ; i < n ;i++){
+           maxi = max(maxi,mp[s[i]]); // check the last occurrence of char and maximize then update it unitll and unless we won't reach to the maxi 
+           if(maxi == i){ // if we reach (i reach) at maxi then find the partition length 
+              ans.push_back(maxi - prev);
+              prev = maxi ; // prev updated with the maxi for the next part 
+           }
+        }
+
+        return ans ; // this is done in the : O(N) time and O(N) space 
+
+        // other solution in O(N) time and O(1) space at java code editor 
+        // please check that out 
+        
+    }
+};
+
+
+/**************************************************************************** JAVA SOLUTION *************************************************************************/
+
+// MOST OPTIMAL :
+
+class Solution {
+    public List<Integer> partitionLabels(String s) {
+        int n = s.length() ;
+        List<Integer> partitions = new ArrayList<>();
+
+        for(int i = 0 ; i < n ; i++){
+            int startIndex = i ;
+            int endIndex = s.lastIndexOf(s.charAt(startIndex));
+
+            for(int ni = startIndex + 1 ; ni <= endIndex - 1 ; ni++){
+                // now find the last index of subsequent character which come in ith iteration 
+                int lastIndexOfnext = s.lastIndexOf(s.charAt(ni));
+
+                if(lastIndexOfnext > endIndex){
+                    endIndex = lastIndexOfnext ;
+                }
+            }
+            // now we find the length and add to the list 
+            partitions.add(endIndex - startIndex + 1); 
+            // and update the startIndex with endIndex 
+            i = endIndex ; // that means i move from next of endIndex
+        }
+
+        return partitions ;
+        // this is taking : O(N) time and Space : O(1) but k space for storing length and return 
+        // other approach check at c++ code editor
+
+    }
+}

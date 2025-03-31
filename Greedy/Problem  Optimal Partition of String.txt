@@ -1,0 +1,126 @@
+Problem : Optimal Partition of String 
+
+Problem Statement : 
+Given a string s, partition the string into one or more substrings such that the characters in each substring are unique. That is, no letter appears in a single substring more than once.
+
+Return the minimum number of substrings in such a partition.
+
+Note that each character should belong to exactly one substring in a partition.
+
+ 
+
+Example 1:
+
+Input: s = "abacaba"
+Output: 4
+Explanation:
+Two possible partitions are ("a","ba","cab","a") and ("ab","a","ca","ba").
+It can be shown that 4 is the minimum number of substrings needed.
+
+
+Example 2:
+Input: s = "ssssss"
+Output: 6
+Explanation:
+The only valid partition is ("s","s","s","s","s","s").
+
+Constraints:
+
+1 <= s.length <= 105
+s consists of only English lowercase letters.
+
+//////////////////////////////// SOLUTION CPP USING SET ////////////////////////////////////////
+
+
+#include <iostream>
+#include <unordered_set>
+using namespace std;
+
+int partitionString(string s) {
+    int count = 1;  // At least one partition is required
+    unordered_set<char> charSet;
+
+    for (char c : s) {
+        if (charSet.find(c) != charSet.end()) {
+            count++; // Create a new partition
+            charSet.clear();
+        }
+        charSet.insert(c);
+    }
+
+    return count;
+}
+
+int main() {
+    string s = "abacbc";
+    cout << "Minimum partitions: " << partitionString(s) << endl;
+    return 0;
+}
+
+
+/////////////////////////////////////////// JAVA IMPLEMETATION //////////////////////////////////////////////
+
+class Solution {
+    public int partitionString(String s) {
+        // brute force solution 
+        int count = 1 ;
+        int n = s.length();
+        HashSet<Character> set = new HashSet<>();
+
+        for(int i = 0 ; i < n ;i++){
+
+            if(set.contains(s.charAt(i))){
+                count++ ;
+                set.clear();
+            }
+
+            set.add(s.charAt(i));
+        }
+        
+        return count ; // time comp : O(N) but space : O(26)
+    }
+}
+
+
+///////////////////////////////////////////////////////////////  USING GREEDY HOW WE CAN SOLVE ?///////////////////////////////////////////////
+
+above we wrote solution that greedy solution 
+how it works let's talk 
+
+How Greedy is Applied in This Problem
+Local Decision:
+
+As you iterate through the string, you add each character to a set that tracks the characters in the current partition.
+
+Greedy Choice:
+
+If you encounter a character that is already in the set, you don't try to rearrange or postpone the decision. Instead, you decide that the current partition must end before this duplicate character.
+
+Immediate Action:
+
+When a duplicate is found, you immediately increment the partition count and clear the set (starting a new partition).
+
+This is greedy because you're always taking the immediate best action (starting a new partition) rather than looking ahead or trying to merge partitions later.
+
+No Backtracking:
+
+The algorithm does not reconsider previous decisions. Once a partition is ended, that decision is final. This is a hallmark of greedy algorithms.
+
+
+Goal: We need to partition the string into the minimum number of substrings such that each substring contains only unique characters.
+
+Greedy Choice:
+
+We iterate through the string, keeping track of characters seen so far in a set.
+
+If we encounter a character that is already present, we immediately start a new partition.
+
+We do this because continuing with the same substring would force a duplicate, violating our condition.
+
+Why Greedy Works?
+
+The approach ensures that we maximize each substring before splitting, minimizing the total number of partitions.
+
+It makes the best choice at each step by extending the substring as long as possible without repeating characters.
+
+This ensures that we get an optimal number of partitions in O(n) time.

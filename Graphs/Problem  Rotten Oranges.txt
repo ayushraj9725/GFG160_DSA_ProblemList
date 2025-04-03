@@ -1,0 +1,103 @@
+Problem : Rotten Oranges
+
+Problem Statement : 
+Given a matrix mat[][] of dimension n * m where each cell in the matrix can have values 0, 1 or 2 which has the following meaning:
+0 : Empty cell
+1 : Cell have fresh oranges
+2 : Cell have rotten oranges
+
+We have to determine what is the earliest time after which all the oranges are rotten. A rotten orange at index (i, j) can rot other fresh orange at indexes (i-1, j), (i+1, j), (i, j-1), (i, j+1) (up, down, left and right) in a unit time.
+
+Note: Your task is to return the minimum time to rot all the fresh oranges. If not possible returns -1.
+
+Examples:
+
+Input: mat[][] = [[0, 1, 2], [0, 1, 2], [2, 1, 1]]
+Output: 1
+Explanation: Oranges at positions (0,2), (1,2), (2,0) will rot oranges at (0,1), (1,1), (2,2) and (2,1) in unit time.
+
+Input: mat[][] = [[2, 2, 0, 1]]
+Output: -1
+Explanation: Oranges at (0,0) and (0,1) can't rot orange at (0,3).
+
+Input: mat[][] = [[2, 2, 2], [0, 2, 0]]
+Output: 0
+Explanation: There is no fresh orange. 
+
+Constraints:
+1 ≤ mat.size() ≤ 500
+1 ≤ mat[0].size() ≤ 500
+mat[i][j] = {0, 1, 2} 
+
+Company Tags
+Flipkart  Accolite  Amazon  Microsoft  OYO Rooms  Samsung  MakeMyTrip  
+
+
+/************************************************************************ CPP SOLUTION ************************************************************************/
+
+class Solution {
+  public:
+    bool isSafe(int i , int j , int n , int m){
+        return (i >= 0 && i < n && j >= 0 && j < m);
+    }
+    int orangesRotting(vector<vector<int>>& mat) {
+        // Code here
+        int n = mat.size();
+        int m = mat[0].size();
+        
+        // all the direction we mentions for checking 
+        vector<vector<int>> directions = {{1,0},{0,1}, {-1,0}, {0,-1}};
+        
+        // queue to store cell positions
+        queue<vector<int>> q ;
+        
+        for(int i = 0 ; i < n ;i++){
+            for(int j = 0 ; j < m ; j++){
+                if(mat[i][j] == 2){
+                    q.push({i,j});
+                }
+            }
+        }
+        // counter of elapsed time
+        int time = 0 ;
+        
+        while(!q.empty()){
+            // increase the time
+            time++ ;
+            
+            int len = q.size();
+            while(len--){
+                
+                vector<int> curr = q.front();
+                q.pop();
+                int i = curr[0];
+                int j = curr[1];
+                
+                // change 4-directionsally connected cells
+                for(auto dir : directions){
+                    int x = i + dir[0];
+                    int y = j + dir[1];
+                    
+                    if(isSafe(x,y,n,m) && mat[x][y] == 1){
+                        mat[x][y] = 2 ;
+                        q.push({x,y});
+                    }
+                }
+            }
+        }
+        
+        //check if any fresh oranges is remaining 
+        
+        for(int i = 0 ; i < n ; i++){
+            for(int j = 0 ; j < m ; j++){
+                
+                if(mat[i][j] == 1){
+                    return -1 ;
+                }
+            }
+        }
+        
+        return max(0,time -1 );
+        
+    }
+};

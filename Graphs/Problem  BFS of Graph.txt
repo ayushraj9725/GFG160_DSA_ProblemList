@@ -1,0 +1,135 @@
+Problem : BFS of Graph 
+
+Problem Statement :
+Given a connected undirected graph containing V vertices, represented by a 2-d adjacency list adj[][], where each adj[i] represents the list of vertices connected to vertex i. Perform a Breadth First Search (BFS) traversal starting from vertex 0, visiting vertices from left to right according to the given adjacency list, and return a list containing the BFS traversal of the graph.
+
+Note: Do traverse in the same order as they are in the given adjacency list.
+
+Examples:
+
+Input: adj[][] = [[2, 3, 1], [0], [0, 4], [0], [2]]
+
+Output: [0, 2, 3, 1, 4]
+Explanation: Starting from 0, the BFS traversal will follow these steps: 
+Visit 0 → Output: 0 
+Visit 2 (first neighbor of 0) → Output: 0, 2 
+Visit 3 (next neighbor of 0) → Output: 0, 2, 3 
+Visit 1 (next neighbor of 0) → Output: 0, 2, 3, 
+Visit 4 (neighbor of 2) → Final Output: 0, 2, 3, 1, 4
+
+
+Input: adj[][] = [[1, 2], [0, 2], [0, 1, 3, 4], [2], [2]]
+Output: [0, 1, 2, 3, 4]
+Explanation: Starting from 0, the BFS traversal proceeds as follows: 
+Visit 0 → Output: 0 
+Visit 1 (the first neighbor of 0) → Output: 0, 1 
+Visit 2 (the next neighbor of 0) → Output: 0, 1, 2 
+Visit 3 (the first neighbor of 2 that hasn't been visited yet) → Output: 0, 1, 2, 3 
+Visit 4 (the next neighbor of 2) → Final Output: 0, 1, 2, 3, 4
+
+Constraints:
+1 ≤ V = adj.size() ≤ 104
+1 ≤ adj[i][j] ≤ 104
+
+Company Tags
+Flipkart   Amazon   Microsoft   Samsung  Ola Cabs   Adobe  SAP Labs
+
+
+Expected Complexities
+Time Complexity  : O(V + E)   Auxiliary Space  : O(V + E)
+
+/*************************************************************************** SOLUTION CPP ************************************************************************/
+
+class Solution {
+  public:
+    // Function to return Breadth First Traversal of given graph.
+    vector<int> bfs(vector<vector<int>> &adj) {
+        // Code here
+        int v = adj.size();
+        
+        queue<int> q ;
+        vector<int> ans ;
+        int s = 0 ;
+        vector<bool> visited(v,false);
+        
+        // start writing the bfs algorithm code
+        // mark sourse  initial as visited 
+        visited[s] = true ;
+        q.push(s);
+        
+        while(!q.empty()){
+            // dequeue a vertics from the queue and store it
+            int curr = q.front() ;
+            q.pop();
+            ans.push_back(curr);
+            
+            // now get all the adjacent vertices of the dequeue
+            // if not visited their neighbour then we take it into the queue and mark visited
+            for(int nhbr : adj[curr]){
+                if(!visited[nhbr]){
+                    visited[nhbr] = true ;
+                    q.push(nhbr);
+                }
+            }
+        }
+        
+        return ans ;
+    }
+};
+
+
+/************************************************************************ JAVA SOLUTION **************************************************************************/
+
+import java.util.*;
+
+class Solution {
+    // Function to return Breadth First Traversal of given graph.
+    public List<Integer> bfs(List<List<Integer>> adj) {
+        int v = adj.size();
+        Queue<Integer> q = new LinkedList<>();
+        List<Integer> ans = new ArrayList<>();
+        boolean[] visited = new boolean[v];
+
+        // Start BFS traversal from node 0
+        int s = 0;
+        visited[s] = true;
+        q.offer(s);
+
+        while (!q.isEmpty()) {
+            // Dequeue a vertex and store it
+            int curr = q.poll();
+            ans.add(curr);
+
+            // Get all adjacent vertices of the dequeued vertex
+            for (int neighbor : adj.get(curr)) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    q.offer(neighbor);
+                }
+            }
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        List<List<Integer>> adj = new ArrayList<>();
+        
+        // Example graph (adjacency list representation)
+        int vertices = 5;
+        for (int i = 0; i < vertices; i++) {
+            adj.add(new ArrayList<>());
+        }
+        
+        adj.get(0).add(1);
+        adj.get(0).add(2);
+        adj.get(1).add(0);
+        adj.get(1).add(3);
+        adj.get(1).add(4);
+        adj.get(2).add(0);
+        adj.get(3).add(1);
+        adj.get(4).add(1);
+
+        System.out.println(sol.bfs(adj)); // Expected Output: [0, 1, 2, 3, 4]
+    }
+}

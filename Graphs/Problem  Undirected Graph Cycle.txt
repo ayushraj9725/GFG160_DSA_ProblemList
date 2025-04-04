@@ -1,0 +1,162 @@
+Problem : Undirected Graph Cycle
+
+Problem Statement : 
+Given an undirected graph with V vertices and E edges, represented as a 2D vector edges[][], where each entry edges[i] = [u, v] denotes an edge between vertices u and v, determine whether the graph contains a cycle or not.
+
+Examples:
+
+Input: V = 4, E = 4, edges[][] = [[0, 1], [0, 2], [1, 2], [2, 3]]
+Output: true
+Explanation: 
+ 
+1 -> 2 -> 0 -> 1 is a cycle.
+
+Input: V = 4, E = 3, edges[][] = [[0, 1], [1, 2], [2, 3]]
+Output: false
+Explanation: 
+No cycle in the graph.
+
+Constraints:
+1 ≤ V ≤ 105
+1 ≤ E = edges.size() ≤ 105
+
+Company Tags
+Flipkart  Amazon  Microsoft   Samsung   MakeMyTrip   Oracle  Adobe
+
+
+Expected Complexities
+Time Complexity  :  O(V + E)    Auxiliary Space  :  O(V)
+
+
+/**************************************************************************** SOLUTION CPP ************************************************************************/
+
+Using Depth First Search – O(V+E) time and O(V) space
+
+class Solution {
+  public:
+    vector<vector<int>> constructadj(int V,vector<vector<int>> &edges){
+        vector<vector<int>> adj(V);
+        
+        for(auto it : edges){
+            adj[it[0]].push_back(it[1]);
+            adj[it[1]].push_back(it[0]);
+        }
+        return adj ;
+        
+    }
+    bool isCycleUtil(int v , vector<vector<int>> &adj , vector<bool> &visited,int parent){
+        // mark the current node as visited
+        visited[v] = true ;
+        
+        // go for the adj check and finding result true of false using dfs calling recursion
+        for(int i : adj[v]){
+            // if and adjacent vertex is not visited , then call recursion for next child return true 
+            if(!visited[i]){
+                if(isCycleUtil(i,adj,visited,v)) return true ;
+            }
+            // if an adjacent vertex is visited and is not parent of curr vertex then there exist a cycle in graph so return true from here
+            
+            else if(i != parent) return true ;
+        }
+        
+        return false ;
+    }  
+    bool isCycle(int V, vector<vector<int>>& edges) {
+        // Code here
+        vector<vector<int>> adj = constructadj(V,edges);
+        vector<bool> visited(V,false);
+        
+        for(int u = 0 ; u < V ; u++){
+            if(!visited[u]){
+                if(isCycleUtil(u,adj,visited,-1)){
+                    return true ;
+                }
+            }
+        }
+        
+        return false ;
+    }
+};
+
+
+
+/**************************************************************************** SOLUTION JAVA ***********************************************************************/
+
+// //////////////////////////////////// USING DFS TRAVERSAL  ///////////////////////////////
+
+
+import java.util.*;
+
+class GfG {
+    // Helper function to check cycle using DFS
+    static boolean isCycleUtil(int v, List<Integer>[] adj,
+                               boolean[] visited,
+                               int parent)
+    {
+        visited[v] = true;
+        // If an adjacent vertex is not visited,
+        // then recur for that adjacent
+        for (int i : adj[v]) {
+            if (!visited[i]) {
+                if (isCycleUtil(i, adj, visited, v))
+                    return true;
+            }
+            // If an adjacent vertex is visited and
+            // is not parent of current vertex,
+            // then there exists a cycle in the graph.
+            else if (i != parent) {
+                return true;
+            }
+        }
+        return false;
+    }
+    static  List<Integer>[] constructadj(int V, int [][] edges){
+        
+        List<Integer>[] adj = new ArrayList[V];
+
+        for (int i = 0; i < V; i++) {
+            adj[i] = new ArrayList<>();
+        }
+        
+        return adj;
+    } 
+    // Function to check if graph contains a cycle
+    static boolean isCycle(int V, int[][] edges)
+    {
+        List<Integer> [] adj = constructadj(V,edges);
+        
+        for (int[] edge : edges) {
+            adj[edge[0]].add(edge[1]);
+            adj[edge[1]].add(edge[0]);
+        }
+
+        boolean[] visited = new boolean[V];
+        // Call the recursive helper function
+        // to detect cycle in different DFS trees
+        for (int u = 0; u < V; u++) {
+            if (!visited[u]) {
+                if (isCycleUtil(u, adj, visited, -1))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args)
+    {
+        int V = 5;
+        int[][] edges = {
+            {0, 1}, {0, 2}, {0, 3}, {1, 2}, {3, 4}
+        };
+
+        if (isCycle(V, edges)) {
+            System.out.println("true");
+        }
+        else {
+            System.out.println("false");
+        }
+    }
+}
+
+
+//////////////////////     USING BFS TRAVERSAL     / /////////////////////////////////

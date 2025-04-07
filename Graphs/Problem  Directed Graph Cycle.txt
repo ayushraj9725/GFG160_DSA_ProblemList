@@ -1,0 +1,84 @@
+Problem : Directed Graph Cycle
+
+Problem Statement : 
+Given a Directed Graph with V vertices (Numbered from 0 to V-1) and E edges, check whether it contains any cycle or not.
+The graph is represented as a 2D vector edges[][], where each entry edges[i] = [u, v] denotes an edge from verticex u to v.
+
+Examples:
+
+Input: V = 4, edges[][] = [[0, 1], [1, 2], [2, 3], [3, 3]]
+Output: true
+Explanation: 3 -> 3 is a cycle
+
+
+Input: V = 3, edges[][] = [[0, 1], [1, 2]]
+Output: false
+Explanation: no cycle in the graph
+Constraints:
+
+
+1 ≤ V, E ≤ 105
+
+Expected Complexities
+Time Complexity: O(V + E)
+Auxiliary Space: O(V + E)
+
+Company Tags
+Flipkart   Amazon   Microsoft   Samsung   MakeMyTrip   Oracle   Goldman Sachs   Adobe   Bank  Bazaar   Rockstand
+
+
+/********************************************************************** SOLUTION CPP ***********************************************************************/
+
+
+[Approach 1] Using DFS – O(V + E) Time and O(V) Space
+
+
+[Approach 2] Using Topological Sorting – O(V + E) Time and O(V) Space
+
+
+class Solution {
+  public:
+    vector<vector<int>> constAdj(int V , vector<vector<int>> & ed){
+        vector<vector<int>> adj(V);
+        for(auto &edge : ed){
+            adj[edge[0]].push_back(edge[1]);
+        }
+        return adj ;
+    }
+    bool isCyclic(int V, vector<vector<int>> &edges) {
+        // code here
+        vector<vector<int>> adj = constAdj(V,edges);
+        
+        vector<int> inDegree(V,0);
+        queue<int> q;
+        int visited = 0 ;
+        
+        for(int u = 0 ; u < V ; u++){
+            for(int v : adj[u]){
+                inDegree[v]++;
+            }
+        }
+        
+        for(int u = 0 ; u < V ; u++){
+            if(inDegree[u] == 0){
+                q.push(u);
+            }
+        }
+        
+        while(!q.empty()){
+            int u = q.front();
+            q.pop();
+            visited++ ;
+            
+            for(int v : adj[u]){
+                inDegree[v]-- ;
+                if(inDegree[v] == 0){
+                    q.push(v);
+                }
+            }
+        }
+        
+        return visited != V ;
+        
+    }
+};

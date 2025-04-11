@@ -1,0 +1,86 @@
+Problem : Dijkstra Algorithm
+
+Problem Statement :
+Given an undirected, weighted graph with V vertices numbered from 0 to V-1 and E edges, represented by 2d array edges[][], where edges[i]=[u, v, w] represents the edge between the nodes u and v having w edge weight.
+You have to find the shortest distance of all the vertices from the source vertex src, and return an array of integers where the ith element denotes the shortest distance between ith node and source vertex src.
+
+Note: The Graph is connected and doesn't contain any negative weight edge.
+
+Examples:
+
+Input: V = 3, edges[][] = [[0, 1, 1], [1, 2, 3], [0, 2, 6]], src = 2
+Output: [4, 3, 0]
+Explanation:
+Shortest Paths:
+For 2 to 0 minimum distance will be 4. By following path 2 -> 1 -> 0
+For 2 to 1 minimum distance will be 3. By following path 2 -> 1
+For 2 to 2 minimum distance will be 0. By following path 2 -> 2
+
+Input: V = 5, edges[][] = [[0, 1, 4], [0, 2, 8], [1, 4, 6], [2, 3, 2], [3, 4, 10]], src = 0
+Output: [0, 4, 8, 10, 10]
+Explanation: 
+Shortest Paths: 
+For 0 to 1 minimum distance will be 4. By following path 0 -> 1
+For 0 to 2 minimum distance will be 8. By following path 0 -> 2
+For 0 to 3 minimum distance will be 10. By following path 0 -> 2 -> 3 
+For 0 to 4 minimum distance will be 10. By following path 0 -> 1 -> 4
+
+Constraints:
+1 ≤ V ≤ 105
+1 ≤ E = edges.size() ≤ 105
+0 ≤ edges[i][j] ≤ 104
+0 ≤ src < V
+
+Expected Complexities
+Time Complexity: O((V + E) log V)
+Auxiliary Space: O(V)
+
+Company Tags
+Flipkart  Microsoft
+
+/*********************************************************************** CPP SOLUTION *****************************************************************************/
+
+class Solution {
+  public:
+    vector<vector<vector<int>>> constructAdj(vector<vector<int>> &edges , int V){
+        vector<vector<vector<int>>> adj(V) ;
+        
+        for(const auto &edge : edges){
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+            
+            adj[u].push_back({v,wt});
+            adj[v].push_back({u,wt});
+        }
+        return adj ;
+    }
+    vector<int> dijkstra(int V, vector<vector<int>> &edges, int src) {
+        // Code here
+        vector<vector<vector<int>>> adj = constructAdj(edges,V);
+        
+        priority_queue<vector<int> , vector<vector<int>> ,greater<vector<int>>> pq ;
+        
+        vector<int> dist(V,INT_MAX);
+        
+        pq.push({0,src});
+        dist[src] = 0 ;
+        
+        while(!pq.empty()){
+            int u = pq.top()[1];
+            pq.pop();
+            
+            for(auto x : adj[u]){
+                int v = x[0];
+                int weight = x[1];
+                
+                if(dist[v] > dist[u] + weight){
+                    dist[v] =dist[u] + weight ;
+                    pq.push({dist[v],v});
+                }
+            }
+        }
+        
+        return dist ;
+    }
+};

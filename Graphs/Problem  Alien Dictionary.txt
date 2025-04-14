@@ -1,0 +1,89 @@
+Problem : Alien Dictionary 
+
+Problem Statement :
+
+
+Constraints:
+1 ≤ words.length ≤ 500
+1 ≤ words[i].length ≤ 100
+words[i] consists only of lowercase English letters.
+
+Expected Complexities
+Time Complexity : O(n * m)
+Auxiliary Space : O(n * m)
+
+Company Tags
+Flipkart  Amazon  Microsoft  OYO Rooms  Walmart  Google
+
+/*************************************************************************** CPP SOLUTION ************************************************************************/
+
+
+
+APPROACH 1 :
+
+class Solution {
+  public:
+    string findOrder(vector<string> &words) {
+        // code here
+        vector<vector<int>> graph(26);
+        
+        vector<int> inDegree(26,0);
+        vector<bool> exists(26,false);
+        
+        for(const string& word : words){
+            for(char ch : word){
+                exists[ch-'a'] = true ;
+            }
+        }
+        
+        for(int i = 0 ; i + 1 < words.size(); ++i){
+            const string& w1 = words[i];
+            const string& w2 = words[i+1];
+            
+            int len = min(w1.length(),w2.length());
+            
+            int j = 0 ;
+            
+            while(j < len && w1[j] == w2[j]) ++j ;
+            
+            if(j < len){
+                int u = w1[j] - 'a';
+                int v = w2[j] - 'a';
+                
+                graph[u].push_back(v);
+                inDegree[v]++;
+            }
+            else if(w1.size() > w2.size()){
+                return "";
+            }
+        }
+        
+        queue<int> q;
+        for(int i = 0 ; i < 26 ; ++i){
+            if(exists[i] && inDegree[i] == 0){
+                q.push(i);
+            }
+        }
+        
+        string result ;
+        while(!q.empty()){
+            int u = q.front(); q.pop();
+            result +=  (char)(u + 'a');
+            
+            for(int v : graph[u]){
+                inDegree[v]-- ;
+                if(inDegree[v] == 0){
+                    q.push(v);
+                }
+            }
+        }
+        
+        for(int i = 0 ; i< 26 ; ++i){
+            if(exists[i] && inDegree[i] != 0){
+                return "" ;
+            }
+        }
+        
+        return result ;
+    }
+};

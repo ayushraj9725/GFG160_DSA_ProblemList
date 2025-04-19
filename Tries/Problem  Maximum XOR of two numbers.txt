@@ -1,0 +1,111 @@
+Problem : Maximum XOR of two numbers in an array
+
+Problem Statement :
+
+Given an array arr[] of non-negative integers of size n. Find the maximum possible XOR between two numbers present in the array.
+
+Examples:
+
+Input: arr[] = [25, 10, 2, 8, 5, 3]
+Output: 28
+Explanation: The maximum possible XOR is 5 ^ 25 = 28.
+
+Input: arr[] = [1, 2, 3, 4, 5, 6, 7]
+Output: 7
+Explanation : The maximum possible XOR is 1 ^ 6 = 7.
+
+Constraints:
+2 ≤ arr.size() ≤ 5*104
+1 ≤ arr[i] ≤ 106
+
+
+Expected Complexities
+Time Complexity  : O(n log n)
+Auxiliary Space  : O(n)
+
+
+Company Tags
+Flipkart
+
+
+/********************************************************************  SOLUTION CPP IMPLEMENTATION ************************************************************/
+
+Table of Content
+
+[Naive Approach] Using 2 Nested Loops – O(n^2) Time and O(1) Space
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to find the maximum XOR
+int maxXor(vector<int> &arr) {
+    int res = 0;
+    int fir = 0, sec = 0;
+    // Generate all possible pairs
+    for (int i = 0; i < arr.size(); i++) {
+        for (int j = i + 1; j < arr.size(); j++) {
+            if((arr[i]^arr[j]) > res){
+              res = max(res, arr[i] ^ arr[j]);
+             fir = arr[i], sec = arr[j];
+            }
+            }
+    }
+    return res;
+}
+
+int main() {
+    vector<int> arr = {26, 100, 25, 13, 4, 14};
+    cout << maxXor(arr);
+    return 0;
+}
+
+
+[Expected Approach – 1] – Using Bit Masking and HashSet – O(n * log m) Time and O(n * log m) Space
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to find the maximum XOR
+int maxXor(vector<int> &arr) {
+
+    int res = 0, mask = 0;
+
+    // to store all unique bits
+    unordered_set<int> s;
+
+    for (int i = 30; i >= 0; i--) {
+
+        // set the i-th bit in mask
+        mask |= (1 << i);
+
+        for (auto value: arr) {
+
+            // keep prefix of all elements
+            // till the i-th bit
+            s.insert(value & mask);
+        }
+
+        int cur = res | (1 << i);
+
+        for (int prefix : s) {
+            if (s.count(cur ^ prefix)) {
+                res = cur;
+                break;
+            }
+        }
+        s.clear();
+    }
+
+    return res;
+}
+
+int main() {
+    vector<int> arr = {26, 100, 25, 13, 4, 14};
+    cout << maxXor(arr);
+    return 0;
+}
+
+
+
+[Expected Approach – 2] – Using Trie – O(n * log m) Time and O(n * log m) Space

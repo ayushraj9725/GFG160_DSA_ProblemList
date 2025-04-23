@@ -1,0 +1,98 @@
+Problem : unique number 2 
+
+Problem Statement ;
+Given an array arr[] containing 2*n + 2 positive numbers, out of which 2*n numbers exist in pairs whereas only two number occur exactly once and are distinct. Find the other two numbers. Return the answer in increasing order.
+
+Examples:
+
+Input: arr[] = [1, 2, 3, 2, 1, 4]
+Output: [3, 4] 
+Explanation: 3 and 4 occur exactly once.
+
+Input: arr[] = [2, 1, 3, 2]
+Output: [1, 3]
+Explanation: 1 and 3 occur exactly once.
+
+Input: arr[] = [2, 1, 3, 3]
+Output: [1, 2]
+Explanation: 1 and 2 occur exactly once.
+
+Constraints:
+2 ≤ arr.size() ≤ 106 
+1 ≤ arr[i] ≤ 5 * 106
+arr.size() is even
+
+Expected Complexities
+Time Complexity : O(n)
+Auxiliary Space : O(1)
+
+Company Tags
+Accolite  Amazon  Microsoft  Samsung  Fact  Set  MakeMyTrip  Google  Qualcomm
+
+
+/**************************************************************  CPP SOLUTION IMPLEMENTATION ****************************************************************/
+
+//// OPTIMAL SOLUTION /////
+
+class Solution {
+  public:
+    vector<int> singleNum(vector<int>& arr) {
+        // Code here.
+        
+        int xor_all = 0 ;
+        for(int it : arr){
+            xor_all ^= it ;
+        }
+        int setbit = xor_all & -xor_all ;
+        int g1 = 0 , g0 = 0 ;
+        for(int it : arr){
+            if(it & setbit) g1 ^= it ;
+            else g0 ^= it ;
+        }
+        if(g1 < g0) return {g1,g0} ;
+        
+        else return {g0,g1} ;
+    }
+};
+
+
+
+/************************************************************** JAVA SOLUTION ************************************************************************************./
+
+
+class Solution {
+    public int[] singleNum(int[] arr) {
+        // Get the XOR of the two numbers we need to find
+        int xorVal = 0;
+        for (int i : arr) {
+            xorVal ^= i;
+        }
+
+        // Get its last set bit
+        xorVal &= -xorVal;
+
+        int[] res = new int[2];
+
+        for (int num : arr) {
+
+            // If bit is not set, it belongs to the first set
+            if ((num & xorVal) == 0) {
+                res[0] ^= num;
+            }
+
+            // If bit is set, it belongs to the second set
+            else {
+                res[1] ^= num;
+            }
+        }
+
+        // Ensure the order of the returned numbers is consistent
+        if (res[0] > res[1]) {
+            int temp = res[0];
+            res[0] = res[1];
+            res[1] = temp;
+        }
+
+        return res;
+    }
+}

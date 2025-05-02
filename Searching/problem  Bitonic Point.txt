@@ -1,0 +1,106 @@
+problem : Bitonic Point
+
+problem statement :
+Given an array of integers arr[] that is first strictly increasing and then maybe strictly decreasing, find the bitonic point, that is the maximum element in the array.
+Bitonic Point is a point before which elements are strictly increasing and after which elements are strictly decreasing.
+
+Note: It is guaranteed that the array contains exactly one bitonic point.
+
+Examples:
+
+Input: arr[] = [1, 2, 4, 5, 7, 8, 3]
+Output: 8
+Explanation: Elements before 8 are strictly increasing [1, 2, 4, 5, 7] and elements after 8 are strictly decreasing [3].
+
+Input: arr[] = [10, 20, 30, 40, 50]
+Output: 50
+Explanation: Elements before 50 are strictly increasing [10, 20, 30 40] and there are no elements after 50.
+
+Input: arr[] = [120, 100, 80, 20, 0]
+Output: 120
+Explanation: There are no elements before 120 and elements after 120 are strictly decreasing [100, 80, 20, 0].
+
+Constraints:
+3 ≤ arr.size() ≤ 105
+1 ≤ arr[i] ≤ 106
+
+Expected Complexities
+Time Complexity: O(log n)
+Auxiliary Space: O(1)
+
+Company Tags
+Flipkart  Amazon  Microsoft
+
+/******************************************************************************* SOLUTION CPP ************************************************************************/
+
+
+///////////////////////   NAIVEE APPROACH     //////////////////////
+
+
+
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// function to find the maximum element 
+int findMaximum(vector<int>& arr) { 
+    int mx = arr[0]; 
+    for (int i = 1; i < arr.size(); i++) { 
+      
+      	// update max when found greater value
+        if (arr[i] > mx) 
+            mx = arr[i]; 
+        
+        // break when once an element is smaller than 
+        // the max then it will go on decreasing 
+        // and no need to check after that 
+        else
+            break; 
+    } 
+    return mx; 
+} 
+
+int main() { 
+    vector<int> arr = {1, 2, 4, 5, 7, 8, 3}; 
+    cout << findMaximum(arr); 
+    return 0; 
+} 
+
+
+
+/////////////////////////////////////     OPTIMAL SOLUTION      /////////////////////////////////
+
+
+class Solution {
+  public:
+    int findMaximum(vector<int> &arr) {
+        // code here
+        // using linear search we can do it easly in n time
+        // but using binary search we are doing it in O(logn) time
+        
+        int n = arr.size() ;
+        if(n == 1 || arr[0] > arr[1]){  // starting and if arry has 2 element
+            return arr[0] ;
+        }
+        if(arr[n-1] > arr[n-2]){
+            return arr[n-1];
+        }
+        int i = 1 , j = n - 1 ;
+        
+        while(i <= j){
+            int mid = i + (j - i)/ 2;
+            
+            if(arr[mid] > arr[mid+1] && arr[mid] > arr[mid-1]){
+                return arr[mid];
+            }
+            else if(arr[mid] < arr[mid+1]){
+                i = mid + 1 ; // trim left half 
+            }
+            else{
+                j = mid - 1 ;// otherwise trim right half
+            }
+        }
+        
+        return arr[j]; // otherwise at the end of the return element at high or j 
+    }
+};

@@ -1,0 +1,102 @@
+Problem : Prime List
+
+Problem statement :
+You are given the head of a linked list. You have to replace all the values of the nodes with the nearest prime number. If more than one prime number exists at an equal distance, choose the smallest one. Return the head of the modified linked list.
+
+Examples :
+
+Input: head = 2 → 6 → 10
+Output: 2 → 5 → 11
+Explanation: The nearest prime of 2 is 2 itself. The nearest primes of 6 are 5 and 7, since 5 is smaller so, 5 will be chosen. The nearest prime of 10 is 11.
+
+Input: head = 1 → 15 → 20
+Output: 2 → 13 → 19
+
+Explanation: The nearest prime of 1 is 2. The nearest primes of 15 are 13 and 17, since 13 is smaller so, 13 will be chosen. The nearest prime of 20 is 19.
+Constraints:
+1 <= no. of Nodes <= 104
+1 <= node.val <= 104
+
+Expected Complexities
+Time Complexity: O(n * sqrt(node.val))
+Auxiliary Space: O(1)
+
+
+/************************************************************* SOLUTIONS CPP AND JAVA *******************************************************************/
+
+
+//C++ CODE
+class Solution {
+  public:
+    bool prime(int n){
+        if(n<=1) return false;
+        for(int i=2;i*i<=n;i++){
+            if(n%i==0) return false;
+        }
+        return true;
+    }
+    int nearestprime(int n){
+        if(prime(n)) return n;
+        int prev=n-1;
+        int next=n+1;
+        while(true){
+        if(prev>=2 && prime(prev)) return prev;
+        if(prime(next)) return next;
+        --prev;
+        ++next;
+        }
+    }
+    Node *primeList(Node *head) {
+        // CodeGenius
+        Node* temp=head;
+        while(temp){
+            temp->val=nearestprime(temp->val);
+            temp=temp->next;
+        }
+        return head;        
+    }
+};
+//JAVA CODE
+class Solution {
+    Node primeList(Node head) {
+        // code here
+        int max=Integer.MIN_VALUE;
+        Node cur=head;
+        while(cur!=null){
+            max=Math.max(cur.val,max);
+            cur=cur.next;
+        }
+        boolean prime[]=new boolean[max+100];
+        Arrays.fill(prime,true);
+        prime[0]=false;
+        prime[1]=false;
+        for(int i=2;i*i<prime.length;i++){
+            if(prime[i]){
+                for(int j=i*i;j<prime.length;j+=i){
+                    prime[j]=false;
+                }
+            }
+        }
+        cur=head;
+        while(cur!=null){
+            if(!prime[cur.val]){
+                int left=cur.val-1;
+                int right=cur.val+1;
+                while(true){
+                    if(left>=2 && prime[left]){
+                        cur.val=left;
+                        break;
+                    }
+                    if(right<prime.length && prime[right]){
+                        cur.val=right;
+                        break;
+                    }
+                    left--;
+                    right++;
+                }
+            }
+            cur=cur.next;
+        }
+        return head;
+    }
+}

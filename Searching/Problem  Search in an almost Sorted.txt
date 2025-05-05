@@ -1,0 +1,66 @@
+Problem : Search in an almost Sorted Array
+
+Problem Statement : 
+
+Given a sorted integer array arr[] consisting of distinct elements, where some elements of the array are moved to either of the adjacent positions, i.e. arr[i] may be present at arr[i-1] or arr[i+1].
+Given an integer target.  You have to return the index ( 0-based ) of the target in the array. If target is not present return -1.
+
+Examples:
+
+Input: arr[] = [10, 3, 40, 20, 50, 80, 70], target = 40
+Output: 2
+Explanation: Index of 40 in the given array is 2.
+
+Input: arr[] = [10, 3, 40, 20, 50, 80, 70], target = 90
+Output: -1
+Explanation: 90 is not present in the array.
+
+Input: arr[] = [-20], target = -20
+Output: 0
+Explanation: -20 is the only element present in the array.
+
+
+Constraints:
+1 <= arr.size() <= 105
+-109 <= arr[i] <= 109
+
+Expected Complexities
+Time Complexity: O(log n)
+Auxiliary Space: O(1)
+
+
+Topic Tags
+Binary Search  Sorting  Arrays
+
+
+/******************************************************************   SOLUTION CPP And JAVA *******************************************************************/
+
+class Solution {
+  public:
+    int findTarget(vector<int>& arr, int target) {
+        // code here
+         // Optimal Approach
+        int n = arr.size();
+        int i = 0, j = n - 1;
+        
+        // we are applying binary search over here 
+        
+        while(i <= j){
+            int mid = i + (j - i)/2 ;
+            
+            if(arr[mid] == target) return mid ;
+            // and also check for adjecent to mid 
+            else if(mid > i && arr[mid-1] == target) return mid - 1 ; // this is our location/ index where target present 
+            else if(mid < j && arr[mid+1] == target) return mid + 1 ; // '""
+            
+            // now if now found yet than start elimiating half
+            if(arr[mid] < target){
+                i = mid + 2 ; // trim 2 stp ahead to mid because we checked  // left part trimed 
+            }
+            else j = mid - 2 ; // trim right half 
+        }
+        
+        
+        return -1 ; // otherwise we return -1 , here the element / target not present in the array
+    }
+};

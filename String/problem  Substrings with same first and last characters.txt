@@ -1,6 +1,8 @@
 problem : Substrings with same first and last characters
 
-Problem Statement :
+
+Problem Statement : 
+
 Given a string s consisting of lowercase characters, the task is to find the count of all substrings that start and end with the same character.
 
 Examples:
@@ -21,15 +23,17 @@ Expected Complexities
 Time Complexity: O(n)
 Auxiliary Space: O(1)
 
+
 Company Tags
 Amazon
 
-/******************************************************************************* Solutions ******************************************************************************/
 
-//////////////////////////////////////////// BRUTE FORCE SOLUTION /////////////////////////////
+/****************************************************************************  SOLUTION S ********************************************************************** /
 
 
-class solution 
+///////////////////////////////////////////////////////   BRUTE FORCE SOLUTION    ////////////////////////////////////////////////////
+
+class solution {
 
     static int countSubstring(String s) {
         int count = 0;
@@ -57,7 +61,10 @@ class solution
 }
 
 
-///////////////////////////////////////////       OPTIMAL SOLUTION         ///////////////////////////////////
+/*************************************************************************** OPTIMAL SOLUTION ******************************************************************
+
+
+//////////    C+++                //////////////
 
 class Solution {
   public:
@@ -75,13 +82,12 @@ class Solution {
         }
         
         return ans ;
+        
     }
 };
 
 
-
-////////////////////////////////////          JAVA  SOLUTION         //////////////////////////////////////
-
+///////////// JAVA              //////////////
 
 class Solution {
     public int countSubstring(String s) {
@@ -103,11 +109,10 @@ class Solution {
     
 }
 
+////////////////////////  ANOTHER SOLUTION    ////////////////////////////
 
-////////////////////////////////////////////////////////////    Another   solution  //////////////////////////////////////////////////////////
 
-
-class Solution
+class solution {
 
     static int countSubstring(String s) {
         int n = s.length();

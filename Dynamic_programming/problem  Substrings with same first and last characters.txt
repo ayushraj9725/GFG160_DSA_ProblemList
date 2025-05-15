@@ -1,0 +1,143 @@
+problem : Substrings with same first and last characters
+
+Problem Statement :
+Given a string s consisting of lowercase characters, the task is to find the count of all substrings that start and end with the same character.
+
+Examples:
+
+Input: s = "abcab"
+Output: 7
+Explanation: There are 7 substrings where the first and last characters are the same: "a", "abca", "b", "bcab", "c", "a", and "b"
+
+Input: s = "aba"
+Output: 4
+Explanation: There are 4 substrings where the first and last characters are the same: "a", "aba", "b", "a"
+
+Constraints:
+1 <= |s| <= 104
+s contains lower case english alphabets
+
+Expected Complexities
+Time Complexity: O(n)
+Auxiliary Space: O(1)
+
+Company Tags
+Amazon
+
+/******************************************************************************* Solutions ******************************************************************************/
+
+//////////////////////////////////////////// BRUTE FORCE SOLUTION /////////////////////////////
+
+
+class solution 
+
+    static int countSubstring(String s) {
+        int count = 0;
+        int n = s.length();
+        
+        // Consider all possible substrings
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                
+                // If first and last characters
+                // of substring s[i..j] are same
+                if (s.charAt(i) == s.charAt(j)) {
+                    count++;
+                }
+            }
+        }
+        
+        return count;
+    }
+
+    public static void main(String[] args) {
+        String s = "abcab";
+        System.out.println(countSubstring(s));
+    }
+}
+
+
+///////////////////////////////////////////       OPTIMAL SOLUTION         ///////////////////////////////////
+
+class Solution {
+  public:
+    int countSubstring(string &s) {
+        // code here
+        int ans = s.size();
+        unordered_map<int,int> mp ;
+        
+        for(auto c : s){
+            if(mp.find(c) != mp.end()){
+                ans = ans + mp[c];
+            }
+            
+            mp[c]++ ;
+        }
+        
+        return ans ;
+    }
+};
+
+
+
+////////////////////////////////////          JAVA  SOLUTION         //////////////////////////////////////
+
+
+class Solution {
+    public int countSubstring(String s) {
+        // code here
+        // int ans = s.size();
+         int ans = s.length();
+        HashMap<Character,Integer> hm = new HashMap<>();
+        
+        for(char c : s.toCharArray()){
+            if(hm.containsKey(c)){
+                ans = ans + hm.get(c);
+            }
+            hm.put(c,hm.getOrDefault(c,0)+1);
+        }
+        
+        return ans ;
+        
+    }
+    
+}
+
+
+////////////////////////////////////////////////////////////    Another   solution  //////////////////////////////////////////////////////////
+
+
+class Solution
+
+    static int countSubstring(String s) {
+        int n = s.length();
+        
+        // Create an array to store 
+        // frequency of characters
+        int[] freq = new int[26];
+        
+        // Update frequency of each character
+        for (int i = 0; i < n; i++) {
+            freq[s.charAt(i) - 'a']++;
+        }
+        
+        int count = 0;
+        
+        // For each character, calculate number of substrings
+        // that start and end with that character
+        for (int i = 0; i < 26; i++) {
+            
+            // Number of substrings with same 
+            // first and last character is 
+            // nC2 + n = n*(n+1)/2
+            count += (freq[i] * (freq[i] + 1)) / 2;
+        }
+        
+        return count;
+    }
+
+    public static void main(String[] args) {
+        String s = "abcab";
+        System.out.println(countSubstring(s));
+    }
+}

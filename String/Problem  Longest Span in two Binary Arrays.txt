@@ -1,0 +1,88 @@
+Problem : Longest Span in two Binary Arrays
+
+
+Problem Statement : 
+
+Given two binary arrays, a1[] and a2[]. Find the length of longest common span (i, j) where j>= i such that a1[i] + a1[i+1] + .... + a1[j] =  a2[i] + a2[i+1] + ... + a2[j].
+
+Examples:
+Input: a1[] = [0, 1, 0, 0, 0, 0], a2[] = [1, 0, 1, 0, 0, 1]
+Output: 4
+Explanation: The longest span with same sum is from index 1 to 4 following zero based indexing.
+
+Input: a1[] = [0, 1, 0, 1, 1, 1, 1], a2[] = [1, 1, 1, 1, 1, 0, 1]
+Output: 6
+Explanation: The longest span with same sum is from index 1 to 6 following zero based indexing.
+
+Constraints:
+1 <= a1.size() = a2.size() <= 106
+0 <= a1[i], a2[i] <= 1
+
+Expected Complexities
+Time Complexity: O(n)
+Auxiliary Space: O(n)
+
+
+/*****************************************************************************  SOLUTIONS ************************************************************************/
+
+
+
+Table of Content
+
+[Naive Approach] Checking Each Subarray - O(n^2) Time and O(1) Space
+
+
+
+[Expected Approach] Using Difference Array - O(n) Time and O(n) Space
+
+
+class Solution {
+  public:
+    int longestCommonSum(vector<int> &a1, vector<int> &a2) {
+        // Code here.
+        
+        int n = a1.size();
+    int res = 0;
+    
+    // Create difference array 
+    // to store first occurrence
+    vector<int> diff(2 * n + 1, -1);
+    
+    int sum1 = 0, sum2 = 0;
+    
+    for (int i = 0; i < n; i++) {
+        sum1 += a1[i];
+        sum2 += a2[i];
+        
+        int currentDiff = sum1 - sum2;
+        
+        // Add n to handle negative differences
+        int index = currentDiff + n;
+        
+        // If difference is 0, entire subarray 
+        // from 0 to i has equal sum
+        if (currentDiff == 0) {
+            res = max(res, i + 1);
+        }
+        
+        // If this difference has been seen before
+        else if (diff[index] != -1) {
+            res = max(res, i - diff[index]);
+        } 
+        else {
+            
+            // Store first occurrence of this difference
+            diff[index] = i;
+        }
+    }
+    
+    return res;
+        
+    }
+};
+
+
+[Alternative Approach] Using Hash Map - O(n) Time and O(n) Space
+
+
+

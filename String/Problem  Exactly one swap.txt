@@ -1,0 +1,120 @@
+Problem : Exactly one swap
+
+Problem Statement : 
+
+Exactly one swap
+Difficulty: MediumAccuracy: 48.42%Submissions: 23K+Points: 4
+Given a string s, return the number of distinct strings that can be obtained by exactly one swap of two different indices (i < j).
+
+Examples:
+Input: s = "geek"
+Output: 6
+Explanation: After one swap, There are only 6 distinct strings possible.(i.e "egek","eegk","geek","geke","gkee" and "keeg") 
+
+
+Input: s = "aaaa"
+Output: 1
+Explanation: Only one distinct string is possible after one swap(i.e "aaaa")
+
+Constraints:
+2 ≤ s.size() ≤ 104
+
+Expected Complexities
+Time Complexity: O(n)
+Auxiliary Space: O(1)
+
+
+/*******************************************************************************  SOLUTIONSS   **********************************************************************/
+
+
+
+[Naive Approach] Using Hash Set - O(n^3) time and O(n^2) space
+
+
+// C++ program to find the count of distinct strings 
+// that can be obtained after performing exactly one swap
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to count distinct strings after one swap
+int countStrings(string &s) {
+    int n = s.length();
+    
+    // Set to store unique strings after one swap
+    unordered_set<string> set;
+
+    // Try all pairs (i, j) such that i < j
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            // Swap characters at positions i and j
+            swap(s[i], s[j]);
+
+            // Insert the resulting string into the set
+            set.insert(s);
+
+            // Swap back to restore original string
+            swap(s[i], s[j]);
+        }
+    }
+
+    // Return the number of unique strings obtained
+    return set.size();
+}
+
+int main() {
+    // Input string
+    string s = "geek";
+
+    // Output the count of distinct strings after one swap
+    cout << countStrings(s);
+    return 0;
+}
+
+
+
+
+
+/*******************************************   [Efficient Approach] Using Frequency Array - O(n) time and O(1) space   ***************************************/
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to count distinct strings after exactly one swap
+int countStrings(string &s) {
+    int n = s.length();
+
+    // Vector to count occurrences of each character (assuming lowercase letters)
+    vector<int> map(26, 0);
+
+    // Variable to store the total number of distinct strings
+    int ans = 0;
+
+    // Count pairs (i, j) where swapping s[i] and s[j] gives a new string
+    for (int i = 0; i < n; i++) {
+        ans += (i - map[s[i] - 'a']); 
+        map[s[i] - 'a']++;
+    }
+
+    // If there's any duplicate character, one extra swap can result
+    // in same string So, one more distinct outcome is possible
+    for (int i = 0; i < 26; i++) {
+        if (map[i] > 1) {
+            ans++;
+            break;
+        }
+    }
+
+    // Return the total number of distinct strings possible
+    return ans;
+}
+
+int main() {
+    // Input string
+    string s = "geek";
+
+    // Output the count of distinct strings after one swap
+    cout << countStrings(s);
+    return 0;
+}

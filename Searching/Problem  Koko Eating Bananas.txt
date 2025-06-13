@@ -1,0 +1,144 @@
+Problem : Koko Eating Bananas
+
+Problem Statement :
+
+Koko is given an array arr[], where each element represents a pile of bananas. She has exactly k hours to eat all the bananas.
+
+Each hour, Koko can choose one pile and eat up to s bananas from it.
+
+If the pile has atleast s bananas, she eats exactly s bananas.
+
+If the pile has fewer than s bananas, she eats the entire pile in that hour.
+
+Koko can only eat from one pile per hour.
+Your task is to find the minimum value of s (bananas per hour) such that Koko can finish all the piles within k hours.
+
+Examples:
+Input: arr[] = [5, 10, 3], k = 4
+Output: 5
+Explanation: Koko eats at least 5 bananas per hour to finish all piles within 4 hours, as she can consume each pile in 1 + 2 + 1 = 4 hours.
+
+Input: arr[] = [5, 10, 15, 20], k = 7
+Output: 10
+Explanation: At 10 bananas per hour, Koko finishes in 6 hours, just within the limit 7.
+
+
+Constraint:
+1 ≤ arr.size() ≤ 105 
+1 ≤ arr[i] ≤ 106
+arr.size() ≤ k ≤ 106
+
+Expected Complexities
+Time Complexity: O(n log(max(arr[i])))
+Auxiliary Space: O(1)
+
+
+Company Tags
+Bloomberg Amazon  Microsoft Walmart  Adobe  Arcesium Uber
+
+
+/*********************************************************************    SOLUTIONS  *******************************************************************************/
+
+
+
+[Naive Approach] Using Linear Search - O(n * m) time and O(1) space
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+// Function to find the minimum eating speed to finish bananas within k hours
+int kokoEat(vector<int>& arr, int k) {
+    int mx = *max_element(arr.begin(), arr.end());
+
+    for (int speed = 1; speed <= mx; speed++) {
+        long long time = 0;
+
+        for (int i = 0; i < arr.size(); i++) {
+            // Add the time needed to eat this pile at the current speed
+            time += arr[i] / speed;
+            if (arr[i] % speed != 0) {
+                // Extra hour for remaining bananas
+                time++;  
+            }
+        }
+
+        // If total time is within allowed hours, return this speed
+        if (time <= k) {
+            return speed;
+        }
+    }
+    
+    // If no smaller speed works, return the max pile size
+    return mx; 
+}
+
+// Driver code
+int main() {
+    vector<int> arr = {5, 10, 3};
+    int k = 4;
+
+    int minSpeed = kokoEat(arr, k);
+    cout << minSpeed << endl;
+
+    return 0;
+}
+
+
+[Expected Approach] Using Binary Search - O(n * log m) time and O(1) space
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm> 
+
+using namespace std;
+
+// Function to check whether current speed is enough
+bool check(vector<int>& arr, int mid, int k) {
+    int hours = 0;
+    for (int i = 0; i < arr.size(); i++) {
+        hours += arr[i] / mid;
+
+        // Add one more hour if some bananas are left
+        if (arr[i] % mid != 0) {
+            hours++;
+        }
+    }
+
+    // Return true if total hours needed is within limit
+    return hours <= k;
+}
+
+// Function to find the minimum eating speed
+int kokoEat(vector<int>& arr, int k) {
+    int lo = 1;
+    int hi = *max_element(arr.begin(), arr.end());
+    int res = hi;
+
+    while (lo <= hi) {
+        int mid = lo + (hi - lo) / 2;
+
+        if (check(arr, mid, k)) {
+            // Update result and try slower speed
+            res = mid;       
+            hi = mid - 1;
+        } else {
+             // Need faster speed
+            lo = mid + 1;    
+        }
+    }
+
+    return res;
+}
+
+int main() {
+    vector<int> arr = {5, 10, 3};
+    int k = 4;
+    cout << kokoEat(arr, k) << endl;
+    return 0;
+}
+

@@ -1,0 +1,82 @@
+Problem : Counting elements in two arrays
+
+Problem Statements : 
+You are given two unsorted arrays a[] and b[]. Both arrays may contain duplicate elements. For each element in a[], your task is to count how many elements in b[] are less than or equal to that element.
+
+Examples:
+
+Input: a[] = [4, 8, 7, 5, 1], b[] = [4, 48, 3, 0, 1, 1, 5]
+Output: [5, 6, 6, 6, 3]
+
+Explanation: 
+For a[0] = 4, there are 5 elements in b (4, 3, 0, 1, 1) that are ≤ 4.
+For a[1] = 8 and a[2] = 7, there are 6 elements in b that are ≤ 8 and ≤ 7.
+For a[3] = 5, there are 6 elements in b that are ≤ 5.
+For a[4] = 1, there are 3 elements in b (0, 1, 1) that are ≤ 1.
+
+Input: a[] = [10, 20], b[] = [30, 40, 50]
+Output: [0, 0]
+
+Explanation: 
+For a[0] = 10 and a[1] = 20, there are no elements in b that are less than or equal to 10 or 20. Hence, the output is [0, 0].
+
+Constraints:
+1 ≤ a.size(), b.size() ≤ 105
+0 ≤ a[i], b[j] ≤ 105
+
+Expected Complexities
+Time Complexity: O(n + m + max(b[i]))
+Auxiliary Space: O(max(b[i]))
+
+/********************************************************************************  Solutions : Types all *****************************************************************/
+
+[Naive Approach] Using Nested Loops - O(n * m) Time and O(n) Space
+
+vector<int> countLessEq(vector<int>& a, vector<int>& b) {
+    
+    int n = a.size(), m = b.size();
+
+    // to store the result
+    vector<int> res(n);
+
+    // outer loop for each element of a[]
+    for (int i = 0; i < n; i++) {
+        int count = 0;
+
+        // inner loop for each element of b[]
+        for (int j = 0; j < m; j++)
+            if (b[j] <= a[i])
+                count++;
+
+        res[i] = count;
+    }
+
+    return res;
+}
+
+int main() {
+    vector<int> a = {1, 2, 3, 4, 7, 9};
+    vector<int> b = {0, 1, 2, 1, 1, 4};
+    vector<int> result = countLessEq(a, b);
+    for (int i : result) {
+        cout << i << " ";
+    }
+    return 0;
+}
+
+[Better Approach - 1] Using Sorting - O((n + m) * log m) Time and O(n) Space
+
+
+
+[Better Approach - 2] Using Inbuilt Function - O((n + m) * log m) Time and O(n) Space
+
+
+
+[Better Approach - 3] Using Sorting and Two Pointers - O(n*logn + m*logm) Time and O(n) Space
+
+
+
+
+[Expected Approach for Small Range] Using Count Array and Prefix Sum - O(n + m + max(b[i])) Time and O(max(b[i])) Space
+
+
